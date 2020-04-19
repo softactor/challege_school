@@ -11,7 +11,10 @@
 |
 */
 
-
+Route::get('/storage', function(){
+    \Artisan::call('storage:link');
+    return "Se han vinculado las imágenes";
+});
 
 Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::get('/home', 'HomeController@index');
