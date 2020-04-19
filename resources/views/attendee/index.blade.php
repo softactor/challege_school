@@ -1,0 +1,71 @@
+@extends('layouts.app')
+@section('css')
+<style>
+
+</style>
+@endsection
+
+@section('content')
+<div class="col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+		<a href="{{route('importCSV')}}"  class="btn btn-sm btn-success">Import CSV</a>
+		<a href="{{route('sampleCSV')}}"  class="btn btn-sm btn-success">Sample CSV</a>
+		</div>
+		<div class="panel-body" style="overflow-x:scroll">
+			<table class="table table-bordered" id="attendeeTable">
+				<thead>
+					<tr>
+						<th>Serial Number</th>
+						<th>Event Name</th>
+						<th>Salutation</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Email</th>
+						<th>Type</th>
+						<th>Country</th>
+						<th>Company</th>
+						<th>Action</th>
+					</tr>					
+				</thead>
+				<tbody>
+					@php $i = 1 @endphp
+					@foreach($attendees as $attendee)
+					<tr>
+						<td>{{$i}}</td>
+						<td>{{ getEventName($attendee->event_id) }}</td>
+						<td>{{$attendee->salutation}}</td>
+						<td>{{$attendee->first_name}}</td>
+						<td>{{$attendee->last_name}}</td>
+						<td>{{$attendee->email}}</td>
+						<td>{{ getTypeName($attendee->type_id) }}</td>
+						<td>{{$attendee->country}}</td>
+						<td>{{$attendee->company}}</td>
+						<td><a href="{{route('editAttendee',[$attendee['id']])}}"  class="btn btn-sm btn-success">Edit</a>
+						<a href="{{route('deleteAttendee',[$attendee['id']])}}" onclick="return confirm('Are you sure you want to delete this attendee?');" class="btn btn-sm btn-danger">Delete</a></td>
+					</tr>
+					@php $i++ @endphp
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+@endsection
+
+@section('page-script')
+<script>
+$(document).ready( function () {
+    $('#attendeeTable').DataTable( {
+		responsive: true,
+        columnDefs: [
+            { responsivePriority: 1, targets: 0 },
+            { responsivePriority: 10001, targets: 4 },
+            { responsivePriority: 2, targets: -2 }
+        ]
+	} );
+} );
+</script>
+@endsection
+

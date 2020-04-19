@@ -1,0 +1,153 @@
+@font-face {
+    font-family: 'engagementregular';
+    src: url('../customfont/engagement/engagement-regular-webfont.woff2') format('woff2'),
+         url('../customfont/engagement/engagement-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'arialregular';
+    src: url('../customfont/arial/arial-webfont.woff2') format('woff2'),
+         url('../customfont/arial/arial-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'helveticaregular';
+    src: url('../customfont/helvetica/helvetica-webfont.woff2') format('woff2'),
+         url('../customfont/helvetica/helvetica-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Myriad Pro';
+    src: url('../customfont/myriadpro/MyriadPro-Regular.woff2') format('woff2'),
+        url('../customfont/myriadpro/MyriadPro-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'deliciousregular';
+    src: url('../customfont/delicious/delicious-webfont.woff2') format('woff2'),
+         url('../customfont/delicious/delicious-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Vrinda';
+    src: url('../customfont/vrinda/Vrinda.woff2') format('woff2'),
+        url('../customfont/vrinda/Vrinda.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Georgia';
+    src: url('../customfont/georgia/Georgia.woff2') format('woff2'),
+        url('../customfont/georgia/Georgia.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'courierregular';
+    src: url('../customfont/courier/courier_allfont.net-webfont.woff2') format('woff2'),
+         url('../customfont/courier/courier_allfont.net-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Comic Sans MS';
+    src: url('../customfont/comicsans/ComicSansMS.woff2') format('woff2'),
+        url('../customfont/comicsans/ComicSansMS.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Impact';
+    src: url('../customfont/impact/Impact.woff2') format('woff2'),
+        url('../customfont/impact/Impact.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Monaco';
+    src: url('../customfont/monaco/Monaco.woff2') format('woff2'),
+        url('../customfont/monaco/Monaco.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'optimanormal';
+    src: url('../customfont/optima/optima-webfont.woff2') format('woff2'),
+         url('../customfont/optima/optima-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Hoefler Text';
+    src: url('../customfont/hoeflertext/HoeflerText.woff2') format('woff2'),
+        url('../customfont/hoeflertext/HoeflerText.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'plasterregular';
+    src: url('../customfont/plaster/plaster_400-webfont.woff2') format('woff2'),
+         url('../customfont/plaster/plaster_400-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+.field-list{
+	list-style: none;
+    display: block;
+	text-align:center;
+	padding:  15px 15px  15px 24px ;
+	
+}
+.field-list li{
+	cursor: pointer;
+	margin:5px;
+	padding: 10;
+	border: 3px solid grey;
+	text-align:center;
+	font-weight:bold;
+	color:#646161;
+}
+
+.box{
+	cursor: pointer;
+	border: 1px solid grey;
+}
+.side-menu, .grid-cont{
+	padding: 0px !important;
+}
+.card-icon{
+	width: 80px;
+    height: 80px;
+    border-radius: 3px;
+    line-height: 80px;
+    font-size: 13px;
+    text-align: center;
+    float: left;
+    
+}
+.pro-label {
+	margin-left:8px;
+	margin-right:8px;
+}
+.properties{
+	margin-top: 10px;
+}
+.field{
+	margin-left: auto;
+	margin-top: 10px;
+}
+.buton-top{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
