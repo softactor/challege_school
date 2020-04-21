@@ -39,8 +39,9 @@
                                 $del_url    = route('delete_event');
                                 $del_id     = $event->id;
                             ?>
-                            <a href="{{route('addAttendee',['id'=>$event['id']])}}"  class="btn btn-sm btn-success">Add Attendee</a>
+                            <a href="{{route('editEvent',[$event['id']])}}"  class="btn btn-sm btn-success">Edit</a>
                             <a href="javascript:void(0)" onclick="deletConfirmation('<?php echo $del_url; ?>',<?php echo $del_id; ?>);" class="btn btn-sm btn-danger">Delete</a>
+                            <a href="{{route('addAttendee',['id'=>$event['id']])}}"  class="btn btn-sm btn-success">Add Attendee</a>
                         </td>
                     </tr>
                     @php $i++ @endphp

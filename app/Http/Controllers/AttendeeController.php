@@ -13,20 +13,21 @@ use Illuminate\Http\Request;
 use App\Http\Requests\attendeeStore;
 use App\Http\Requests\uploadCSV;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
-class AttendeeController extends Controller
-{
-	public function __construct() {
+class AttendeeController extends Controller {
+
+    public function __construct() {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-		$attendees = attendee::all();
+    public function index() {
+        $attendees = attendee::all();
         return view('attendee.index', compact(['attendees']));
     }
 
@@ -35,21 +36,21 @@ class AttendeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($event)
-    {
+    public function create($event) {
         $event_id = $event;
-		$attendee = Attendee::orderBy("id","Desc")->first();
-		
-		if($attendee == null)
-		{
-			$serial_number = 1;
-		}else{
-			$serial_number = $attendee->serial_number+1;
-		}
-		$events = Event::get()->pluck('name','id');
-		$userTypes = Usertype::get()->pluck('type_name','id');
-		$CustomFields = getCustomFieldByModule('attendee');
-		return view('attendee.create',compact(['event_id','events','serial_number','userTypes','CustomFields']));
+        $salutations = DB::table('salutations')->get();
+        $countries = DB::table('countries')->get();
+        $attendee = Attendee::orderBy("id", "Desc")->first();
+
+        if ($attendee == null) {
+            $serial_number = 1;
+        } else {
+            $serial_number = $attendee->serial_number + 1;
+        }
+        $events = Event::get()->pluck('name', 'id');
+        $userTypes = Usertype::get()->pluck('type_name', 'id');
+        $CustomFields = getCustomFieldByModule('attendee');
+        return view('attendee.create', compact(['event_id', 'events', 'serial_number', 'userTypes', 'CustomFields', 'countries', 'salutations']));
     }
 
     /**
@@ -58,183 +59,174 @@ class AttendeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(attendeeStore $request)
-    {
+    public function store(attendeeStore $request) {
         $insert = new attendee();
-		$insert->serial_number = $request->serial_number;
-		$insert->event_id = $request->event_id;
-		$insert->salutation = $request->salutation;
-		$insert->first_name = $request->first_name;
-		$insert->last_name = $request->last_name;
-		$insert->email = $request->email;
-		$insert->type_id = $request->type_id;
-		$insert->country = $request->country;
-		$insert->company = $request->company;
-		$insert->created_by = Auth::User()->id;
-		$insert->edited_by = Auth::User()->id;
-		$insert->save();
-		// Other field Add Code
-		$other = $request->custom;
-		if(!empty($other))
-		{
-			foreach ($other as $key => $value)
-			{
-				$value = $other[$key];
-				$custom = new custom_field_metas;
-				$custom->user_id = Auth::User()->id;
-				$custom->custom_fields_id = $key;
-				$custom->module = "attendee";
-				$custom->reference_record = $insert->id;
-				$custom->field_value = $value;
-				$custom->save();
-			}
-		}
-		
-		return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
+        $insert->serial_number = $request->serial_number;
+        $insert->event_id = $request->event_id;
+        $insert->salutation = $request->salutation;
+        $insert->first_name = $request->first_name;
+        $insert->last_name = $request->last_name;
+        $insert->email = $request->email;
+        $insert->type_id = $request->type_id;
+        $insert->country = $request->country;
+        $insert->company = $request->company;
+        $insert->created_by = Auth::User()->id;
+        $insert->edited_by = Auth::User()->id;
+        $insert->save();
+        // Other field Add Code
+        $other = $request->custom;
+        if (!empty($other)) {
+            foreach ($other as $key => $value) {
+                $value = $other[$key];
+                $custom = new custom_field_metas;
+                $custom->user_id = Auth::User()->id;
+                $custom->custom_fields_id = $key;
+                $custom->module = "attendee";
+                $custom->reference_record = $insert->id;
+                $custom->field_value = $value;
+                $custom->save();
+            }
+        }
+
+        return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
     }
-	
-	/** 
-	Import CSV
-	*/
-	public function importCSV()
-	{
-		return view('attendee.importCSV');
-	}
-	
-	/**
-	Upload CSV
-	*/
-	public function uploadCSV(uploadCSV $request)
-	{
-		$file = $request->file('attendee_csv');
 
-		// File Details 
-		$filename = $file->getClientOriginalName();
-		$extension = $file->getClientOriginalExtension();
-		$tempPath = $file->getRealPath();
-		$fileSize = $file->getSize();
-		$mimeType = $file->getMimeType();
+    /**
+      Import CSV
+     */
+    public function importCSV() {
+        return view('attendee.importCSV');
+    }
 
-		// Valid File Extensions
-		$valid_extension = array("csv");
+    /**
+      Upload CSV
+     */
+    public function uploadCSV(uploadCSV $request) {
+        $file = $request->file('attendee_csv');
 
-		// 2MB in Bytes
-		$maxFileSize = 2097152; 
+        // File Details 
+        $filename = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $tempPath = $file->getRealPath();
+        $fileSize = $file->getSize();
+        $mimeType = $file->getMimeType();
 
-		// Check file extension
-		if(in_array(strtolower($extension),$valid_extension)){
-			// Check file size
-			if($fileSize <= $maxFileSize){
+        // Valid File Extensions
+        $valid_extension = array("csv");
 
-				$new_name = time() .".". $extension;
-				Storage::put('public/attendee_csv/' . $new_name, file_get_contents($file -> getRealPath()), 'public');
+        // 2MB in Bytes
+        $maxFileSize = 2097152;
 
-				// Import CSV to Database
-				$filepath = public_path('storage/attendee_csv'."/".$new_name);
-				// dd($filepath);
-				// Reading file
-				$file = fopen($filepath,"r");
+        // Check file extension
+        if (in_array(strtolower($extension), $valid_extension)) {
+            // Check file size
+            if ($fileSize <= $maxFileSize) {
 
-				$importData_arr = array();
-				$i = 0;
+                $new_name = time() . "." . $extension;
+                Storage::put('public/attendee_csv/' . $new_name, file_get_contents($file->getRealPath()), 'public');
 
-				while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
-					$num = count($filedata );
-				 
-					// Skip first row (Remove below comment if you want to skip the first row)
-					/*if($i == 0){
-						$i++;
-						continue; 
-					}*/
-					for ($c=0; $c < $num; $c++) {
-						$importData_arr[$i][] = $filedata [$c];
-					}
-					$i++;
-				}
-				fclose($file);
-				unlink($filepath);
-				// Insert to MySQL database
-				$fields_name = $importData_arr[0];
-				$default_field = array("serial_number","event_id","salutation","first_name","last_name","email","type_id","country","company");
-				$custom_field = array_diff($fields_name,$default_field);
-			  
-				$custom_fileds_id = array();
-			  
-				foreach($custom_field as $key=>$value)
-				{
-					$custom_fileds_id[$key] = getCustomFieldIdBySlug($value);
-				}
-				unset($importData_arr[0]);
-				$duplicate = array();
-				foreach($importData_arr as $importData){
-					$attendee_exist = Attendee::where('email',$importData[5])->count();
-					if($attendee_exist == 0){
-						$insert = new Attendee();
-						$insert->serial_number = $importData[0];
-						$insert->event_id = $importData[1];
-						$insert->salutation = $importData[2];
-						$insert->first_name = $importData[3];
-						$insert->last_name = $importData[4];
-						$insert->email = $importData[5];
-						$insert->type_id = $importData[6];
-						$insert->country = $importData[7];
-						$insert->company = $importData[8];
-						$insert->created_by = Auth::User()->id;
-						$insert->edited_by = Auth::User()->id;
-						$insert->save(); 
-					
-						foreach($custom_fileds_id as $key=>$value)
-						{
-							$custom = new custom_field_metas;
-							$custom->user_id = Auth::User()->id;
-							$custom->custom_fields_id = $value;
-							$custom->module = "attendee";
-							$custom->reference_record = $insert->id;
-							$custom->field_value = $importData[$key];
-							$custom->save();
-						}
-					}else{
-						$duplicate[] = $importData[5];
-					}
-				}
-			}
-		}
-		// dd($duplicate);
-		if(!empty($duplicate)){
-			return redirect()->route('attendeeList')->with('error', $duplicate);
-		}else{
-			return redirect()->route('attendeeList')->with('success', 'CSV imported successfully.');
-		}
-	}
-	
-	// Sample CSV
-	
-	public function sampleCSV()
-	{
-		$filename = "attendee.csv";
-		$handle = fopen($filename, 'w+');
-		$default_field = array('serial_number', 'event_id', 'salutation', 'first_name', 'last_name', 'email', 'type_id', 'country', 'company');
-		$custom_fields = custom_fields::where(['module'=>'attendee','field_visibility'=>1])->pluck('field_slug')->toArray();
-		$all_fields = array_merge($default_field,$custom_fields);
-		fputcsv($handle, $all_fields);
+                // Import CSV to Database
+                $filepath = public_path('storage/attendee_csv' . "/" . $new_name);
+                // dd($filepath);
+                // Reading file
+                $file = fopen($filepath, "r");
 
-		fclose($handle);
+                $importData_arr = array();
+                $i = 0;
 
-		$headers = array(
-			'Content-Type' => 'text/csv',
-		);
+                while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                    $num = count($filedata);
 
-		return Response::download($filename, 'attendee.csv', $headers);
-	}
-	
+                    // Skip first row (Remove below comment if you want to skip the first row)
+                    /* if($i == 0){
+                      $i++;
+                      continue;
+                      } */
+                    for ($c = 0; $c < $num; $c++) {
+                        $importData_arr[$i][] = $filedata [$c];
+                    }
+                    $i++;
+                }
+                fclose($file);
+                unlink($filepath);
+                // Insert to MySQL database
+                $fields_name = $importData_arr[0];
+                $default_field = array("serial_number", "event_id", "salutation", "first_name", "last_name", "email", "type_id", "country", "company");
+                $custom_field = array_diff($fields_name, $default_field);
+
+                $custom_fileds_id = array();
+
+                foreach ($custom_field as $key => $value) {
+                    $custom_fileds_id[$key] = getCustomFieldIdBySlug($value);
+                }
+                unset($importData_arr[0]);
+                $duplicate = array();
+                foreach ($importData_arr as $importData) {
+                    $attendee_exist = Attendee::where('email', $importData[5])->count();
+                    if ($attendee_exist == 0) {
+                        $insert = new Attendee();
+                        $insert->serial_number = $importData[0];
+                        $insert->event_id = $importData[1];
+                        $insert->salutation = $importData[2];
+                        $insert->first_name = $importData[3];
+                        $insert->last_name = $importData[4];
+                        $insert->email = $importData[5];
+                        $insert->type_id = $importData[6];
+                        $insert->country = $importData[7];
+                        $insert->company = $importData[8];
+                        $insert->created_by = Auth::User()->id;
+                        $insert->edited_by = Auth::User()->id;
+                        $insert->save();
+
+                        foreach ($custom_fileds_id as $key => $value) {
+                            $custom = new custom_field_metas;
+                            $custom->user_id = Auth::User()->id;
+                            $custom->custom_fields_id = $value;
+                            $custom->module = "attendee";
+                            $custom->reference_record = $insert->id;
+                            $custom->field_value = $importData[$key];
+                            $custom->save();
+                        }
+                    } else {
+                        $duplicate[] = $importData[5];
+                    }
+                }
+            }
+        }
+        // dd($duplicate);
+        if (!empty($duplicate)) {
+            return redirect()->route('attendeeList')->with('error', $duplicate);
+        } else {
+            return redirect()->route('attendeeList')->with('success', 'CSV imported successfully.');
+        }
+    }
+
+    // Sample CSV
+
+    public function sampleCSV() {
+        $filename = "attendee.csv";
+        $handle = fopen($filename, 'w+');
+        $default_field = array('serial_number', 'event_id', 'salutation', 'first_name', 'last_name', 'email', 'type_id', 'country', 'company');
+        $custom_fields = custom_fields::where(['module' => 'attendee', 'field_visibility' => 1])->pluck('field_slug')->toArray();
+        $all_fields = array_merge($default_field, $custom_fields);
+        fputcsv($handle, $all_fields);
+
+        fclose($handle);
+
+        $headers = array(
+            'Content-Type' => 'text/csv',
+        );
+
+        return Response::download($filename, 'attendee.csv', $headers);
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  \App\Attendee  $attendee
      * @return \Illuminate\Http\Response
      */
-    public function show(Attendee $attendee)
-    {
+    public function show(Attendee $attendee) {
         //
     }
 
@@ -244,13 +236,14 @@ class AttendeeController extends Controller
      * @param  \App\Attendee  $attendee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Attendee $attendee_id)
-    {
+    public function edit(Attendee $attendee_id) {
+        $salutations = DB::table('salutations')->get();
+        $countries = DB::table('countries')->get();
         $row = Attendee::find($attendee_id->id);
-		$events = Event::get()->pluck('name','id');
-		$userTypes = Usertype::get()->pluck('type_name','id');
-		$customFields = getCustomFieldByModule('attendee');
-		return view('attendee.edit', compact(['row','events','userTypes','customFields']));
+        $events = Event::get()->pluck('name', 'id');
+        $userTypes = Usertype::get()->pluck('type_name', 'id');
+        $customFields = getCustomFieldByModule('attendee');
+        return view('attendee.edit', compact(['row', 'events', 'userTypes', 'customFields', 'countries', 'salutations']));
     }
 
     /**
@@ -260,49 +253,42 @@ class AttendeeController extends Controller
      * @param  \App\Attendee  $attendee
      * @return \Illuminate\Http\Response
      */
-    public function update(attendeeStore $request,Attendee $attendee_id)
-    {
+    public function update(attendeeStore $request, Attendee $attendee_id) {
         $update = Attendee::find($attendee_id->id);
-		$update->serial_number = $request->serial_number;
-		$update->event_id = $request->event_id;
-		$update->salutation = $request->salutation;
-		$update->first_name = $request->first_name;
-		$update->last_name = $request->last_name;
-		$update->email = $request->email;
-		$update->type_id = $request->type_id;
-		$update->country = $request->country;
-		$update->company = $request->company;
-		$update->edited_by = Auth::User()->id;
-		$update->save();
-		
-		//Other field Add Code
-		$other = $request->custom;
-		if(!empty($other))
-		{
-			foreach ($other as $key => $value)
-			{
-				$value = $other[$key];
-				$findRow = custom_field_metas::where(['module'=>'attendee','reference_record'=>$attendee_id->id,'custom_fields_id'=>$key])->first();
-				if(empty($findRow))
-				{
-					$custom = new custom_field_metas;
-					$custom->user_id = Auth::User()->id;
-					$custom->custom_fields_id = $key;
-					$custom->module = 'attendee';
-					$custom->reference_record = $attendee_id->id;
-					$custom->field_value = $value;
-						
-					$custom->save();
-				}
-				else
-				{
-					$ok = custom_field_metas::where(['module'=>'attendee','reference_record'=>$attendee_id,'custom_fields_id'=>$key])->update(['field_value'=>$value]);
-					
-				}
-			}
-		}
-		
-		return redirect()->route('attendeeList')->with('success', 'Attendee edited successfully.');
+        $update->serial_number = $request->serial_number;
+        $update->event_id = $request->event_id;
+        $update->salutation = $request->salutation;
+        $update->first_name = $request->first_name;
+        $update->last_name = $request->last_name;
+        $update->email = $request->email;
+        $update->type_id = $request->type_id;
+        $update->country = $request->country;
+        $update->company = $request->company;
+        $update->edited_by = Auth::User()->id;
+        $update->save();
+
+        //Other field Add Code
+        $other = $request->custom;
+        if (!empty($other)) {
+            foreach ($other as $key => $value) {
+                $value = $other[$key];
+                $findRow = custom_field_metas::where(['module' => 'attendee', 'reference_record' => $attendee_id->id, 'custom_fields_id' => $key])->first();
+                if (empty($findRow)) {
+                    $custom = new custom_field_metas;
+                    $custom->user_id = Auth::User()->id;
+                    $custom->custom_fields_id = $key;
+                    $custom->module = 'attendee';
+                    $custom->reference_record = $attendee_id->id;
+                    $custom->field_value = $value;
+
+                    $custom->save();
+                } else {
+                    $ok = custom_field_metas::where(['module' => 'attendee', 'reference_record' => $attendee_id, 'custom_fields_id' => $key])->update(['field_value' => $value]);
+                }
+            }
+        }
+
+        return redirect()->route('attendeeList')->with('success', 'Attendee edited successfully.');
     }
 
     /**
@@ -311,12 +297,11 @@ class AttendeeController extends Controller
      * @param  \App\Attendee  $attendee
      * @return \Illuminate\Http\Response
      */
-    public function destroy($attendee_id)
-    {
+    public function destroy($attendee_id) {
         $attendee = Attendee::find($attendee_id);
-		if($attendee->delete())
-		{
-			return redirect()->route('attendeeList')->with('success', 'Attendee deleted successfully.');
-		}
+        if ($attendee->delete()) {
+            return redirect()->route('attendeeList')->with('success', 'Attendee deleted successfully.');
+        }
     }
+
 }

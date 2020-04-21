@@ -65,8 +65,9 @@ class EventController extends Controller {
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event) {
-        //
+    public function edit(Event $event_id) {
+        $row = Event::find($event_id->id);
+        return view('event.edit', compact(['row']));
     }
 
     /**
@@ -76,8 +77,13 @@ class EventController extends Controller {
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event) {
-        //
+    public function update(Request $request, Event $event_id) {
+        $update = Event::find($event_id->id);
+        $update->name = $request->name;
+        $update->event_date = date('Y-m-d H:i', strtotime($request->event_date));
+        if ($update->save()) {
+            return redirect()->route('eventList')->with('success', 'Event has been successfully updated.');
+        }
     }
 
     /**

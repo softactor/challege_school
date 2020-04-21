@@ -45,7 +45,14 @@
 					
 					<div class="form-group">
 						<label>Salutation</label>
-						<input type="text" name="salutation" value="{{ old('salutation') }}" class="form-control">
+                                                <select class="form-control" name="salutation">
+                                                    <option value=''>-- Select Salutation --</option>
+                                                    @if ($salutations->count())
+                                                            @foreach($salutations as $salutation)
+                                                            <option value="{{ $salutation->name }}">{{ $salutation->name }}</option>
+                                                            @endforeach
+                                                    @endif
+                                                </select>
 						@if ($errors->has('salutation')) 
 							<span class="help-block">
 								<span>{{ $errors->first('salutation') }}</span>
@@ -101,15 +108,22 @@
 					</div>
 					
 					<div class="form-group">
-						<label>Country</label>
-						<input type="text" name="country" value="{{ old('country') }}" class="form-control">
-						@if ($errors->has('country')) 
-							<span class="help-block">
-								<span>{{ $errors->first('country') }}</span>
-							</span>
-						@endif
+                                            <label>Country</label>
+                                            <select class="form-control" name="country">
+                                                    <option value=''>-- Select Country --</option>
+                                                    @if ($countries->count())
+                                                            @foreach($countries as $country)
+                                                            <option value="{{ $country->country_name }}">{{ $country->country_name }}</option>
+                                                            @endforeach
+                                                    @endif
+                                            </select>
+                                            @if ($errors->has('country')) 
+                                                    <span class="help-block">
+                                                            <span>{{ $errors->first('country') }}</span>
+                                                    </span>
+                                            @endif
 					</div>
-					
+                                    
 					<div class="form-group">
 						<label>Company</label>
 						<input type="text" name="company" value="{{ old('country') }}" class="form-control">

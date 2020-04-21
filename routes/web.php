@@ -32,6 +32,8 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::get('/events', 'EventController@index')->name('eventList');
 	Route::get('add_event', 'EventController@create')->name('add_event');
 	Route::post('save_event', 'EventController@store')->name('save_event');
+        Route::get('/edit_event/{event_id}', 'EventController@edit')->name('editEvent');
+        Route::post('/update_event/{event_id}', 'EventController@update')->name('updateEvent');
         Route::get('delete_event', 'EventController@destroy')->name('delete_event');
 
 	// User Type Route

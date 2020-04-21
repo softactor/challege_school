@@ -45,7 +45,14 @@
 					
 					<div class="form-group">
 						<label>Salutation</label>
-						<input type="text" name="salutation" value="{{ $row->salutation }}" class="form-control">
+						<select class="form-control" name="salutation">
+                                                    <option value=''>-- Select Salutation --</option>
+                                                    @if ($salutations->count())
+                                                            @foreach($salutations as $salutation)
+                                                            <option value="{{ $salutation->name }}"<?php if(isset($row->salutation) && $row->salutation == $salutation->name){ echo 'selected'; } ?>>{{ $salutation->name }}</option>
+                                                            @endforeach
+                                                    @endif
+                                                </select>
 						@if ($errors->has('salutation')) 
 							<span class="help-block">
 								<span>{{ $errors->first('salutation') }}</span>
@@ -102,8 +109,15 @@
 					
 					<div class="form-group">
 						<label>Country</label>
-						<input type="text" name="country" value={{ $row->country }} class="form-control">
-						@if ($errors->has('country')) 
+						<select class="form-control" name="country">
+                                                    <option value=''>-- Select Country --</option>
+                                                    @if ($events->count())
+                                                            @foreach($countries as $country)
+                                                            <option value="{{ $country->country_name }}" <?php if(isset($row->country) && $row->country == $country->country_name){ echo 'selected'; } ?>>{{ $country->country_name }}</option>
+                                                            @endforeach
+                                                    @endif
+                                                </select>
+                                                @if ($errors->has('country')) 
 							<span class="help-block">
 								<span>{{ $errors->first('country') }}</span>
 							</span>
