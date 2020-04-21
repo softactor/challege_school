@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use auth;
 use App\Event;
+use App\Attendee;
 use Illuminate\Http\Request;
+use App\Http\Requests\EventStore;
 
-class EventController extends Controller
-{
-	public function __construct() {
+class EventController extends Controller {
+
+    public function __construct() {
         $this->middleware('auth');
     }
-	
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-		$events = Event::all();
-        return view("event.index",compact(['events']));
+    public function index() {
+        $events = Event::all();
+        return view("event.index", compact(['events']));
     }
 
     /**
@@ -27,9 +29,8 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        return view("event.create");
     }
 
     /**
@@ -38,9 +39,14 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(EventStore $request) {
+        $insert = new Event();
+        $insert->name = $request->name;
+        $insert->event_date = date('Y-m-d H:i', strtotime($request->event_date));
+        $insert->created_by = Auth::user()->id;
+        if ($insert->save()) {
+            return redirect()->route('eventList')->with('success', 'Event Added successfully.');
+        }
     }
 
     /**
@@ -49,8 +55,7 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
-    {
+    public function show(Event $event) {
         //
     }
 
@@ -60,8 +65,7 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
-    {
+    public function edit(Event $event) {
         //
     }
 
@@ -72,8 +76,7 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
-    {
+    public function update(Request $request, Event $event) {
         //
     }
 
@@ -83,8 +86,24 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
-    {
-        //
+    public function destroy(Request $request) {
+        $attendee = Attendee::where("event_id", $request->event_id)->count();
+        if ($attendee) {
+            $status  = "error";
+            $message = "You cant delete Event, Dependency found with Attendee.";
+        }else {
+            $type = Event::find($request->event_id);
+            if ($type->delete()) {
+                $status  = "success";
+                $message = "Event has been successfully deleted";
+            }
+        }        
+        $feedback  = [
+            'status'  => $status,
+            'message' => $message
+        ];
+        
+        echo json_encode($feedback);
     }
+
 }

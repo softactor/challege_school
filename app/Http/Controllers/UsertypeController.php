@@ -9,20 +9,20 @@ use App\Attendee;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserTypeStore;
 
-class UsertypeController extends Controller
-{
-	public function __construct() {
+class UsertypeController extends Controller {
+
+    public function __construct() {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-		$types = Usertype::all();
-		return view('usertype.index', compact(['types']));
+    public function index() {
+        $types = Usertype::all();
+        return view('usertype.index', compact(['types']));
     }
 
     /**
@@ -30,9 +30,8 @@ class UsertypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-		return view('usertype.create');
+    public function create() {
+        return view('usertype.create');
     }
 
     /**
@@ -41,14 +40,13 @@ class UsertypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserTypeStore $request)
-    {
+    public function store(UserTypeStore $request) {
         $insert = new Usertype();
-		$insert->type_name = $request->typename;
-		$insert->created_by = Auth::user()->id;
-		if($insert->save()){
-			return redirect()->route('userTypes')->with('success', 'User Type Added successfully.');
-		}
+        $insert->type_name = $request->typename;
+        $insert->created_by = Auth::user()->id;
+        if ($insert->save()) {
+            return redirect()->route('userTypes')->with('success', 'User Type Added successfully.');
+        }
     }
 
     /**
@@ -57,8 +55,7 @@ class UsertypeController extends Controller
      * @param  \App\Usertype  $usertype
      * @return \Illuminate\Http\Response
      */
-    public function show(Usertype $usertype)
-    {
+    public function show(Usertype $usertype) {
         //
     }
 
@@ -68,10 +65,9 @@ class UsertypeController extends Controller
      * @param  \App\Usertype  $usertype
      * @return \Illuminate\Http\Response
      */
-    public function edit(Usertype $type_id)
-    {
+    public function edit(Usertype $type_id) {
         $row = userType::find($type_id->id);
-		return view('usertype.edit', compact(['row']));
+        return view('usertype.edit', compact(['row']));
     }
 
     /**
@@ -81,14 +77,12 @@ class UsertypeController extends Controller
      * @param  \App\Usertype  $usertype
      * @return \Illuminate\Http\Response
      */
-    public function update(UserTypeStore $request,Usertype $type_id)
-    {
+    public function update(UserTypeStore $request, Usertype $type_id) {
         $update = userType::find($type_id->id);
-		$update->type_name = $request->typename;
-		if($update->save())
-		{
-			return redirect()->route('userTypes')->with('success','Type updated successfully.');
-		}
+        $update->type_name = $request->typename;
+        if ($update->save()) {
+            return redirect()->route('userTypes')->with('success', 'Type updated successfully.');
+        }
     }
 
     /**
@@ -97,22 +91,21 @@ class UsertypeController extends Controller
      * @param  \App\Usertype  $usertype
      * @return \Illuminate\Http\Response
      */
-    public function destroy($usertype_id)
-    {
-		$template = Template::where("type_id",$usertype_id)->count();
-		$attendee = Attendee::where("type_id",$usertype_id)->count();
-		if($template && $attendee)
-		{
-			return redirect()->route('userTypes')->with('warning','You cant delete this type, Dependency found with template and attendee.');
-		}else if($template){
-			return redirect()->route('userTypes')->with('warning','You cant delete this type, Dependency found with template.');
-		}else if($attendee){
-			return redirect()->route('userTypes')->with('warning','You cant delete this type, Dependency found with attendee.');
-		}else{
-			$type = Usertype::find($usertype_id);
-			if($type->delete()){
-				return redirect()->route('userTypes')->with('success','Type deleted successfully.');
-			}
-		}
+    public function destroy($usertype_id) {
+        $template = Template::where("type_id", $usertype_id)->count();
+        $attendee = Attendee::where("type_id", $usertype_id)->count();
+        if ($template && $attendee) {
+            return redirect()->route('userTypes')->with('warning', 'You cant delete this type, Dependency found with template and attendee.');
+        } else if ($template) {
+            return redirect()->route('userTypes')->with('warning', 'You cant delete this type, Dependency found with template.');
+        } else if ($attendee) {
+            return redirect()->route('userTypes')->with('warning', 'You cant delete this type, Dependency found with attendee.');
+        } else {
+            $type = Usertype::find($usertype_id);
+            if ($type->delete()) {
+                return redirect()->route('userTypes')->with('success', 'Type deleted successfully.');
+            }
+        }
     }
+
 }
