@@ -76,4 +76,60 @@ if(!function_exists('getCustomFieldIdBySlug'))
 		}
 	}
 }
+
+function image_file_store($file_data) {
+
+    $image_file_name    = $file_data['image_file_name'];
+    $newDirtory         = $file_data['newDirtory'];
+    $filePrefix         = $file_data['filePrefix'];
+    
+    $image_errors       = [];
+    $image_status       = false;
+
+    if (isset($_FILES[$image_file_name]['name']) && !empty($_FILES[$image_file_name]['name'])) {
+        $uploadOk = 1;
+        $imageFileType  = strtolower(pathinfo($_FILES[$image_file_name]['name'], PATHINFO_EXTENSION));
+        $fileName       = $filePrefix . "." . $imageFileType;
+        $target_file    = $newDirtory . "/" . $fileName;
+        // Check if image file is a actual image or fake image
+        list($width, $height) = getimagesize($_FILES[$image_file_name]["tmp_name"]);
+        $check = getimagesize($_FILES[$image_file_name]["tmp_name"]);
+        if ($check == false) {
+            $uploadOk = 0;
+            array_push($image_errors, "Please upload a image file");
+        }
+        // Check file size
+        // Allow certain file formats
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+            $uploadOk = 0;
+            array_push($image_errors, "Sorry, only JPG, JPEG, PNG files are allowed.");
+        }
+        // Check if $uploadOk is set to 0 by an error
+        if ($uploadOk == 0) {
+            $_SESSION['error'] = "Sorry, Failed to upload image.";
+            $feedbackData   =   [
+                'status'    => "error",
+                'message'   => "Failed to image uploaded",
+                'data'      => $image_errors,
+            ];
+        } else {
+            if (move_uploaded_file($_FILES[$image_file_name]["tmp_name"], $target_file)) {
+                $feedbackData   =   [
+                    'status'    => "success",
+                    'message'   => "File have been successfully uploaded",
+                    'data'      => $fileName,
+                ];
+            }
+        }// Image not selected!
+    }else{
+        $feedbackData   =   [
+            'status'    => "error",
+            'message'   => "Failed to image uploaded",
+            'data'      => array_push($image_errors, "There was no file."),
+        ];
+    }
+    return $feedbackData;
+}
+
+
 ?>

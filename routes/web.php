@@ -49,7 +49,7 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::get('/add-attendee/{eventId}', 'AttendeeController@create')->name('addAttendee');
 	Route::post('/save-attendee', 'AttendeeController@store')->name('saveAttendee');
 	Route::get('/attendee/import-csv', 'AttendeeController@importCSV')->name('importCSV');
-	Route::post('/attendee/upload-csv', 'AttendeeController@uploadCSV')->name('uploadCSV');
+	Route::post('/attendee/upload-csv', 'AttendeeController@upload_attendee_csv')->name('uploadCSV');
 	Route::get('/attendee/edit/{attendee_id}', 'AttendeeController@edit')->name('editAttendee');
 	Route::post('/attendee/update/{attendee_id}', 'AttendeeController@update')->name('updateAttendee');
 	Route::get('/attendee/delete/{attendee_id}', 'AttendeeController@destroy')->name('deleteAttendee');

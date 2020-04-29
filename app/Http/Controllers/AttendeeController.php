@@ -101,6 +101,56 @@ class AttendeeController extends Controller {
     /**
       Upload CSV
      */
+    public function upload_attendee_csv(Request $request) {
+        $fileHaveError = false;
+        $importSuccess = 0;
+        $importError = 0;
+        $fileErrorMessage = [];
+        $allowed = array('csv');
+        $filename = $_FILES['attendee_csv']['name'];
+        if ($_FILES['attendee_csv']['error'] > 0) {
+            $fileHaveError = true;
+            array_push($fileErrorMessage, 'Please select an import file first');
+        }
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (!in_array($ext, $allowed)) {
+            $fileHaveError = true;
+            array_push($fileErrorMessage, 'Please import only CSV file');
+        }
+        if (!$fileHaveError) {
+            $file = $_FILES['attendee_csv']['tmp_name'];
+            $csvdata = $this->csvToArray($file);
+            if (isset($csvdata) && !empty($csvdata)) {
+                $offlineData = [];
+                foreach ($csvdata as $importData) {
+                    $attendee_exist = Attendee::where('email', $importData[5])->count();
+                    if ($attendee_exist == 0) {
+                        $insert = new Attendee();
+                        $insert->serial_number = $importData[0];
+                        $insert->event_id = $importData[1];
+                        $insert->salutation = $importData[2];
+                        $insert->first_name = $importData[3];
+                        $insert->last_name = $importData[4];
+                        $insert->email = $importData[5];
+                        $insert->type_id = $importData[6];
+                        $insert->country = $importData[7];
+                        $insert->company = $importData[8];
+                        $insert->created_by = Auth::User()->id;
+                        $insert->edited_by = Auth::User()->id;
+                        $insert->save();
+                    } else {
+                        $duplicate[] = $importData[5];
+                    }
+                } // Foreach csv end;
+                if (!empty($duplicate)) {
+                    return redirect()->route('attendeeList')->with('error', $duplicate);
+                } else {
+                    return redirect()->route('attendeeList')->with('success', 'CSV imported successfully.');
+                }
+            }
+        }
+    }
+
     public function uploadCSV(uploadCSV $request) {
         $file = $request->file('attendee_csv');
 
@@ -199,6 +249,88 @@ class AttendeeController extends Controller {
         } else {
             return redirect()->route('attendeeList')->with('success', 'CSV imported successfully.');
         }
+    }
+    
+    public function offline_csv_import(Request $request) {
+        $fileHaveError = false;
+        $importSuccess = 0;
+        $importError = 0;
+        $fileErrorMessage = [];
+        $allowed = array('csv');
+        $filename = $_FILES['offline_namebadge_csv']['name'];
+        if ($_FILES['offline_namebadge_csv']['error'] > 0) {
+            $fileHaveError = true;
+            array_push($fileErrorMessage, 'Please select an import file first');
+        }
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (!in_array($ext, $allowed)) {
+            $fileHaveError = true;
+            array_push($fileErrorMessage, 'Please import only CSV file');
+        }
+        if (!$fileHaveError) {
+            $event_business_owners_details_procced = true;
+            $unsuccessEmailContainer = [];
+            $csv_data = [];
+            $company_data_check = [];
+            $profiler = [];
+            $file = $_FILES['offline_namebadge_csv']['tmp_name'];
+            $csvdata = $this->csvToArray($file);
+            if (isset($csvdata) && !empty($csvdata)) {
+                $offlineData = [];
+                foreach ($csvdata as $d) {
+                    $offlineData[] = [
+                        'event_name' => $d[0],
+                        'reg_id' => $d[1],
+                        'reg_email' => $d[2],
+                        'created_at' => $d[3],
+                    ];
+                }
+                DB::table('offline_namebadge_print_temp_data')->insert($offlineData);
+                Session::flash('success', "Data have been successfully imported.");
+                $redirect_url = 'admin/offline_csv_uploader_view/' . $request->event_url;
+                return redirect($redirect_url);
+            } else {
+                array_push($fileErrorMessage, 'Please import only CSV file');
+                $errorText = '';
+                foreach ($fileErrorMessage as $error) {
+                    $errorText .= $error;
+                    $errorText .= "\n";
+                }
+                return redirect('admin/offline_csv_uploader_view/' . $request->event_url)
+                                ->with('error', $errorText)
+                                ->withInput();
+            }
+        } else {
+            $errorText = '';
+            foreach ($fileErrorMessage as $error) {
+                $errorText .= $error;
+                $errorText .= "\n";
+            }
+            return redirect('admin/offline_csv_uploader_view/' . $request->event_url)
+                            ->with('error', $errorText)
+                            ->withInput();
+        }
+    }
+    
+    public function csvToArray($filename = '', $delimiter = ',') {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        $count = 1;
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while ($row = fgetcsv($handle)) {
+                if ($count == 1) {
+                    $count++;
+                    continue;
+                }
+                $data[] = $row;
+            }
+            fclose($handle);
+        }
+
+        return $data;
     }
 
     // Sample CSV
