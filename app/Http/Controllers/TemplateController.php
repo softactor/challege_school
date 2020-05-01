@@ -153,6 +153,11 @@ class TemplateController extends Controller {
         $templateJsonData = $request->json;
         $templateData = json_decode($request->json);
         $nameBadgeData = $this->get_namebadge_print_data($templateData);
+        print '<pre>';
+        print_r($nameBadgeData);
+        print '</pre>';
+        exit;
+        
         $template_id = $request->template_id;
         $insert = Template::find($template_id);
         $insert->template_data = $request->json;
