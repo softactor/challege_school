@@ -78,18 +78,16 @@ if(!function_exists('getCustomFieldIdBySlug'))
 }
 
 function image_file_store($file_data) {
-
     $image_file_name    = $file_data['image_file_name'];
+    $fileName           = $file_data['fileName'];
     $newDirtory         = $file_data['newDirtory'];
     $filePrefix         = $file_data['filePrefix'];
-    
     $image_errors       = [];
     $image_status       = false;
-
     if (isset($_FILES[$image_file_name]['name']) && !empty($_FILES[$image_file_name]['name'])) {
         $uploadOk = 1;
         $imageFileType  = strtolower(pathinfo($_FILES[$image_file_name]['name'], PATHINFO_EXTENSION));
-        $fileName       = $filePrefix . "." . $imageFileType;
+        $fileName       = $filePrefix .$fileName;
         $target_file    = $newDirtory . "/" . $fileName;
         // Check if image file is a actual image or fake image
         list($width, $height) = getimagesize($_FILES[$image_file_name]["tmp_name"]);

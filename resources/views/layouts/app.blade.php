@@ -90,8 +90,7 @@
                             @include('flash-message')
                             @yield('css')
                             @yield('content')
-                        </main>
-                        @yield('page-script')
+                        </main>                        
                     </div>
                 </div>
                 <!-- /#page-content-wrapper -->
@@ -148,5 +147,6 @@
             });
         }
         </script>
+        @yield('page-script')
     </body>
 </html>

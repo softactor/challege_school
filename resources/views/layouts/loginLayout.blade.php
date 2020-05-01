@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <link rel="shortcut icon" type="image/png" href="<?php echo asset('public/image/registro_Logo-PNG.png') ?>"/>
     <!-- Scripts -->
     <!--<script src="{{ asset('public/js/app.js') }}" defer></script>-->
 	<script src="{{URL::asset('public/js/jquery-3.3.1.min.js')}}" type="text/javascript"></script>

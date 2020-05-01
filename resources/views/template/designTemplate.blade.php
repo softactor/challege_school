@@ -12,7 +12,7 @@
 
 @section('content')
   <div class="col-md-12">
-	<input type="hidden" id="header_image_url" value="{{ ($row->header_image != '')?asset('public/storage/header_image/'.$row->header_image):''  }}">
+	<input type="hidden" id="header_image_url" value="{{ ($row->header_image != '')?asset('public/header_image/'.$row->header_image):''  }}">
     <button data-toggle="collapse" data-target="#importTemplate">Import Template</button>
 
     <div id="importTemplate" class="collapse">
@@ -665,7 +665,9 @@ if (header_image_url && header_image_url.length > 0) {
 	fabric.Image.fromURL(header_image_url, function(headerImg) {
 	 //i create an extra var for to change some image properties
 	 var headerImage = headerImg.set({ left: 0, top: 0 });
-		canvas.add(headerImage); 
+//		canvas.add(headerImage); 
+                var objectUpdate  = add_common_object_name(headerImage, 'header_image')  
+        canvas.add(objectUpdate);
 	});
 }
 // ######################## Header Image #############################################
@@ -673,10 +675,12 @@ if (header_image_url && header_image_url.length > 0) {
 // ######################## Load canvas from Database ################################
 var json = "{{$row->template_data}}";
 if(json != ''){
-var json = JSON.parse(json.replace(/&quot;/g,'"'));
-canvas.loadFromJSON(json, canvas.renderAll.bind(canvas), function(o, object) {
-    // fabric.log(o, object);
-});
+    
+    var json = JSON.parse(json.replace(/&quot;/g,'"'));
+    canvas.loadFromJSON(json, canvas.renderAll.bind(canvas), function(o, object) {
+     var objectUpdate  = add_common_object_name(object, object.label_name)  
+        canvas.add(objectUpdate);
+    });
 }
 // ######################## Load canvas from Database ################################
 
@@ -860,23 +864,24 @@ function saveCanvas()
     var json = JSON.stringify( canvas.toJSON() );
   var template_id = {{$template_id}};
   $.ajax({
-           type:'POST',
-           url:'{{route('saveDesignTemplate')}}',
-           data:{json:json,template_id:template_id},
-           success:function(data){
-			   var i=0;
-	while((i*grid)<=canvas.height){
-		canvas.add(new fabric.Line([ 0,i * grid,canvas.width,i * grid ], { stroke: '#ccc', selectable: false }));
-		i++;
-	}
-	var j=0;
-	while((j*grid)<=canvas.width){
-		canvas.add(new fabric.Line([ j * grid,0, j * grid, canvas.height], { stroke: '#ccc', selectable: false }));
-		j++;
-	}
-              alert(data.success);
-           }
-        });
+    type    :'POST',
+    url     :'{{route('saveDesignTemplate')}}',
+    data    :{json:json,template_id:template_id},
+    async   :false,
+    success :function(data){
+         var i=0;
+         while((i*grid)<=canvas.height){
+                 canvas.add(new fabric.Line([ 0,i * grid,canvas.width,i * grid ], { stroke: '#ccc', selectable: false }));
+                 i++;
+         }
+         var j=0;
+         while((j*grid)<=canvas.width){
+                 canvas.add(new fabric.Line([ j * grid,0, j * grid, canvas.height], { stroke: '#ccc', selectable: false }));
+                 j++;
+         }
+       swal("Saved", data.message, "success");
+    }
+ });
 }
 
 // Grid display part
@@ -1032,7 +1037,7 @@ function AddLayout_100()
   // canvas.add(rect);
   function Addserialnumber()
   {
-    var serialnumber = new fabric.Textbox('Serial Number', {
+    var object = new fabric.Textbox('Serial Number', {
     left: 20,
     top: 50,
     fill: '#646161',
@@ -1041,13 +1046,13 @@ function AddLayout_100()
     stroke: "#646161",
 	id: "serial_number",
     });
-
-    canvas.add(serialnumber);
+    var objectUpdate  = add_common_object_name(object, 'serial_digit')  
+    canvas.add(objectUpdate);
   }
   
   function Addsalutation()
   {
-    var salutation = new fabric.Textbox('Salutation', {
+    var object = new fabric.Textbox('Salutation', {
     left: 20,
     top: 50,
     fill: '#646161',
@@ -1057,12 +1062,13 @@ function AddLayout_100()
 	id: "salutation",
     });
 
-    canvas.add(salutation);
+    var objectUpdate  = add_common_object_name(object, 'salutation')  
+    canvas.add(objectUpdate);
   }
 
   function Addfirstname()
   {
-    var firstname = new fabric.Textbox('First Name', {
+    var object = new fabric.Textbox('first_name', {
     left: 20,
     top: 50,
     fill: '#646161',
@@ -1072,12 +1078,13 @@ function AddLayout_100()
 	id: "first_name",
     });
 
-    canvas.add(firstname);
+    var objectUpdate  = add_common_object_name(object, 'first_name')  
+    canvas.add(objectUpdate);
   }
 
   function Addlastname()
   {
-    var lastname = new fabric.Textbox('Last Name', {
+    var object = new fabric.Textbox('Last Name', {
     left: 20,
     top: 50,
     fill: '#646161',
@@ -1087,12 +1094,13 @@ function AddLayout_100()
 	id: "last_name",
     });
 
-    canvas.add(lastname);
+    var objectUpdate  = add_common_object_name(object, 'last_name')  
+    canvas.add(objectUpdate);
   }
 
   function Addemail()
   {
-    var email = new fabric.Textbox('Email', {
+    var object = new fabric.Textbox('Email', {
     left: 20,
     top: 50,
     fill: '#646161',
@@ -1102,12 +1110,13 @@ function AddLayout_100()
 	id: "email",
     });
 
-    canvas.add(email);
+    var objectUpdate  = add_common_object_name(object, 'email')  
+    canvas.add(objectUpdate);
   }
 
   function Addtype()
   {
-    var type = new fabric.Textbox('Type', {
+    var object = new fabric.Textbox('Type', {
     left: 20,
     top: 50,
     fill: '#646161',
@@ -1117,12 +1126,13 @@ function AddLayout_100()
 	id: "user_type",
     });
 
-    canvas.add(type);
+    var objectUpdate  = add_common_object_name(object, 'namebadge_user_label')  
+    canvas.add(objectUpdate);
   }
 
   function Addcountry()
   {
-    var country = new fabric.Textbox('Country', {
+    var object = new fabric.Textbox('Country', {
     left: 20,
     top: 50,
     fill: '#646161',
@@ -1132,12 +1142,13 @@ function AddLayout_100()
 	id: "country",
     });
 
-    canvas.add(country);
+    var objectUpdate  = add_common_object_name(object, 'country_id')  
+    canvas.add(objectUpdate);
   }
 
   function Addcompany()
   {
-    var company = new fabric.Textbox('Company', {
+    var object = new fabric.Textbox('Company', {
     left: 20,
     top: 50,
     fill: '#646161',
@@ -1147,11 +1158,12 @@ function AddLayout_100()
 	id: "company",
     });
 
-    canvas.add(company);
+    var objectUpdate  = add_common_object_name(object, 'company_name')  
+    canvas.add(objectUpdate);
   }
 
   function qrcode(){
-    var object = new fabric.Rect({
+    var qrcodeObject = new fabric.Rect({                    
                     width: 100,
                     height: 100,
                     opacity: 1,
@@ -1160,9 +1172,10 @@ function AddLayout_100()
                     strokeWidth: 2,
                     left: 0,
                     top: 0,
-					id: 'qrcode'
+                    id: 'qrcode'
     });
-    canvas.add(object);
+    var qrcodeObjectUpdate  = add_common_object_name(qrcodeObject, 'qrcode')  
+    canvas.add(qrcodeObjectUpdate);  
   }
   
   function barcode(){
@@ -1175,10 +1188,24 @@ function AddLayout_100()
                     strokeWidth: 2,
                     left: 0,
                     top: 0,
-					id: 'barcode'
+                    id: 'barcode'
     });
-    canvas.add(object);
+    var objectUpdate  = add_common_object_name(object, 'barcode')  
+    canvas.add(objectUpdate);
   }
+  
+  function add_common_object_name(fabricObj, keyValue){
+      fabricObj.toObject = (function(toObject) {
+        return function() {
+          return fabric.util.object.extend(toObject.call(this), {
+            label_name: this.label_name
+          });
+        };
+      })(fabricObj.toObject);
+      fabricObj.label_name = keyValue;
+      return fabricObj;
+  }
+  
   <!--###################################-->
   // ######################## For the snap alignment Start   #################################
   var ctx = canvas.getSelectionContext(),
