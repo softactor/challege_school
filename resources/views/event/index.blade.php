@@ -11,6 +11,7 @@
         <div class="panel-heading">
             <h5 class="float-left">Event List</h5>
             <div class="float-right">
+                <a href="{{route('importEventCSV')}}"  class="btn btn-sm btn-success">Import Events</a>
                 <a href="{{route('add_event')}}"  class="btn btn-sm btn-success text-right">Add Event</a>
             </div>
             <div class="clearfix"></div>
@@ -19,7 +20,7 @@
             <table class="table table-bordered list-table-custom-style" id="eventTable">
                 <thead>
                     <tr>
-                        <th>Serial Number</th>
+                        <th>#</th>
                         <th>Event Name</th>
                         <th>Event Date</th>
                         <th>Action</th>

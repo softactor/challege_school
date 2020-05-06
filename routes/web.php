@@ -35,6 +35,8 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
         Route::get('/edit_event/{event_id}', 'EventController@edit')->name('editEvent');
         Route::post('/update_event/{event_id}', 'EventController@update')->name('updateEvent');
         Route::get('delete_event', 'EventController@destroy')->name('delete_event');
+        Route::get('/events/import-events-csv', 'EventController@importCSV')->name('importEventCSV');
+        Route::post('/events/upload-csv', 'EventController@upload_attendee_csv')->name('uploadEventCSV');
 
 	// User Type Route
 	Route::get('/user-types', 'UsertypeController@index')->name('userTypes');
@@ -43,6 +45,8 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::get('/edit-type/{type_id}', 'UsertypeController@edit')->name('editUserType');
 	Route::post('/update-type/{type_id}', 'UsertypeController@update')->name('updateUserType');
 	Route::get('/delete-type/{type_id}', 'UsertypeController@destroy')->name('deleteUserType');
+        Route::get('/user-types/import-csv', 'UsertypeController@importCSV')->name('importUserTypesCSV');
+        Route::post('/user-types/upload-csv', 'UsertypeController@upload_attendee_csv')->name('uploadUserTypesCSV');
 
 	// Attendee Route
 	Route::get('/attendees-list', 'AttendeeController@index')->name('attendeeList');

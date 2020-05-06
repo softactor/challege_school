@@ -111,5 +111,81 @@ class EventController extends Controller {
         
         echo json_encode($feedback);
     }
+    
+    /**
+      Import CSV
+     */
+    public function importCSV() {
+        return view('event.importCSV');
+    }
+
+    /**
+      Upload CSV
+     */
+    public function upload_attendee_csv(Request $request) {
+        $fileHaveError = false;
+        $importSuccess = 0;
+        $importError = 0;
+        $fileErrorMessage = [];
+        $allowed = array('csv');
+        $filename = $_FILES['event_csv']['name'];
+        if ($_FILES['event_csv']['error'] > 0) {
+            $fileHaveError = true;
+            array_push($fileErrorMessage, 'Please select an import file first');
+        }
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (!in_array($ext, $allowed)) {
+            $fileHaveError = true;
+            array_push($fileErrorMessage, 'Please import only CSV file');
+        }
+        if (!$fileHaveError) {
+            $file = $_FILES['event_csv']['tmp_name'];
+            $csvdata = $this->csvToArray($file);
+            if (isset($csvdata) && !empty($csvdata)) {
+                $offlineData = [];
+                foreach ($csvdata as $importData) {
+                    $attendee_exist = Event::where('id', $importData[0])->count();
+                    if ($attendee_exist == 0) {
+                        $insert = new Event();
+                        $insert->id = $importData[0];
+                        $insert->name = $importData[1];
+                        $insert->event_date = $importData[2];
+                        $insert->event_id = $importData[3];
+                        $insert->event_short_code = $importData[4];
+                        $insert->created_by = Auth::User()->id;
+                        $insert->edited_by = Auth::User()->id;
+                        $insert->save();
+                    } else {
+                        $duplicate[] = $importData[1];
+                    }
+                } // Foreach csv end;
+                if (!empty($duplicate)) {
+                    return redirect()->route('eventList')->with('error', $duplicate);
+                } else {
+                    return redirect()->route('eventList')->with('success', 'CSV imported successfully.');
+                }
+            }
+        }
+    }
+    public function csvToArray($filename = '', $delimiter = ',') {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        $count = 1;
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while ($row = fgetcsv($handle)) {
+                if ($count == 1) {
+                    $count++;
+                    continue;
+                }
+                $data[] = $row;
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
 
 }

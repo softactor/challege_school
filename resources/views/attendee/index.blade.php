@@ -16,7 +16,7 @@
 			<table class="table table-bordered list-table-custom-style" id="attendeeTable">
 				<thead>
 					<tr>
-						<th>Serial Number</th>
+						<th>#</th>
 						<th>Event Name</th>
 						<th>Name</th>
 						<th>Email</th>

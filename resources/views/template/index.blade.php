@@ -13,7 +13,7 @@
 					<table class="table table-bordered list-table-custom-style" id="templateTable">
 						<thead>
 							<tr>
-								<th>Serial Number</th>
+								<th>#</th>
 								<th>Template Name</th>
 								<th>Event</th>
 								<th>Type</th>

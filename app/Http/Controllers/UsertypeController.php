@@ -43,6 +43,8 @@ class UsertypeController extends Controller {
     public function store(UserTypeStore $request) {
         $insert = new Usertype();
         $insert->type_name = $request->typename;
+        $insert->text_clor = $request->text_clor;
+        $insert->background_color = $request->background_color;
         $insert->created_by = Auth::user()->id;
         if ($insert->save()) {
             return redirect()->route('userTypes')->with('success', 'User Type Added successfully.');
@@ -80,6 +82,8 @@ class UsertypeController extends Controller {
     public function update(UserTypeStore $request, Usertype $type_id) {
         $update = userType::find($type_id->id);
         $update->type_name = $request->typename;
+        $update->text_clor = $request->text_clor;
+        $update->background_color = $request->background_color;
         if ($update->save()) {
             return redirect()->route('userTypes')->with('success', 'Type updated successfully.');
         }
@@ -108,4 +112,78 @@ class UsertypeController extends Controller {
         }
     }
 
+    /**
+      Import CSV
+     */
+    public function importCSV() {
+        return view('usertype.importCSV');
+    }
+
+    /**
+      Upload CSV
+     */
+    public function upload_attendee_csv(Request $request) {
+        $fileHaveError = false;
+        $importSuccess = 0;
+        $importError = 0;
+        $fileErrorMessage = [];
+        $allowed = array('csv');
+        $filename = $_FILES['user_type_csv']['name'];
+        if ($_FILES['user_type_csv']['error'] > 0) {
+            $fileHaveError = true;
+            array_push($fileErrorMessage, 'Please select an import file first');
+        }
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (!in_array($ext, $allowed)) {
+            $fileHaveError = true;
+            array_push($fileErrorMessage, 'Please import only CSV file');
+        }
+        if (!$fileHaveError) {
+            $file = $_FILES['user_type_csv']['tmp_name'];
+            $csvdata = $this->csvToArray($file);
+            if (isset($csvdata) && !empty($csvdata)) {
+                $offlineData = [];
+                foreach ($csvdata as $importData) {
+                    $attendee_exist = Usertype::where('id', $importData[0])->count();
+                    if ($attendee_exist == 0) {
+                        $insert = new Usertype();
+                        $insert->id = $importData[0];
+                        $insert->type_name = $importData[1];
+                        $insert->background_color = $importData[2];
+                        $insert->text_clor = $importData[3];
+                        $insert->created_by = Auth::User()->id;
+                        $insert->edited_by = Auth::User()->id;
+                        $insert->save();
+                    } else {
+                        $duplicate[] = $importData[1];
+                    }
+                } // Foreach csv end;
+                if (!empty($duplicate)) {
+                    return redirect()->route('userTypes')->with('error', $duplicate);
+                } else {
+                    return redirect()->route('userTypes')->with('success', 'CSV imported successfully.');
+                }
+            }
+        }
+    }
+    public function csvToArray($filename = '', $delimiter = ',') {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        $count = 1;
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while ($row = fgetcsv($handle)) {
+                if ($count == 1) {
+                    $count++;
+                    continue;
+                }
+                $data[] = $row;
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
 }

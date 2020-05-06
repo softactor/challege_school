@@ -24,6 +24,14 @@
 							</span>
 						@endif
 					</div>
+                                        <div class="form-group">
+                                            <label for="usr">Text Color:</label>
+                                            <input type="color" class="form-control" id="text_clor" name="text_clor" value="{{ $row->text_clor }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="usr">BG Color:</label>
+                                            <input type="color" class="form-control" id="background_color" name="background_color" value="{{ $row->background_color }}">
+                                        </div>
 					<div class="form-group">
 						<input type="submit" class="btn btn-success" value="Submit">
 					</div>
