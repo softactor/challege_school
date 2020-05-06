@@ -10,7 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading"><a href="{{route('createTemplate')}}"  class="btn btn-sm btn-success">Add Template</a></div>
 				<div class="panel-body">
-					<table class="table table-bordered" id="templateTable">
+					<table class="table table-bordered list-table-custom-style" id="templateTable">
 						<thead>
 							<tr>
 								<th>Serial Number</th>
@@ -33,10 +33,18 @@
 								<td>{{ $template->page_height." MM"}}</td>
 								<td>{{ $template->page_width." MM" }}</td>
 								<td>
-								<a href="{{route('deleteTemplate',[$template->id])}}" onclick="return confirm('Are you sure you want to delete this template?');" class="btn btn-sm btn-danger">Delete</a>
-								<a href="{{route('designTemplate',[$template->id])}}"  class="btn btn-sm btn-success">Design Template</a>
-								<a href="{{route('editTemplate',[$template->id])}}"  class="btn btn-sm btn-success">Edit Configuration</a>
-								<a href="{{route('exportTemplate',[$template->id])}}"  class="btn btn-sm btn-success">Export</a>
+                                                                    <a title="Delete Configuration" href="{{route('deleteTemplate',[$template->id])}}" onclick="return confirm('Are you sure you want to delete this template?');" class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-times"></i>
+                                                                    </a>
+                                                                    <a href="{{route('designTemplate',[$template->id])}}"  class="btn btn-sm btn-success" title="Design Template">
+                                                                        <i class="fas fa-palette"></i>
+                                                                    </a>
+                                                                    <a title="Edit Configuration" href="{{route('editTemplate',[$template->id])}}"  class="btn btn-sm btn-success">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    <a title="Export Template Configuration" href="{{route('exportTemplate',[$template->id])}}"  class="btn btn-sm btn-success">
+                                                                        <i class="fas fa-file-export"></i>
+                                                                    </a>
 								</td>
 							</tr>
 							@php $i++ @endphp

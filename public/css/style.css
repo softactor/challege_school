@@ -150,4 +150,15 @@
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-
+table.list-table-custom-style{
+    background-color: white;
+}
+table.list-table-custom-style tr th{
+    font-size: 14px;
+    text-align: center;
+    background-color: lightgrey;
+}
+table.list-table-custom-style tr td{
+    font-size: 14px;
+    padding-top:.5%;
+}

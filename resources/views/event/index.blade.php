@@ -16,7 +16,7 @@
             <div class="clearfix"></div>
         </div>
         <div class="panel-body">
-            <table class="table table-bordered" id="eventTable">
+            <table class="table table-bordered list-table-custom-style" id="eventTable">
                 <thead>
                     <tr>
                         <th>Serial Number</th>
@@ -39,9 +39,15 @@
                                 $del_url    = route('delete_event');
                                 $del_id     = $event->id;
                             ?>
-                            <a href="{{route('editEvent',[$event['id']])}}"  class="btn btn-sm btn-success">Edit</a>
-                            <a href="javascript:void(0)" onclick="deletConfirmation('<?php echo $del_url; ?>',<?php echo $del_id; ?>);" class="btn btn-sm btn-danger">Delete</a>
-                            <a href="{{route('addAttendee',['id'=>$event['id']])}}"  class="btn btn-sm btn-success">Add Attendee</a>
+                            <a title="Edit" href="{{route('editEvent',[$event['id']])}}"  class="btn btn-sm btn-success">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a title="Delete" href="javascript:void(0)" onclick="deletConfirmation('<?php echo $del_url; ?>',<?php echo $del_id; ?>);" class="btn btn-sm btn-danger">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            <a title="Add Attende" href="{{route('addAttendee',['id'=>$event['id']])}}"  class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i>
+                            </a>
                         </td>
                     </tr>
                     @php $i++ @endphp

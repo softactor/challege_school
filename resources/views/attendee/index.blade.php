@@ -13,14 +13,12 @@
 		<a href="{{route('sampleCSV')}}"  class="btn btn-sm btn-success">Sample CSV</a>
 		</div>
 		<div class="panel-body" style="overflow-x:scroll">
-			<table class="table table-bordered" id="attendeeTable">
+			<table class="table table-bordered list-table-custom-style" id="attendeeTable">
 				<thead>
 					<tr>
 						<th>Serial Number</th>
 						<th>Event Name</th>
-						<th>Salutation</th>
-						<th>First Name</th>
-						<th>Last Name</th>
+						<th>Name</th>
 						<th>Email</th>
 						<th>Type</th>
 						<th>Country</th>
@@ -34,15 +32,19 @@
 					<tr>
 						<td>{{$i}}</td>
 						<td>{{ getEventName($attendee->event_id) }}</td>
-						<td>{{$attendee->salutation}}</td>
-						<td>{{$attendee->first_name}}</td>
-						<td>{{$attendee->last_name}}</td>
+						<td><?php echo $attendee->salutation." ".$attendee->first_name." ".$attendee->last_name ?></td>
 						<td>{{$attendee->email}}</td>
 						<td>{{ getTypeName($attendee->type_id) }}</td>
 						<td>{{$attendee->country}}</td>
 						<td>{{$attendee->company}}</td>
-						<td><a href="{{route('editAttendee',[$attendee['id']])}}"  class="btn btn-sm btn-success">Edit</a>
-						<a href="{{route('deleteAttendee',[$attendee['id']])}}" onclick="return confirm('Are you sure you want to delete this attendee?');" class="btn btn-sm btn-danger">Delete</a></td>
+						<td>
+                                                    <a href="{{route('editAttendee',[$attendee['id']])}}"  class="btn btn-sm btn-success">
+                                                       <i class="fas fa-edit"></i> 
+                                                    </a>
+                                                    <a href="{{route('deleteAttendee',[$attendee['id']])}}" onclick="return confirm('Are you sure you want to delete this attendee?');" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-times"></i>
+                                                    </a>
+                                                </td>
 					</tr>
 					@php $i++ @endphp
 					@endforeach

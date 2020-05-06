@@ -16,7 +16,7 @@
             <div class="clearfix"></div>
         </div>
         <div class="panel-body">
-            <table class="table table-bordered" id="typeTable">
+            <table class="table table-bordered list-table-custom-style" id="typeTable">
                 <thead>
                     <tr>
                         <th>Serial Number</th>
@@ -31,8 +31,12 @@
                         <td>{{$i}}</td>
                         <td>{{$type->type_name}} (ID- {{$type->id}})</td>
                         <td>
-                            <a href="{{route('editUserType',[$type['id']])}}"  class="btn btn-sm btn-success">Edit</a>
-                            <a href="{{route('deleteUserType',[$type['id']])}}" onclick="return confirm('Are you sure you want to delete this user type?');" class="btn btn-sm btn-danger">Delete</a>
+                            <a title="Edit" href="{{route('editUserType',[$type['id']])}}"  class="btn btn-sm btn-success">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a title="Delete" href="{{route('deleteUserType',[$type['id']])}}" onclick="return confirm('Are you sure you want to delete this user type?');" class="btn btn-sm btn-danger">
+                                <i class="fas fa-times"></i>
+                            </a>
                         </td>
                     </tr>
                     @php $i++ @endphp
