@@ -15,6 +15,22 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Add User Type</div>
 				<div class="panel-body">
+                                        <div class="form-group">
+                                            <label>Event</label>
+                                            <select class="form-control" name="event_id">
+                                                <option value=''>-- Select Event --</option>
+                                                @if ($events->count())
+                                                @foreach($events as $key=>$value)
+                                                <option value="{{ $key }}">{{ $value }}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                            @if ($errors->has('event_id')) 
+                                            <span class="help-block">
+                                                <span>{{ $errors->first('event_id') }}</span>
+                                            </span>
+                                            @endif
+                                        </div>
 					<div class="form-group">
 						<label>Type Name</label>
 						<input type="text" name="typename" class="form-control">

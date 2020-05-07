@@ -21,6 +21,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Event Name</th>
                         <th>Type Name</th>
                         <th>Background Color</th>
                         <th>Text Color</th>
@@ -32,6 +33,7 @@
                     @foreach($types as $type)
                     <tr>
                         <td>{{$i}}</td>
+                        <td>{{ (isset($type->event_id) && !empty($type->event_id) ? getEventName($type->event_id) : "") }}</td>
                         <td>{{$type->type_name}} (ID- {{$type->id}})</td>
                         <td>
                             <div style="width: 25px; height: 25px; background-color: <?php echo $type->background_color; ?>"></div>

@@ -5,6 +5,7 @@ use App\Template;
 use App\Usertype;
 use App\custom_fields;
 use App\custom_field_metas;
+use Illuminate\Support\Facades\DB;
 
 if(!function_exists('getEventName'))
 {
@@ -127,6 +128,17 @@ function image_file_store($file_data) {
         ];
     }
     return $feedbackData;
+}
+
+// CHECK DUPLICATE DATA ENTRY:
+
+function check_duplicate_data($data){
+    $result     =    DB::table($data['table'])->where($data['where'])->first();
+    if(isset($result) && !empty($result)){
+        return $result->id;
+    }else{
+        return false;
+    }
 }
 
 

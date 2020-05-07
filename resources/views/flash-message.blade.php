@@ -18,14 +18,7 @@
 
 	<button type="button" class="close" data-dismiss="alert">×</button>	
 
-        <strong>This emails are duplicate:</strong>
-		<table>
-		@foreach($message as $email)
-		<tr>
-			<td>{{$email}}</td>
-		</tr>
-		@endforeach
-		</table>
+        <strong>{{ $message }}</strong>
 </div>
 
 @endif

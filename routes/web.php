@@ -43,7 +43,7 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::get('/add-type', 'UsertypeController@create')->name('addUserType');
 	Route::post('/save-type', 'UsertypeController@store')->name('saveUserType');
 	Route::get('/edit-type/{type_id}', 'UsertypeController@edit')->name('editUserType');
-	Route::post('/update-type/{type_id}', 'UsertypeController@update')->name('updateUserType');
+	Route::post('/update-type}', 'UsertypeController@update')->name('updateUserType');
 	Route::get('/delete-type/{type_id}', 'UsertypeController@destroy')->name('deleteUserType');
         Route::get('/user-types/import-csv', 'UsertypeController@importCSV')->name('importUserTypesCSV');
         Route::post('/user-types/upload-csv', 'UsertypeController@upload_attendee_csv')->name('uploadUserTypesCSV');

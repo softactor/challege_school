@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Event;
 use App\Usertype;
 use App\Template;
 use App\Attendee;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserTypeStore;
+use Illuminate\Support\Facades\Validator;
 
 class UsertypeController extends Controller {
 
@@ -31,7 +33,8 @@ class UsertypeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('usertype.create');
+        $events = Event::get()->pluck('name', 'id');
+        return view('usertype.create', compact(['events']));
     }
 
     /**
@@ -40,8 +43,45 @@ class UsertypeController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserTypeStore $request) {
+    public function store(Request $request) {
+        //Define Rules
+        $rules = [
+            'typename'         => 'required'
+        ];
+
+        // Create a new validator instance
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return redirect()->route('addUserType')
+                    ->withErrors($validator)
+                    ->withInput()
+                    ->with('error', 'User Type Added successfully.');
+        }
+        /*----------------------------------------------------------
+         *check duplicate entry
+         * ---------------------------------------------------------
+         */
+        $checkParam['table'] = "usertypes";
+        if (isset($request->event_id) && !empty($request->event_id)) {
+            $checkWhereParam = [
+                ['type_name', '=', $request->typename],
+                ['event_id', '=', $request->event_id],
+            ];
+        }else{
+           $checkWhereParam = [
+                ['type_name', '=', $request->typename],
+            ]; 
+        }
+        $checkParam['where']    = $checkWhereParam;
+        $duplicateCheck         = check_duplicate_data($checkParam); //check_duplicate_data is a helper method:
+        // check is it duplicate or not
+        if ($duplicateCheck) {
+            return redirect()->route('addUserType')
+                    ->withInput()
+                    ->with('error', 'Failed to save data. Duplicate Entry found.');
+        }// end of duplicate checking:
         $insert = new Usertype();
+        $insert->event_id   = (isset($request->event_id) && !empty($request->event_id) ? $request->event_id : "");
         $insert->type_name = $request->typename;
         $insert->text_clor = $request->text_clor;
         $insert->background_color = $request->background_color;
@@ -68,8 +108,9 @@ class UsertypeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit(Usertype $type_id) {
+        $events = Event::get()->pluck('name', 'id');
         $row = userType::find($type_id->id);
-        return view('usertype.edit', compact(['row']));
+        return view('usertype.edit', compact(['row','events']));
     }
 
     /**
@@ -78,11 +119,52 @@ class UsertypeController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Usertype  $usertype
      * @return \Illuminate\Http\Response
+     * UserTypeStore $request, Usertype $type_id
      */
-    public function update(UserTypeStore $request, Usertype $type_id) {
+    public function update(Request $request) {
+        //Define Rules
+        $rules = [
+            'typename'         => 'required'
+        ];
+
+        // Create a new validator instance
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return redirect()->route('userTypes')
+                    ->withErrors($validator)
+                    ->withInput()
+                    ->with('error', 'User Type Added successfully.');
+        }
+        /*----------------------------------------------------------
+         *check duplicate entry
+         * ---------------------------------------------------------
+         */
+        $checkParam['table'] = "usertypes";
+        if (isset($request->event_id) && !empty($request->event_id)) {
+            $checkWhereParam = [
+                ['type_name', '=', $request->typename],
+                ['event_id', '=', $request->event_id],
+                ['id', '!=', $request->edit_id],
+            ];
+        }else{
+           $checkWhereParam = [
+                ['type_name', '=', $request->typename],
+                ['id', '!=', $request->edit_id],
+            ]; 
+        }
+        $checkParam['where']    = $checkWhereParam;
+        $duplicateCheck         = check_duplicate_data($checkParam); //check_duplicate_data is a helper method:
+        // check is it duplicate or not
+        if ($duplicateCheck) {
+            return redirect()->route('userTypes')
+                    ->withErrors($validator)
+                    ->withInput()
+                    ->with('error', 'Failed to save data. Duplicate Entry found.');
+        }// end of duplicate checking:
         $update = userType::find($type_id->id);
-        $update->type_name = $request->typename;
-        $update->text_clor = $request->text_clor;
+        $update->event_id   = (isset($request->event_id) && !empty($request->event_id) ? $request->event_id : "");
+        $update->type_name  = $request->typename;
+        $update->text_clor  = $request->text_clor;
         $update->background_color = $request->background_color;
         if ($update->save()) {
             return redirect()->route('userTypes')->with('success', 'Type updated successfully.');
