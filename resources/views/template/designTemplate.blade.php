@@ -45,9 +45,6 @@
             <li class="nav-item">
               <a class="nav-link" data-toggle="tab" href="#menu1"><i class="fas fa-paint-brush"></i></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#theme"><i class="fas ion-images "></i></a>
-            </li>
           </ul>
         </div>
         <div class="card-body side-menu">
@@ -480,171 +477,12 @@
                     <div class="pro-value">
                       <input type="checkbox" name="polaroid" id="polaroid">
                     </div>
-                  </div><hr>
-                  <!--<div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Brightness :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="checkbox" name="brightness" id="brightness">
-                      </div>
-                    </div>
-                    <div class="row field">
-                      <div class="pro-value">
-                        <input type="range" name="brightness-value" id="brightness-value"  style="margin-left: 10px;width:230px">
-                      </div>
-                    </div>
-                  </div><hr>
-                  <div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Gamma :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="checkbox" name="gamma" id="gamma">
-                      </div>
-                    </div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Red :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="range" name="gamma-red" id="gamma-red"  style="margin-left: 10px;width:230px">
-                      </div>
-                    </div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Green :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="range" name="gamma-green" id="gamma-green"  style="margin-left: 10px;width:230px">
-                      </div>
-                    </div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Blue :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="range" name="gamma-blue" id="gamma-blue"  style="margin-left: 10px;width:230px">
-                      </div>
-                    </div>
-                  </div><hr>
-                  <div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Contrast :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="checkbox" name="contrast" id="contrast">
-                      </div>
-                    </div>
-                    <div class="row field">
-                      <div class="pro-value">
-                        <input type="range" name="contrast-value" id="contrast-value"  style="margin-left: 10px;width:230px">
-                      </div>
-                    </div>
-                  </div><hr>
-                  <div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Saturation :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="checkbox" name="saturation" id="saturation">
-                      </div>
-                    </div>
-                    <div class="row field">
-                      <div class="pro-value">
-                        <input type="range" name="saturation-value" id="saturation-value"  style="margin-left: 10px;width:230px">
-                      </div>
-                    </div>
-                  </div><hr>
-                  <div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Hue :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="checkbox" name="hue" id="hue">
-                      </div>
-                    </div>
-                    <div class="row field">
-                      <div class="pro-value">
-                        <input type="range" name="hue-value" id="hue-value"  style="margin-left: 10px;width:230px">
-                      </div>
-                    </div>
-                  </div><hr>
-                  <div>
-                    <div class="row field">
-                      <div class="pro-label">
-                        <label>Blur :</label>
-                      </div>
-                      <div class="pro-value">
-                        <input type="checkbox" name="blur" id="blur">
-                      </div>
-                    </div>
-                    <div class="row field">
-                      <div class="pro-value">
-                        <input type="range" name="blur-value" id="blur-value"  style="margin-left: 10px;width:230px">
-                      </div>
-                    </div>
-                  </div><hr>-->
+                  </div><hr>                  
                 </div>
               </div>
             </div>
 
-            <div id="theme" class="container tab-pane grid-cont">
-              <!-- theme -->
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item"><b>Background Theme</b></li>
-              </ul>
-
-              <div class=" field-list">
-                <div class="row">
-                  <div class="col-md-6">
-                      <span><img src="{{ asset('public/image/themes/city.jpg') }}"  class="theme" height="78px" width="78px" alt="" title="" /></span>
-                  </div>
-                  <div class="col-md-6">
-                     <span><img src="{{ asset('public/image/themes/food.png') }}" class="theme" height="78px" width="78px" alt="" title="" /></span>
-                  </div>
-                </div>
-              </div>
-        
-              <div class=" field-list">
-                <div class="row">
-                  <div class="col-md-6">
-                     <span><img src="{{ asset('public/image/themes/restaurant.png') }}" class="theme" height="78px" width="78px" alt="" title="" /></span>
-                  </div>
-                  <div class="col-md-6">
-                     <span><img src="{{ asset('public/image/themes/school.png') }}" class="theme" height="78px" width="78px" alt="" title="" /></span>
-                  </div>
-                </div>
-              </div>
-        
-              <div class=" field-list">
-                <div class="row">
-                  <div class="col-md-6">
-                     <span><img src="{{ asset('public/image/themes/space.jpg') }}" class="theme" height="78px" width="78px" alt="" title="" /></span>
-                  </div>
-                  <div class="col-md-6">
-                     <span><img src="{{ asset('public/image/themes/stardust.png') }}" class="theme" height="78px" width="78px" alt="" title="" /></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class=" field-list">
-                <div class="row">
-                  <div class="col-md-6">
-                     <span><img src="{{ asset('public/image/themes/winter.jpg') }}" class="theme" height="78px" width="78px" alt="" title="" /></span>
-                  </div>
-                  <div class="col-md-6">
-                     <span><img src="{{ asset('public/image/themes/winter2.jpg') }}" class="theme" height="78px" width="78px" alt="" title="" /></span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
+            
           </div>
         </div>
       </div>

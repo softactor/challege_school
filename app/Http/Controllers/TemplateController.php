@@ -58,13 +58,19 @@ class TemplateController extends Controller {
             $file_data['image_file_name'] = $image_file_name;
             $file_data['newDirtory']    =   public_path('/header_image/');;
             $file_data['filePrefix']    =   'template_header_';
-            $uploadresult = image_file_store($file_data);
-            print '<pre>';
-            print_r($uploadresult);
-            print '</pre>';
-            exit;
             
-            $insert->header_image = $image_file_name;
+            $image_file_name              = md5($img->getClientOriginalName() . time()) . "." . $img->getClientOriginalExtension();;
+            $file_data['fileName']        = $image_file_name;
+            $file_data['image_file_name'] = 'header_image';
+            $file_data['newDirtory']    =   public_path('/header_image');;
+            $file_data['filePrefix']    =   'template_header_';
+            
+            $uploadresult = image_file_store($file_data);
+            if($uploadresult['status'] == 'success'){
+                $insert->header_image = $uploadresult['data'];
+            }else{
+                $insert->header_image = '';
+            }
         } else {
             $insert->header_image = '';
         }
