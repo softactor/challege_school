@@ -33,7 +33,7 @@ class TemplateController extends Controller {
      */
     public function create() {
         $events = Event::get()->pluck('name', 'id');
-        $userTypes = Usertype::get()->pluck('type_name', 'id');
+        $userTypes = Usertype::get();
 
         return view('template.create', compact(['events', 'userTypes']));
     }
@@ -98,7 +98,7 @@ class TemplateController extends Controller {
     public function edit($template_id) {
         $row = Template::find($template_id);
         $events = Event::get()->pluck('name', 'id');
-        $userTypes = Usertype::get()->pluck('type_name', 'id');
+        $userTypes = Usertype::get();
         return view('template.edit', compact(['row', 'events', 'userTypes']));
     }
 

@@ -53,8 +53,8 @@
                             <select class="form-control" name="type_id">
                                 <option value=''>-- Select Type --</option>
                                 @if ($userTypes->count())
-                                @foreach($userTypes as $key=>$value)
-                                <option value="{{ $key }}" {{ $row->type_id == $key ? 'selected="selected"' : '' }}>{{ $value }}</option>
+                                @foreach($userTypes as $value)
+                                <option value="{{ $value->id }}" {{ $row->type_id == $value->id ? 'selected="selected"' : '' }}><?php echo $value->type_name.(isset($value->event_id) && !empty($value->event_id) ? "(".getEventName($value->event_id).")" : ""); ?></option>
                                 @endforeach
                                 @endif
                             </select>
