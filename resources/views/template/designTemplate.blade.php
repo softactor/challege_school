@@ -104,13 +104,13 @@
                   </div>
                   <div class="col-md-6">
                     <div class="card-icon  box" onclick="Addsalutation()">
-                     <span>Salutation</span>
+                     <span>Name</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class=" field-list">
+<!--              <div class=" field-list">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="card-icon box" onclick="Addfirstname()">
@@ -123,7 +123,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>-->
 
               <div class=" field-list">
                 <div class="row">
@@ -875,11 +875,11 @@ function AddLayout_100()
   // canvas.add(rect);
   function Addserialnumber()
   {
-    var object = new fabric.Textbox('Serial Number', {
+    var object = new fabric.Textbox('SlN', {
     left: 20,
     top: 50,
     fill: '#646161',
-    width:250,
+//    width:250,
     strokeWidth: 1,
     stroke: "#646161",
 	id: "serial_number",
@@ -890,17 +890,16 @@ function AddLayout_100()
   
   function Addsalutation()
   {
-    var object = new fabric.Textbox('Salutation', {
+    var object = new fabric.Textbox('Name', {
     left: 20,
     top: 50,
     fill: '#646161',
-    width:200,
     strokeWidth: 1,
     stroke: "#646161",
-	id: "salutation",
+	id: "name",
     });
 
-    var objectUpdate  = add_common_object_name(object, 'salutation')  
+    var objectUpdate  = add_common_object_name(object, 'name')  
     canvas.add(objectUpdate);
   }
 
@@ -942,7 +941,7 @@ function AddLayout_100()
     left: 20,
     top: 50,
     fill: '#646161',
-    width:200,
+//    width:200,
     strokeWidth: 1,
     stroke: "#646161",
 	id: "email",
@@ -958,7 +957,7 @@ function AddLayout_100()
     left: 20,
     top: 50,
     fill: '#646161',
-    width:200,
+//    width:200,
     strokeWidth: 1,
     stroke: "#646161",
 	id: "user_type",
@@ -974,7 +973,7 @@ function AddLayout_100()
     left: 20,
     top: 50,
     fill: '#646161',
-    width:200,
+//    width:200,
     strokeWidth: 1,
     stroke: "#646161",
 	id: "country",
@@ -990,7 +989,7 @@ function AddLayout_100()
     left: 20,
     top: 50,
     fill: '#646161',
-    width:200,
+//    width:200,
     strokeWidth: 1,
     stroke: "#646161",
 	id: "company",
