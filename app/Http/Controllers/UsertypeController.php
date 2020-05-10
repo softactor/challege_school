@@ -162,7 +162,7 @@ class UsertypeController extends Controller {
                     ->with('error', 'Failed to save data. Duplicate Entry found.');
         }// end of duplicate checking:
         $update = userType::find($request->edit_id);
-        $update->event_id   = (isset($request->event_id) && !empty($request->event_id) ? $request->event_id : "");
+        $update->event_id   = (isset($request->event_id) && !empty($request->event_id) ? $request->event_id : NULL);
         $update->type_name  = $request->typename;
         $update->text_clor  = $request->text_clor;
         $update->background_color = $request->background_color;
