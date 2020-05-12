@@ -54,10 +54,6 @@ class TemplateController extends Controller {
         $insert->created_by = Auth::User()->id;
         $img = $request->file('header_image');
         if (!empty($img)) {
-            $image_file_name              = md5($img->getClientOriginalName() . time()) . "." . $img->getClientOriginalExtension();;
-            $file_data['image_file_name'] = $image_file_name;
-            $file_data['newDirtory']    =   public_path('/header_image/');;
-            $file_data['filePrefix']    =   'template_header_';
             
             $image_file_name              = md5($img->getClientOriginalName() . time()) . "." . $img->getClientOriginalExtension();;
             $file_data['fileName']        = $image_file_name;
