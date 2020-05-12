@@ -998,7 +998,6 @@ function AddLayout_100()
     var objectUpdate  = add_common_object_name(object, 'company_name')  
     canvas.add(objectUpdate);
   }
-
   function qrcode(){
     var qrcodeObject = new fabric.Rect({                    
                     width: 120,
