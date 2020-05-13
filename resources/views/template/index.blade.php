@@ -41,10 +41,7 @@
                                                                     </a>
                                                                     <a title="Edit Configuration" href="{{route('editTemplate',[$template->id])}}"  class="btn btn-sm btn-success">
                                                                         <i class="fas fa-edit"></i>
-                                                                    </a>
-                                                                    <a title="Export Template Configuration" href="{{route('exportTemplate',[$template->id])}}"  class="btn btn-sm btn-success">
-                                                                        <i class="fas fa-file-export"></i>
-                                                                    </a>
+                                                                    </a>                                                                    
 								</td>
 							</tr>
 							@php $i++ @endphp

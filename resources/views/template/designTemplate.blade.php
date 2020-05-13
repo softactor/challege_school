@@ -13,7 +13,10 @@
 @section('content')
   <div class="col-md-12">
 	<input type="hidden" id="header_image_url" value="{{ ($row->header_image != '')?asset('public/header_image/'.$row->header_image):''  }}">
-    <button data-toggle="collapse" data-target="#importTemplate">Import Template</button>
+        <?php $exportUrl    =   url("export_template_config/$row->id"); ?>
+        <a title="Export Template Configuration" href="{{url($exportUrl)}}"  class="btn btn-sm btn-success">
+            <i class="fas fa-file-export"></i> Export Template Configuration
+        </a>
 
     <div id="importTemplate" class="collapse">
       <input type="file" name="import_json" id="import_json">
