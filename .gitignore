@@ -1,3 +1,4 @@
+/nbproject
 /node_modules
 /public/hot
 /public/storage
@@ -15,3 +16,4 @@ yarn-error.log
 /backup
 /uploads
 /public/header_image
+/nbproject/private/
