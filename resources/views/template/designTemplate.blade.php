@@ -9,7 +9,6 @@
 }
 </style>
 @endsection
-
 @section('content')
   <div class="col-md-12">
 	<input type="hidden" id="header_image_url" value="{{ ($row->header_image != '')?asset('public/header_image/'.$row->header_image):''  }}">
