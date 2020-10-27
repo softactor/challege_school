@@ -1004,8 +1004,8 @@ function AddLayout_100()
   
   function qrcode(){
     var qrcodeObject = new fabric.Rect({                    
-                    width: 110,
-                    height: 110,
+                    width: 170,
+                    height: 170,
                     opacity: 1,
                     fill: '#fff',
                     stroke: '#000',
