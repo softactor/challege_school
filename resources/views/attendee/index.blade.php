@@ -11,6 +11,7 @@
         <div class="panel-heading">
             <a href="{{route('importCSV')}}"  class="btn btn-sm btn-success">Import CSV</a>
             <a href="{{route('sampleCSV')}}"  class="btn btn-sm btn-success">Sample CSV</a>
+            <a href="{{route('addAttendee')}}"  class="btn btn-sm btn-success">Add</a>
         </div>
         <div class="panel-body">
             <table class="table table-bordered list-table-custom-style" id="attendeeTable">

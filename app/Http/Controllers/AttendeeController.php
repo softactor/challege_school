@@ -36,6 +36,20 @@ class AttendeeController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
+    public function add_attendee() {
+        $events         = DB::table('events')->get();
+        $usertypes      = DB::table('usertypes')->get();
+        $salutations    = DB::table('salutations')->get();
+        $countries      = DB::table('countries')->get();
+        $attendee = Attendee::orderBy("id", "Desc")->first();
+
+        if ($attendee == null) {
+            $serial_number = 1;
+        } else {
+            $serial_number = $attendee->serial_number + 1;
+        }
+        return view('attendee.add_attendee_form', compact('events','usertypes','salutations','countries','serial_number'));
+    }
     public function create($event) {
         $event_id = $event;
         $salutations = DB::table('salutations')->get();
@@ -59,34 +73,20 @@ class AttendeeController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(attendeeStore $request) {
+    public function store(Request $request) {
         $insert = new attendee();
-        $insert->serial_number = $request->serial_number;
-        $insert->event_id = $request->event_id;
-        $insert->salutation = $request->salutation;
-        $insert->first_name = $request->first_name;
-        $insert->last_name = $request->last_name;
-        $insert->email = $request->email;
-        $insert->type_id = $request->type_id;
-        $insert->country = $request->country;
-        $insert->company = $request->company;
+        $insert->serial_number           = $request->serial_number;
+        $insert->event_id           = $request->event_id;
+        $insert->salutation         = $request->salutation;
+        $insert->first_name         = $request->first_name;
+        $insert->last_name          = $request->last_name;
+        $insert->email              = $request->email;
+        $insert->type_id            = $request->type_id;
+        $insert->country            = $request->country;
+        $insert->company            = $request->company;
         $insert->created_by = Auth::User()->id;
         $insert->edited_by = Auth::User()->id;
         $insert->save();
-        // Other field Add Code
-        $other = $request->custom;
-        if (!empty($other)) {
-            foreach ($other as $key => $value) {
-                $value = $other[$key];
-                $custom = new custom_field_metas;
-                $custom->user_id = Auth::User()->id;
-                $custom->custom_fields_id = $key;
-                $custom->module = "attendee";
-                $custom->reference_record = $insert->id;
-                $custom->field_value = $value;
-                $custom->save();
-            }
-        }
 
         return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
     }

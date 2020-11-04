@@ -162,9 +162,9 @@ function human_format_date($timestamp) {
 function getAttendeePrintedStatus($id){
     $attendeeData   =   DB::table('attendees')->where('id', '=', $id)->first();
     if($attendeeData->print_status){
-        $printingStatus     =   '<span class="label label-success">Printed</span>';
+        $printingStatus     =   '<span class="badge badge-success">Printed</span>';
     }else{
-        $printingStatus     =   '<span class="label label-warning">Printed</span>';
+        $printingStatus     =   '<span class="badge badge-warning">Not Printed</span>';
     }
     
     return $printingStatus;
@@ -177,17 +177,11 @@ function getAttendeePrintedDate($id){
         $printingDate     =   '';
     }
     
-    return $printingStatus;
+    return $printingDate;
 }
 function getAttendeenop($id){
-    $attendeeData   =   DB::table('attendees')->where('id', '=', $id)->first();
-    if($attendeeData->print_status){
-        $printingDate     = human_format_date($attendeeData->print_date);
-    }else{
-        $printingDate     =   '';
-    }
-    
-    return $printingStatus;
+    $attendeeNopHisResp        =   DB::table('print_history')->where('attendee_id', '=', $id)->get();
+    return count($attendeeNopHisResp);
 }
 
 ?>

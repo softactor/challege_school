@@ -16,8 +16,9 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Country</th>
+                        <th>Type</th>
                         <th>Print Status</th>
-                        <th>NOR</th>
+                        <th>NOP</th>
                         <th>Printing Date</th>
                         <th>Namebadge</th>
                         <th>Action</th>
@@ -31,8 +32,9 @@
                         <td><?php echo $attendee->salutation . " " . $attendee->first_name . " " . $attendee->last_name ?></td>
                         <td>{{$attendee->email}}</td>
                         <td>{{$attendee->country}}</td>                        
+                        <td><?php echo getTypeName($attendee->type_id) ?></td>                        
                         <td><span id='printing_status_<?php echo $attendee->id; ?>'><?php echo getAttendeePrintedStatus($attendee->id); ?></span></td>
-                        <td><span id='printing_not_<?php echo $attendee->id; ?>'>NOR</span></td>
+                        <td><span id='printing_not_<?php echo $attendee->id; ?>'><?php echo getAttendeenop($attendee->id); ?></span></td>
                         <td><span id='printing_date_<?php echo $attendee->id; ?>'><?php echo getAttendeePrintedDate($attendee->id); ?></span></td>
                         <td>
                             <div id="print_preview_<?php echo $attendee->id; ?>">

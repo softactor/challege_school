@@ -26,32 +26,35 @@ class PrintStationController extends Controller
     }
     
     public function get_user_namebadge($attendee) {
+        $namebadge                  =   '<span class="badge badge-warning">No template Found</span>';
         $nameBadgeTemplateParam     =   [
             'event_id'  => $attendee->event_id,
             'type_id'   => $attendee->type_id
         ];
         $templateInfo       =   getNameBadgeTemplatedata($nameBadgeTemplateParam);
-        $nameBadgeConfData  =   json_decode($templateInfo->namebadge_print_data);
-        $attendeeData       =   [
-            'serial_number'         =>  $attendee->serial_number,
-            'event_id'              =>  $attendee->event_id,
-            'salutation'            =>  $attendee->salutation,
-            'first_name'            =>  $attendee->first_name,
-            'last_name'             =>  $attendee->last_name,
-            'email'                 =>  $attendee->email,
-            'namebadge_user_label'  =>  getTypeName($attendee->type_id),
-            'country_id'            =>  $attendee->country,
-            'company_name'          =>  $attendee->company,
-            'type_id'               =>  $attendee->type_id
-        ];  
-        $viewParamData['user_id']             = $attendee->id;
-        $viewParamData['event_id']            = $attendee->event_id;
-        $viewParamData['qrCodeFinalData']     = $attendeeData;
-        $viewParamData['templatesDatas']      = $templateInfo;
-        $viewParamData['nameBadgeConfData']   = $nameBadgeConfData;
-        $viewParam                            = (object)$viewParamData;
-        $namebadgeViewData                    =   View::make('attendee.attendee_namebadge', compact('viewParam'));
-        $namebadge                            =   $namebadgeViewData->render();
+        if(isset($templateInfo) && !empty($templateInfo)){
+            $nameBadgeConfData  =   json_decode($templateInfo->namebadge_print_data);
+            $attendeeData       =   [
+                'serial_number'         =>  $attendee->serial_number,
+                'event_id'              =>  $attendee->event_id,
+                'salutation'            =>  $attendee->salutation,
+                'first_name'            =>  $attendee->first_name,
+                'last_name'             =>  $attendee->last_name,
+                'email'                 =>  $attendee->email,
+                'namebadge_user_label'  =>  getTypeName($attendee->type_id),
+                'country_id'            =>  $attendee->country,
+                'company_name'          =>  $attendee->company,
+                'type_id'               =>  $attendee->type_id
+            ];  
+            $viewParamData['user_id']             = $attendee->id;
+            $viewParamData['event_id']            = $attendee->event_id;
+            $viewParamData['qrCodeFinalData']     = $attendeeData;
+            $viewParamData['templatesDatas']      = $templateInfo;
+            $viewParamData['nameBadgeConfData']   = $nameBadgeConfData;
+            $viewParam                            = (object)$viewParamData;
+            $namebadgeViewData                    =   View::make('attendee.attendee_namebadge', compact('viewParam'));
+            $namebadge                            =   $namebadgeViewData->render();
+        }
         return $namebadge;
     }
     

@@ -50,7 +50,7 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 
 	// Attendee Route
 	Route::get('/attendees-list', 'AttendeeController@index')->name('attendeeList');
-	Route::get('/add-attendee/{eventId}', 'AttendeeController@create')->name('addAttendee');
+//	Route::get('/add-attendee/{eventId}', 'AttendeeController@create')->name('addAttendee');
 	Route::post('/save-attendee', 'AttendeeController@store')->name('saveAttendee');
 	Route::get('/attendee/import-csv', 'AttendeeController@importCSV')->name('importCSV');
 	Route::post('/attendee/upload-csv', 'AttendeeController@upload_attendee_csv')->name('uploadCSV');
@@ -58,6 +58,7 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::post('/attendee/update/{attendee_id}', 'AttendeeController@update')->name('updateAttendee');
 	Route::get('/attendee/delete/{attendee_id}', 'AttendeeController@destroy')->name('deleteAttendee');
 	Route::get('/attendee/sample-csv', 'AttendeeController@sampleCSV')->name('sampleCSV');
+	Route::get('/attendee/add', 'AttendeeController@add_attendee')->name('addAttendee');
 
 	// Templates Route
 	Route::get('/templates', 'TemplateController@index')->name('templateList');
