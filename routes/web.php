@@ -83,4 +83,8 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::get('/custom_field/sequence1', 'CustomController@sequence1');//->name('manage_sequence'); delete after change sequenece code
 	Route::post('/getCustomSequence', 'CustomController@sortsequence');
         Route::get('export_template_config/{id}', 'ExcelController@export_template_configuration');
+        
+        // Printing Station Controller:
+        Route::get('print_attendee', 'PrintStationController@print_attendee')->name('print_attendee');
+        Route::get('update_attendee_printing_history', 'PrintStationController@update_attendee_printing_history')->name('update_attendee_printing_history');
 });

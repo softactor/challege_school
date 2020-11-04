@@ -143,7 +143,9 @@ class AttendeeController extends Controller {
                     }
                 } // Foreach csv end;
                 if (!empty($duplicate)) {
-                    return redirect()->route('attendeeList')->with('error', $duplicate);
+                    $emailsArrays   = implode(',', $duplicate);
+                    $errorText      =   'Found duplicate attendee. Duplicates emails: '.$emailsArrays;
+                    return redirect()->route('attendeeList')->with('error', $errorText);
                 } else {
                     return redirect()->route('attendeeList')->with('success', 'CSV imported successfully.');
                 }

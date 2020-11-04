@@ -140,6 +140,54 @@ function check_duplicate_data($data){
         return false;
     }
 }
+function getNameBadgeTemplatedata($param) {        
+    $result     =    DB::table('templates')->where($param)->first();
+    if(isset($result) && !empty($result)){
+        return $result;
+    }else{
+        return false;
+    }
+}
+function getTypeBackgroundColor($id){
+    return DB::table('usertypes')->where('id', '=', $id)->first()->background_color;
+}
+function getTypeTextColor($id){
+    return DB::table('usertypes')->where('id', '=', $id)->first()->text_clor;
+}
 
+function human_format_date($timestamp) {
+    return date("jS M, Y h:i:a", strtotime($timestamp)); //September 30th, 2013
+}
+
+function getAttendeePrintedStatus($id){
+    $attendeeData   =   DB::table('attendees')->where('id', '=', $id)->first();
+    if($attendeeData->print_status){
+        $printingStatus     =   '<span class="label label-success">Printed</span>';
+    }else{
+        $printingStatus     =   '<span class="label label-warning">Printed</span>';
+    }
+    
+    return $printingStatus;
+}
+function getAttendeePrintedDate($id){
+    $attendeeData   =   DB::table('attendees')->where('id', '=', $id)->first();
+    if($attendeeData->print_status){
+        $printingDate     = human_format_date($attendeeData->print_date);
+    }else{
+        $printingDate     =   '';
+    }
+    
+    return $printingStatus;
+}
+function getAttendeenop($id){
+    $attendeeData   =   DB::table('attendees')->where('id', '=', $id)->first();
+    if($attendeeData->print_status){
+        $printingDate     = human_format_date($attendeeData->print_date);
+    }else{
+        $printingDate     =   '';
+    }
+    
+    return $printingStatus;
+}
 
 ?>

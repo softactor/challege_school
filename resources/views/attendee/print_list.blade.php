@@ -8,21 +8,18 @@
 @section('content')
 <div class="col-lg-12">
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <a href="{{route('importCSV')}}"  class="btn btn-sm btn-success">Import CSV</a>
-            <a href="{{route('sampleCSV')}}"  class="btn btn-sm btn-success">Sample CSV</a>
-        </div>
         <div class="panel-body">
-            <table class="table table-bordered list-table-custom-style" id="attendeeTable">
+            <table class="table table-bordered list-table-custom-style table-striped" id="attendeePrintTable">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Event Name</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Type</th>
                         <th>Country</th>
-                        <th>Company</th>
+                        <th>Print Status</th>
+                        <th>NOR</th>
+                        <th>Printing Date</th>
+                        <th>Namebadge</th>
                         <th>Action</th>
                     </tr>					
                 </thead>
@@ -31,18 +28,20 @@
                     @foreach($attendees as $attendee)
                     <tr>
                         <td>{{$i}}</td>
-                        <td>{{ getEventName($attendee->event_id) }}</td>
                         <td><?php echo $attendee->salutation . " " . $attendee->first_name . " " . $attendee->last_name ?></td>
                         <td>{{$attendee->email}}</td>
-                        <td>{{ getTypeName($attendee->type_id) }}</td>
-                        <td>{{$attendee->country}}</td>
-                        <td>{{$attendee->company}}</td>
+                        <td>{{$attendee->country}}</td>                        
+                        <td><span id='printing_status_<?php echo $attendee->id; ?>'><?php echo getAttendeePrintedStatus($attendee->id); ?></span></td>
+                        <td><span id='printing_not_<?php echo $attendee->id; ?>'>NOR</span></td>
+                        <td><span id='printing_date_<?php echo $attendee->id; ?>'><?php echo getAttendeePrintedDate($attendee->id); ?></span></td>
                         <td>
-                            <a href="{{route('editAttendee',[$attendee['id']])}}"  class="btn btn-sm btn-success">
-                                <i class="fas fa-edit"></i> 
-                            </a>
-                            <a href="{{route('deleteAttendee',[$attendee['id']])}}" onclick="return confirm('Are you sure you want to delete this attendee?');" class="btn btn-sm btn-danger">
-                                <i class="fas fa-times"></i>
+                            <div id="print_preview_<?php echo $attendee->id; ?>">
+                            <?php echo $attendee->namebadgeView; ?>
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <a href="javascript:void(0)" onclick="confirm_namebadge_print('<?php echo $attendee->id; ?>');" class="btn btn-sm btn-success">
+                                <i class="fas fa-print"></i> 
                             </a>
                         </td>
                     </tr>
@@ -59,7 +58,7 @@
 @section('page-script')
 <script>
     $(document).ready(function () {
-        $('#attendeeTable').DataTable({
+        $('#attendeePrintTable').DataTable({
             responsive: true,
             columnDefs: [
                 {responsivePriority: 1, targets: 0},

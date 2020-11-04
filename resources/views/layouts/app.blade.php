@@ -41,6 +41,7 @@
                         <a href="{{ route('custom_fields_view') }}" class="list-group-item list-group-item-action bg-light">Custom Fields</a>
                         <a href="{{ route('attendeeList') }}" class="list-group-item list-group-item-action bg-light">Attendees</a>
                         <a href="{{ route('templateList') }}" class="list-group-item list-group-item-action bg-light">Templates</a>
+                        <a href="{{ route('print_attendee') }}" class="list-group-item list-group-item-action bg-light">Print Station</a>
                     </div>
                 </div>
                 <!-- /#sidebar-wrapper -->
@@ -146,6 +147,60 @@
                 }
             });
         }
+        
+        function confirm_namebadge_print(attendee_id){
+            swal(
+                {
+                    title: "Are you sure?",
+                    text: "You want to Print?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-green",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                },
+            function(isConfirm){
+                if (isConfirm){
+                    var printHistoryRes     =   update_printing_history(attendee_id);
+                    namebadge_printing_execution(attendee_id);
+                }
+            });
+        }
+        
+        function update_printing_history(attendee_id){
+            var responseFeedback    =   false;
+            $.ajax({
+                url         : '{{route("update_attendee_printing_history")}}',
+                type        : 'Get',
+                dataType    : 'json',
+                data        : 'attendee_id=' + attendee_id,
+                success     : function (response) {
+                    if (response.status == 'success'){
+                        responseFeedback    =   true;
+                        $('#printing_status_'+attendee_id).html(response.printingStatus);
+                        $('#printing_not_'+attendee_id).html(response.nop);
+                        $('#printing_date_'+attendee_id).html(response.printingDate);
+                    } else{
+                        responseFeedback    =   false;
+                    }
+                },
+                async: false // <- this turns it into synchronous
+            });
+            return responseFeedback
+        }
+        
+        function namebadge_printing_execution(attendee_id){
+            setTimeout(function () {
+                w = window.open(window.location.href, "_blank");
+                w.document.open();
+                w.document.write($('#print_preview_'+attendee_id).html());
+                w.document.close();
+                w.window.print();
+                swal.close();
+                setTimeout(w.window.close, 0);
+            }, 2000);
+        }
+        
         </script>
         @yield('page-script')
     </body>
