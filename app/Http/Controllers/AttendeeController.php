@@ -132,7 +132,7 @@ class AttendeeController extends Controller {
                         $insert->first_name = $importData[3];
                         $insert->last_name = $importData[4];
                         $insert->email = $importData[5];
-                        $insert->type_id = $importData[6];
+                        $insert->type_id = (is_numeric($importData[6]) ? $importData[6] : getTypeIdByName($importData[6]));
                         $insert->country = $importData[7];
                         $insert->company = $importData[8];
                         $insert->created_by = Auth::User()->id;

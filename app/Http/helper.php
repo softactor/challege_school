@@ -28,6 +28,22 @@ if(!function_exists('getTypeName'))
 		{
 			return $type->type_name;
 		}
+                
+                return '';
+	}
+}
+
+if(!function_exists('getTypeIdByName'))
+{
+	function getTypeIdByName($typeName)
+	{
+		$type = DB::table('usertypes')->where('type_name', '=', $typeName)->first();
+		if(!empty($type))
+		{
+			return $type->id;
+		}
+                
+                return '';
 	}
 }
 
