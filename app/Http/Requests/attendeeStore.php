@@ -26,7 +26,6 @@ class attendeeStore extends FormRequest
     {
         $rules = [
             'event_id' => 'required',
-            'salutation' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:attendees,email,'.(isset($this->attendee_id->id)?$this->attendee_id->id:''),

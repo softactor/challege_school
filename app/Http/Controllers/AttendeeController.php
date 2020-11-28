@@ -441,7 +441,14 @@ class AttendeeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(attendeeStore $request, Attendee $attendee_id) {
-        $update                     = Attendee::find($attendee_id->id);
+        $update                     = Attendee::find($attendee_id->id);        
+        if(isset($update->vcard_path) && !empty($update->vcard_path)){
+            $vcardFullPath  =   public_path('vcards/'.$update->vcard_path);
+            if (file_exists($vcardFullPath)) {
+                unlink($vcardFullPath);;
+            }
+        }
+        
         $update->serial_number      = $request->serial_number;
         $update->event_id           = $request->event_id;
         $update->salutation         = $request->salutation;
@@ -456,8 +463,23 @@ class AttendeeController extends Controller {
         $update->mobile             = $request->mobile;
         $update->office_number      = $request->office_number;
         $update->postal_code        = $request->postal_code;
-        
         $update->edited_by = Auth::User()->id;
+        
+        $vcardName          =   'attendee_vcard_'.$request->event_id.'_'.$update->id.'.png';        
+        $vcardParam         =   (object)[
+            'lastName'          =>  $request->last_name,
+            'fastName'          =>  $request->first_name,
+            'salutation'        =>  $request->salutation,
+            'fullName'          =>  $request->first_name. ' ' .$request->last_name,
+            'organizationName'  =>  $request->company,
+            'mobile'            =>  $request->mobile,
+            'office_number'     =>  $request->office_number,
+            'email'             =>  $request->email,
+            'pathName'          =>  public_path('vcards/'.$vcardName)
+        ];
+        
+        create_attendee_qr_vcard($vcardParam);
+        $update->vcard_path = $vcardName;
         $update->save();
 
         //Other field Add Code
