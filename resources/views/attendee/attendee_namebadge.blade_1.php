@@ -130,30 +130,13 @@ $type_id            = $qrCodeFinalData['type_id'];
         ?>
         <div class="badgeContent" style="transform: scale(<?php echo $scaleX; ?>, <?php echo $scaleY; ?>);width:<?php echo $nameBadgeConfData->qrcode->width; ?>px; height: <?php echo $nameBadgeConfData->qrcode->height; ?>px; left: <?php echo $nameBadgeConfData->qrcode->left; ?>px; top: <?php echo $nameBadgeConfData->qrcode->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
             <?php
-            if(isset($dashboardQrImage) && $dashboardQrImage==1){
-                $qrcodePath = $dashboardUrl . 'pdf/' . $event_id . "/" . $event_id . $user_id . ".png";
-                $path = $qrcodePath;
-                $type = pathinfo($qrcodePath, PATHINFO_EXTENSION);
-                $imageqrdata = file_get_contents($qrcodePath);
-                $imageqrdatabase64 = 'data:image/' . $type . ';base64,' . base64_encode($imageqrdata);
-            
+            $qrcodePath = $dashboardUrl . 'pdf/' . $event_id . "/" . $event_id . $user_id . ".png";
+            $path = $qrcodePath;
+            $type = pathinfo($qrcodePath, PATHINFO_EXTENSION);
+            $imageqrdata = file_get_contents($qrcodePath);
+            $imageqrdatabase64 = 'data:image/' . $type . ';base64,' . base64_encode($imageqrdata);
             ?>
             <img id="reg_qrcode_image" src="<?php echo $imageqrdatabase64; ?>" width="<?php echo $nameBadgeConfData->qrcode->width; ?>" height="<?php echo $nameBadgeConfData->qrcode->height; ?>"/>
-            <?php            
-                }else{
-                if(isset($qrCodeFinalData['vcard_path']) && !empty($qrCodeFinalData['vcard_path'])){
-                    $vcardFullPath  =   public_path('vcards/'.$qrCodeFinalData['vcard_path']);
-                    $vcardPath      =   asset('public/vcards/'.$qrCodeFinalData['vcard_path']); 
-                    $qrcodeWidth    =   $nameBadgeConfData->qrcode->width;
-                    $qrcodeHeight   =   $nameBadgeConfData->qrcode->width;
-                    if (file_exists($vcardFullPath)) {
-                        echo "<img id='reg_qrcode_image' src='$vcardPath' width='$qrcodeWidth' height='$qrcodeHeight'/>";
-                    }else{
-                        echo 'qrvcard not found';
-                    }
-                }
-            ?>
-            <?php } ?>
         </div>
     <?php } ?>
 </div>

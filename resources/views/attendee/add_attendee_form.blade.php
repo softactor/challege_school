@@ -94,6 +94,54 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Designation</label>
+                            <input type="text" name="designation" value="{{ old('designation') }}" class="form-control">
+                            @if ($errors->has('designation')) 
+                            <span class="help-block">
+                                <span>{{ $errors->first('designation') }}</span>
+                            </span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Mobile</label>
+                            <input type="text" name="mobile" value="{{ old('mobile') }}" class="form-control">
+                            @if ($errors->has('mobile')) 
+                            <span class="help-block">
+                                <span>{{ $errors->first('mobile') }}</span>
+                            </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Office Number</label>
+                            <input type="text" name="office_number" value="{{ old('office_number') }}" class="form-control">
+                            @if ($errors->has('office_number')) 
+                            <span class="help-block">
+                                <span>{{ $errors->first('office_number') }}</span>
+                            </span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Postal Code</label>
+                            <input type="text" name="postal_code" value="{{ old('postal_code') }}" class="form-control">
+                            @if ($errors->has('postal_code')) 
+                            <span class="help-block">
+                                <span>{{ $errors->first('postal_code') }}</span>
+                            </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <input type="hidden" name="serial_number" value="<?php echo $serial_number ?>">
                     <input type="submit" class="btn btn-success" value="Submit">

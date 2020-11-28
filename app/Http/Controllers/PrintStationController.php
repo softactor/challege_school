@@ -44,13 +44,15 @@ class PrintStationController extends Controller
                 'namebadge_user_label'  =>  getTypeName($attendee->type_id),
                 'country_id'            =>  $attendee->country,
                 'company_name'          =>  $attendee->company,
-                'type_id'               =>  $attendee->type_id
+                'type_id'               =>  $attendee->type_id,
+                'vcard_path'            =>  $attendee->vcard_path
             ];  
             $viewParamData['user_id']             = $attendee->id;
             $viewParamData['event_id']            = $attendee->event_id;
             $viewParamData['qrCodeFinalData']     = $attendeeData;
             $viewParamData['templatesDatas']      = $templateInfo;
             $viewParamData['nameBadgeConfData']   = $nameBadgeConfData;
+            
             $viewParam                            = (object)$viewParamData;
             $namebadgeViewData                    =   View::make('attendee.attendee_namebadge', compact('viewParam'));
             $namebadge                            =   $namebadgeViewData->render();

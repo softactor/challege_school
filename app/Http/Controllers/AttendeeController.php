@@ -84,6 +84,12 @@ class AttendeeController extends Controller {
         $insert->type_id            = $request->type_id;
         $insert->country            = $request->country;
         $insert->company            = $request->company;
+        
+        $insert->designation        = $request->designation;
+        $insert->mobile             = $request->mobile;
+        $insert->office_number      = $request->office_number;
+        $insert->postal_code        = $request->postal_code;
+        
         $insert->created_by = Auth::User()->id;
         $insert->edited_by = Auth::User()->id;
         $insert->save();
@@ -435,16 +441,22 @@ class AttendeeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(attendeeStore $request, Attendee $attendee_id) {
-        $update = Attendee::find($attendee_id->id);
-        $update->serial_number = $request->serial_number;
-        $update->event_id = $request->event_id;
-        $update->salutation = $request->salutation;
-        $update->first_name = $request->first_name;
-        $update->last_name = $request->last_name;
-        $update->email = $request->email;
-        $update->type_id = $request->type_id;
-        $update->country = $request->country;
-        $update->company = $request->company;
+        $update                     = Attendee::find($attendee_id->id);
+        $update->serial_number      = $request->serial_number;
+        $update->event_id           = $request->event_id;
+        $update->salutation         = $request->salutation;
+        $update->first_name         = $request->first_name;
+        $update->last_name          = $request->last_name;
+        $update->email              = $request->email;
+        $update->type_id            = $request->type_id;
+        $update->country            = $request->country;
+        $update->company            = $request->company;
+        
+        $update->designation        = $request->designation;
+        $update->mobile             = $request->mobile;
+        $update->office_number      = $request->office_number;
+        $update->postal_code        = $request->postal_code;
+        
         $update->edited_by = Auth::User()->id;
         $update->save();
 
