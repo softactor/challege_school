@@ -4,8 +4,53 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07981b655ef942d2e05b2f4aecbc9aa7",
+    "content-hash": "f948ad22ec518ae1c402f0b4b2b07735",
     "packages": [
+        {
+            "name": "behat/transliterator",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Behat/Transliterator.git",
+                "reference": "3c4ec1d77c3d05caa1f0bf8fb3aae4845005c7fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Behat/Transliterator/zipball/3c4ec1d77c3d05caa1f0bf8fb3aae4845005c7fc",
+                "reference": "3c4ec1d77c3d05caa1f0bf8fb3aae4845005c7fc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "chuyskywalker/rolling-curl": "^3.1",
+                "php-yaoi/php-yaoi": "^1.0",
+                "phpunit/phpunit": "^4.8.36|^6.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Behat\\Transliterator\\": "src/Behat/Transliterator"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Artistic-1.0"
+            ],
+            "description": "String transliterator",
+            "keywords": [
+                "i18n",
+                "slug",
+                "transliterator"
+            ],
+            "time": "2020-01-14T16:39:13+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "v0.1.1",
@@ -526,6 +571,55 @@
             ],
             "abandoned": "opis/closure",
             "time": "2018-03-21T22:21:57+00:00"
+        },
+        {
+            "name": "jeroendesloovere/vcard",
+            "version": "1.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeroendesloovere/vcard.git",
+                "reference": "21a7341a589d80196a55e1f6317468a93e57c104"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeroendesloovere/vcard/zipball/21a7341a589d80196a55e1f6317468a93e57c104",
+                "reference": "21a7341a589d80196a55e1f6317468a93e57c104",
+                "shasum": ""
+            },
+            "require": {
+                "behat/transliterator": "~1.0",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.6.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JeroenDesloovere\\VCard\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeroen Desloovere",
+                    "email": "info@jeroendesloovere.be",
+                    "homepage": "http://jeroendesloovere.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This VCard PHP class can generate a vCard with some data. When using an iOS device it will export as a .ics file because iOS devices don't support the default .vcf files.",
+            "homepage": "https://github.com/jeroendesloovere/vcard",
+            "keywords": [
+                ".vcf",
+                "generator",
+                "php",
+                "vCard"
+            ],
+            "time": "2019-03-02T13:21:03+00:00"
         },
         {
             "name": "kylekatarnls/update-helper",
@@ -3314,6 +3408,94 @@
                 "environment"
             ],
             "time": "2020-05-02T13:46:13+00:00"
+        },
+        {
+            "name": "werneckbh/laravel-qr-code",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/werneckbh/laravel-qr-code.git",
+                "reference": "df3875022158d0f8355f54219955e32f9a9ba080"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/werneckbh/laravel-qr-code/zipball/df3875022158d0f8355f54219955e32f9a9ba080",
+                "reference": "df3875022158d0f8355f54219955e32f9a9ba080",
+                "shasum": ""
+            },
+            "require": {
+                "werneckbh/qr-code": "^2.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelQRCode\\Providers\\QRCodeServiceProvider"
+                    ],
+                    "aliases": {
+                        "QRCode": "LaravelQRCode\\Facades\\QRCode"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelQRCode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bruno Werneck",
+                    "email": "brunovaulawerneck@gmail.com"
+                }
+            ],
+            "description": "QR Code Generator for PHP wrapper for Laravel",
+            "time": "2018-02-12T20:01:20+00:00"
+        },
+        {
+            "name": "werneckbh/qr-code",
+            "version": "2.1.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/werneckbh/qr-code.git",
+                "reference": "ec66df0ebd5a3e1ea895bb5fba82ab9c3b9ff8f0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/werneckbh/qr-code/zipball/ec66df0ebd5a3e1ea895bb5fba82ab9c3b9ff8f0",
+                "reference": "ec66df0ebd5a3e1ea895bb5fba82ab9c3b9ff8f0",
+                "shasum": ""
+            },
+            "require-dev": {
+                "khanamiryan/qrcode-detector-decoder": "^1.0",
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers/constants.php",
+                    "src/helpers/functions.php"
+                ],
+                "psr-4": {
+                    "QR_Code\\": "src/QR_Code/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bruno Vaula Werneck",
+                    "email": "brunovaulawerneck@gmail.com"
+                }
+            ],
+            "description": "QR Code Generator for PHP",
+            "abandoned": true,
+            "time": "2018-02-04T20:29:27+00:00"
         }
     ],
     "packages-dev": [
@@ -3543,6 +3725,7 @@
                 "faker",
                 "fixtures"
             ],
+            "abandoned": true,
             "time": "2019-12-12T13:22:17+00:00"
         },
         {
@@ -4333,6 +4516,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {

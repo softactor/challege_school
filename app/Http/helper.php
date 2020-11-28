@@ -6,6 +6,8 @@ use App\Usertype;
 use App\custom_fields;
 use App\custom_field_metas;
 use Illuminate\Support\Facades\DB;
+use JeroenDesloovere\VCard\VCard;
+use QR_Code\QR_Code;
 
 if(!function_exists('getEventName'))
 {
@@ -198,6 +200,53 @@ function getAttendeePrintedDate($id){
 function getAttendeenop($id){
     $attendeeNopHisResp        =   DB::table('print_history')->where('attendee_id', '=', $id)->get();
     return count($attendeeNopHisResp);
+}
+
+function create_attendee_vcard($data=''){
+    $vcard  =   new VCard();
+    $lastname = 'Desloovere';
+    $firstname = 'Jeroen';
+    $additional = '';
+    $prefix = '';
+    $suffix = '';
+
+    // add personal data
+    $vcard->addName($lastname, $firstname, $additional, $prefix, $suffix);
+
+    // add work data
+    $vcard->addCompany('Siesqo');
+    $vcard->addJobtitle('Web Developer');
+    $vcard->addRole('Data Protection Officer');
+    $vcard->addEmail('info@jeroendesloovere.be');
+    $vcard->addPhoneNumber(123456789, 'WORK');
+
+    // return vcard as a string
+    //return $vcard->getOutput();
+
+    // return vcard as a download
+    //return $vcard->download();
+
+    // save vcard on disk
+    $vcardPath                  = public_path('vcards/');
+    
+    $vcard->setSavePath($vcardPath);
+    $vcard->save();
+}
+function create_attendee_qr_vcard($profile=''){
+    $vcardPath                  = $profile->pathName;
+    $vcardData  =   '';
+    $vcardData.="BEGIN:VCARD\r\n";
+    $vcardData.="VERSION:3.0\r\n";
+    $vcardData.="N:$profile->lastName;$profile->fastName;;$profile->salutation\r\n";
+    $vcardData.="FN:$profile->fullName\r\n";
+    $vcardData.="ORG:$profile->organizationName\r\n";
+    $vcardData.="TEL;TYPE=WORK,VOICE:$profile->mobile\r\n";
+    $vcardData.="TEL;TYPE=HOME,VOICE:$profile->office_number\r\n";
+    $vcardData.="EMAIL:$profile->email\r\n";
+    $vcardData.="REV:2008-04-24T19:52:43Z\r\n";
+    $vcardData.="END:VCARD\r\n";
+    
+    QR_Code::png($vcardData, $vcardPath);
 }
 
 ?>

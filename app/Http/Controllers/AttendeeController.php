@@ -75,7 +75,7 @@ class AttendeeController extends Controller {
      */
     public function store(Request $request) {
         $insert = new attendee();
-        $insert->serial_number           = $request->serial_number;
+        $insert->serial_number      = $request->serial_number;
         $insert->event_id           = $request->event_id;
         $insert->salutation         = $request->salutation;
         $insert->first_name         = $request->first_name;
@@ -87,7 +87,24 @@ class AttendeeController extends Controller {
         $insert->created_by = Auth::User()->id;
         $insert->edited_by = Auth::User()->id;
         $insert->save();
-
+        
+        $vcardName          =   'attendee_vcard_'.$request->event_id.'_'.$insert->id.'.png';        
+        $vcardParam         =   (object)[
+            'lastName'          =>  $request->last_name,
+            'fastName'          =>  $request->first_name,
+            'salutation'        =>  $request->salutation,
+            'fullName'          =>  $request->first_name. ' ' .$request->last_name,
+            'organizationName'  =>  $request->company,
+            'mobile'            =>  $request->mobile,
+            'office_number'     =>  $request->office_number,
+            'email'             =>  $request->email,
+            'pathName'          =>  public_path('vcards/'.$vcardName)
+        ];
+        
+        create_attendee_qr_vcard($vcardParam);
+        $update = Attendee::find($insert->id);
+        $update->vcard_path = $vcardName;
+        $update->save();
         return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
     }
 
@@ -124,22 +141,52 @@ class AttendeeController extends Controller {
                 $offlineData = [];
                 foreach ($csvdata as $importData) {
                     $attendee_exist = Attendee::where('email', $importData[5])->count();
-                    if ($attendee_exist == 0) {
-                        $insert = new Attendee();
-                        $insert->serial_number = $importData[0];
-                        $insert->event_id = $importData[1];
-                        $insert->salutation = $importData[2];
-                        $insert->first_name = $importData[3];
-                        $insert->last_name = $importData[4];
-                        $insert->email = $importData[5];
-                        $insert->type_id = (is_numeric($importData[6]) ? $importData[6] : getTypeIdByName($importData[6]));
-                        $insert->country = $importData[7];
-                        $insert->company = $importData[8];
-                        $insert->created_by = Auth::User()->id;
-                        $insert->edited_by = Auth::User()->id;
-                        $insert->save();
-                    } else {
-                        $duplicate[] = $importData[5];
+                    if(isset($importData[6]) && !empty($importData[6])){
+                        $attendeeTypeId     =   (is_numeric($importData[6]) ? $importData[6] : getTypeIdByName($importData[6]));
+                        if(isset($attendeeTypeId) && !empty($attendeeTypeId)){
+                            if ($attendee_exist == 0) {
+                                $insert = new Attendee();
+                                $insert->serial_number  = $importData[0];
+                                $insert->event_id       = $importData[1];
+                                $insert->salutation     = $importData[2];
+                                $insert->first_name     = $importData[3];
+                                $insert->last_name      = $importData[4];
+                                $insert->email          = $importData[5];
+                                $insert->type_id        = $attendeeTypeId;
+                                $insert->country        = $importData[7];
+                                $insert->company        = $importData[8];
+                                $insert->designation    = $importData[9];
+                                $insert->mobile         = $importData[10];
+                                $insert->office_number  = $importData[11];
+                                $insert->postal_code    = $importData[12];
+                                $insert->created_by     = Auth::User()->id;
+                                $insert->edited_by      = Auth::User()->id;
+                                $insert->save();
+                                
+                                $vcardName          =   'attendee_vcard_'.$importData[1].'_'.$insert->id.'.png';
+                                $vcardPath          =   public_path('vcards/'.$vcardName);
+                                $vcardParam         =   (object)[
+                                    'lastName'          =>  $importData[4],
+                                    'fastName'          =>  $importData[3],
+                                    'salutation'        =>  $importData[2],
+                                    'fullName'          =>  $importData[3]. ' ' .$importData[4],
+                                    'organizationName'  =>  $importData[8],
+                                    'mobile'            =>  $importData[10],
+                                    'office_number'     =>  $importData[11],
+                                    'email'             =>  $importData[5],
+                                    'pathName'          =>  $vcardPath
+                                ];
+                                // create attendee vcard qrcode:
+                                create_attendee_qr_vcard($vcardParam);
+                                // update attendee with vcard path:
+                                $update = Attendee::find($insert->id);
+                                $update->vcard_path = $vcardName;
+                                $update->save();
+                                
+                            } else {
+                                $duplicate[] = $importData[5];
+                            }
+                        }
                     }
                 } // Foreach csv end;
                 if (!empty($duplicate)) {

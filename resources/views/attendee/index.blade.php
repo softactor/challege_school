@@ -24,6 +24,7 @@
                         <th>Type</th>
                         <th>Country</th>
                         <th>Company</th>
+                        <th>Vcard</th>
                         <th>Action</th>
                     </tr>					
                 </thead>
@@ -38,6 +39,18 @@
                         <td>{{ getTypeName($attendee->type_id) }}</td>
                         <td>{{$attendee->country}}</td>
                         <td>{{$attendee->company}}</td>
+                        <td>
+                            <?php
+                                if(isset($attendee->vcard_path) && !empty($attendee->vcard_path)){
+                                    $vcardFullPath  =   public_path('vcards/'.$attendee->vcard_path);
+                                    $vcardPath      =   asset('public/vcards/'.$attendee->vcard_path);                                    
+                                    if (file_exists($vcardFullPath)) {
+                                        echo '<img src="'.$vcardPath.'">';
+                                    }
+                                }
+                            
+                            ?>
+                        </td>
                         <td>
                             <a href="{{route('editAttendee',[$attendee['id']])}}"  class="btn btn-sm btn-success">
                                 <i class="fas fa-edit"></i> 
