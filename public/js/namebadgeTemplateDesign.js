@@ -493,6 +493,34 @@ function AddLayout_100()
 
     canvas.add(company);
   }
+  function Adddesignation()
+  {
+    var designation = new fabric.Textbox('Designation', {
+    left: 20,
+    top: 50,
+    fill: '#646161',
+    width:200,
+    strokeWidth: 1,
+    stroke: "#646161",
+	id: "designation",
+    });
+
+    canvas.add(designation);
+  }
+  function AddzoneTable()
+  {
+    var zoneTable = new fabric.Textbox('Table', {
+    left: 20,
+    top: 50,
+    fill: '#646161',
+    width:200,
+    strokeWidth: 1,
+    stroke: "#646161",
+	id: "zonetable",
+    });
+
+    canvas.add(zoneTable);
+  }
 
   function qrcode(){
     var object = new fabric.Rect({

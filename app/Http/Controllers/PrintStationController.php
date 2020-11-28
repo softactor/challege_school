@@ -34,6 +34,9 @@ class PrintStationController extends Controller
         $templateInfo       =   getNameBadgeTemplatedata($nameBadgeTemplateParam);
         if(isset($templateInfo) && !empty($templateInfo)){
             $nameBadgeConfData  =   json_decode($templateInfo->namebadge_print_data);
+            
+            
+            
             $attendeeData       =   [
                 'serial_number'         =>  $attendee->serial_number,
                 'event_id'              =>  $attendee->event_id,
@@ -45,14 +48,18 @@ class PrintStationController extends Controller
                 'country_id'            =>  $attendee->country,
                 'company_name'          =>  $attendee->company,
                 'type_id'               =>  $attendee->type_id,
-                'vcard_path'            =>  $attendee->vcard_path
+                'vcard_path'            =>  $attendee->vcard_path,
+                'zone'                  =>  $attendee->zone,
+                'table_name'            =>  $attendee->table_name,
+                'seat'                  =>  $attendee->seat,
+                'zone_bg_color'         =>  $attendee->zone_bg_color,
+                'designation'           =>  $attendee->designation,
             ];  
             $viewParamData['user_id']             = $attendee->id;
             $viewParamData['event_id']            = $attendee->event_id;
             $viewParamData['qrCodeFinalData']     = $attendeeData;
             $viewParamData['templatesDatas']      = $templateInfo;
             $viewParamData['nameBadgeConfData']   = $nameBadgeConfData;
-            
             $viewParam                            = (object)$viewParamData;
             $namebadgeViewData                    =   View::make('attendee.attendee_namebadge', compact('viewParam'));
             $namebadge                            =   $namebadgeViewData->render();

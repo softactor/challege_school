@@ -89,10 +89,31 @@ $type_id            = $qrCodeFinalData['type_id'];
         $fontsize = (isset($nameBadgeConfData->namebadge_user_label->fontSize) && !empty($nameBadgeConfData->namebadge_user_label->fontSize) ? $nameBadgeConfData->namebadge_user_label->fontSize : 14);
         $fontweight = (isset($nameBadgeConfData->namebadge_user_label->fontWeight) && !empty($nameBadgeConfData->namebadge_user_label->fontWeight) ? $nameBadgeConfData->namebadge_user_label->fontWeight : 'normal');
         ?>
-        <div class="badgeContent" style="color: <?php echo $text_clor; ?>;background-color: <?php echo $background_color; ?>;width:<?php echo $nameBadgeConfData->namebadge_user_label->width; ?>px; height: <?php echo $nameBadgeConfData->namebadge_user_label->height; ?>px; left: <?php echo $nameBadgeConfData->namebadge_user_label->left; ?>px; top: <?php echo $nameBadgeConfData->namebadge_user_label->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
+        <div class="badgeContent" style="min-height: 33px; color: <?php echo $text_clor; ?>;background-color: <?php echo $background_color; ?>;width:<?php echo $nameBadgeConfData->namebadge_user_label->width; ?>px; height: <?php echo $nameBadgeConfData->namebadge_user_label->height; ?>px; left: <?php echo $nameBadgeConfData->namebadge_user_label->left; ?>px; top: <?php echo $nameBadgeConfData->namebadge_user_label->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
             <?php echo $qrCodeFinalData['namebadge_user_label']; ?>
         </div>
     <?php } ?>
+    
+    
+    <!--Zone Area-->
+    <?php if ((isset($qrCodeFinalData['zone']) && !empty($qrCodeFinalData['zone'])) && isset($nameBadgeConfData->zonetable)) { ?>
+        <?php
+        $typeBackGcolor     =   getTypeBackgroundColor($type_id);
+        $typeTextcolor      =   getTypeTextColor($type_id);
+        $background_color   =  (isset($qrCodeFinalData['zone_bg_color']) && !empty($qrCodeFinalData['zone_bg_color']) ? $qrCodeFinalData['zone_bg_color'] : "black");
+        $text_clor = (isset($typeTextcolor) && !empty($typeTextcolor) ? $typeTextcolor : "white");
+        $textAlign = (isset($nameBadgeConfData->zonetable->textAlign) && !empty($nameBadgeConfData->zonetable->textAlign) ? $nameBadgeConfData->zonetable->textAlign : "left");
+        $fontsize = (isset($nameBadgeConfData->zonetable->fontSize) && !empty($nameBadgeConfData->zonetable->fontSize) ? $nameBadgeConfData->zonetable->fontSize : 14);
+        $fontweight = (isset($nameBadgeConfData->zonetable->fontWeight) && !empty($nameBadgeConfData->zonetable->fontWeight) ? $nameBadgeConfData->zonetable->fontWeight : 'normal');
+        ?>
+        <div class="badgeContent" style="min-height: 33px; color: <?php echo $text_clor; ?>;background-color: <?php echo $background_color; ?>;width:<?php echo $nameBadgeConfData->zonetable->width; ?>px; height: <?php echo $nameBadgeConfData->zonetable->height; ?>px; left: <?php echo $nameBadgeConfData->zonetable->left; ?>px; top: <?php echo $nameBadgeConfData->zonetable->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
+            <?php echo $qrCodeFinalData['table_name']; ?>
+        </div>
+    <?php } ?>
+    
+    
+    
+    
     <!--Company Area-->
     <?php if ((isset($qrCodeFinalData['company_name']) && !empty($qrCodeFinalData['company_name'])) && isset($nameBadgeConfData->company_name)) { ?>
         <?php
@@ -106,6 +127,23 @@ $type_id            = $qrCodeFinalData['type_id'];
             </div>
         </div>
     <?php } ?>
+    
+    
+    <!-- Designation Area-->
+    <?php if ((isset($qrCodeFinalData['designation']) && !empty($qrCodeFinalData['designation'])) && isset($nameBadgeConfData->designation_name)) { ?>
+        <?php
+        $textAlign = (isset($nameBadgeConfData->designation_name->textAlign) && !empty($nameBadgeConfData->designation_name->textAlign) ? $nameBadgeConfData->designation_name->textAlign : "left");
+        $fontsize = (isset($nameBadgeConfData->designation_name->fontSize) && !empty($nameBadgeConfData->designation_name->fontSize) ? $nameBadgeConfData->designation_name->fontSize : 14);
+        $fontweight = (isset($nameBadgeConfData->designation_name->fontWeight) && !empty($nameBadgeConfData->designation_name->fontWeight) ? $nameBadgeConfData->designation_name->fontWeight : 'normal');
+        ?>
+        <div class="badgeContent" style="width:<?php echo $nameBadgeConfData->designation_name->width; ?>px; height: <?php echo $nameBadgeConfData->designation_name->height; ?>px; left: <?php echo $nameBadgeConfData->designation_name->left; ?>px; top: <?php echo $nameBadgeConfData->designation_name->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
+            <div id="nameBadgeVisitorCompany">
+                <?php echo $qrCodeFinalData['designation']; ?>
+            </div>
+        </div>
+    <?php } ?>
+    
+    
     <!--Country Area-->
     <?php if ((isset($qrCodeFinalData['country_id']) && !empty($qrCodeFinalData['country_id'])) && isset($nameBadgeConfData->country_id)) { ?>
         <?php

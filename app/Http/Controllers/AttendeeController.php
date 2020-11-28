@@ -165,6 +165,10 @@ class AttendeeController extends Controller {
                                 $insert->mobile         = $importData[10];
                                 $insert->office_number  = $importData[11];
                                 $insert->postal_code    = $importData[12];
+                                $insert->zone           = $importData[13];
+                                $insert->table_name     = $importData[14];
+                                $insert->seat           = $importData[15];
+                                $insert->zone_bg_color  = $importData[16];
                                 $insert->created_by     = Auth::User()->id;
                                 $insert->edited_by      = Auth::User()->id;
                                 $insert->save();

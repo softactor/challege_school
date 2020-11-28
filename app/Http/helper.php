@@ -240,8 +240,6 @@ function create_attendee_qr_vcard($profile=''){
     $vcardData.="N:$profile->lastName;$profile->fastName;;$profile->salutation\r\n";
     $vcardData.="FN:$profile->fullName\r\n";
     $vcardData.="ORG:$profile->organizationName\r\n";
-    $vcardData.="TEL;TYPE=WORK,VOICE:$profile->mobile\r\n";
-    $vcardData.="TEL;TYPE=HOME,VOICE:$profile->office_number\r\n";
     $vcardData.="EMAIL:$profile->email\r\n";
     $vcardData.="REV:2008-04-24T19:52:43Z\r\n";
     $vcardData.="END:VCARD\r\n";

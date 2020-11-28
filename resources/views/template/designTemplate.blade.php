@@ -156,6 +156,20 @@
                   </div>
                 </div>
               </div>
+               <div class=" field-list">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="card-icon box" onclick="Adddesignation()">
+                       <span>Designation</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card-icon box" onclick="AddzoneTable()">
+                      <span>Table</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><b>QrCode Section</b></li>
@@ -1001,11 +1015,41 @@ function AddLayout_100()
     canvas.add(objectUpdate);
   }
   
+  function Adddesignation()
+  {
+    var designation = new fabric.Textbox('Designation', {
+    left: 20,
+    top: 50,
+    fill: '#646161',
+    width:200,
+    strokeWidth: 1,
+    stroke: "#646161",
+	id: "designation",
+    });
+
+    var objectUpdate  = add_common_object_name(designation, 'designation_name')  
+    canvas.add(objectUpdate);
+  }
+  function AddzoneTable()
+  {
+    var zoneTable = new fabric.Textbox('Table', {
+    left: 20,
+    top: 50,
+    fill: '#646161',
+    width:200,
+    strokeWidth: 1,
+    stroke: "#646161",
+	id: "zonetable",
+    });
+
+    var objectUpdate  = add_common_object_name(zoneTable, 'zonetable')  
+    canvas.add(objectUpdate);
+  }
   
   function qrcode(){
     var qrcodeObject = new fabric.Rect({                    
-                    width: 170,
-                    height: 170,
+                    width: 113.39,
+                    height: 113.39,
                     opacity: 1,
                     fill: '#fff',
                     stroke: '#000',
