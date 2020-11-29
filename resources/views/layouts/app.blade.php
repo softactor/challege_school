@@ -235,8 +235,7 @@
                 },
                 async: false // <- this turns it into synchronous
             });
-        }
-        
+        }        
         </script>
         @yield('page-script')
     </body>
