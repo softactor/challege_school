@@ -67,6 +67,28 @@ class PrintStationController extends Controller
         return $namebadge;
     }
     
+    public function print_namebadge_by_serial_number(Request $request){
+        $serial_number      =   trim($request->serial_number);
+        $attendee           =   DB::table('attendees')->where('serial_number', $serial_number)->first();
+        
+        if(isset($attendee) && !empty($attendee)){
+            $status             =   'success';
+            $data               =   $this->get_user_namebadge($attendee);;
+        }else{
+            $status             =   'error';
+            $data               =   '';
+        }
+        
+        $feedBack               =   [
+            'status'            =>  $status,
+            'attendee_id'       =>  $attendee->id,
+            'data'              =>  $data
+        ];
+        
+        echo json_encode($feedBack);
+    }
+
+
     public function update_attendee_printing_history(Request $request) {
         date_default_timezone_set('Asia/Singapore');
         $attendeeData   =   attendee::find($request->attendee_id);

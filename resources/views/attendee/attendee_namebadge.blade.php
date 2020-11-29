@@ -107,7 +107,7 @@ $type_id            = $qrCodeFinalData['type_id'];
         $fontweight = (isset($nameBadgeConfData->zonetable->fontWeight) && !empty($nameBadgeConfData->zonetable->fontWeight) ? $nameBadgeConfData->zonetable->fontWeight : 'normal');
         ?>
         <div class="badgeContent" style="min-height: 33px; color: <?php echo $text_clor; ?>;background-color: <?php echo $background_color; ?>;width:<?php echo $nameBadgeConfData->zonetable->width; ?>px; height: <?php echo $nameBadgeConfData->zonetable->height; ?>px; left: <?php echo $nameBadgeConfData->zonetable->left; ?>px; top: <?php echo $nameBadgeConfData->zonetable->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
-            <?php echo $qrCodeFinalData['table_name']; ?>
+            <?php echo $qrCodeFinalData['zone'].'|'.$qrCodeFinalData['table_name']; ?>
         </div>
     <?php } ?>
     
@@ -135,6 +135,9 @@ $type_id            = $qrCodeFinalData['type_id'];
         $textAlign = (isset($nameBadgeConfData->designation_name->textAlign) && !empty($nameBadgeConfData->designation_name->textAlign) ? $nameBadgeConfData->designation_name->textAlign : "left");
         $fontsize = (isset($nameBadgeConfData->designation_name->fontSize) && !empty($nameBadgeConfData->designation_name->fontSize) ? $nameBadgeConfData->designation_name->fontSize : 14);
         $fontweight = (isset($nameBadgeConfData->designation_name->fontWeight) && !empty($nameBadgeConfData->designation_name->fontWeight) ? $nameBadgeConfData->designation_name->fontWeight : 'normal');
+        if(strlen($qrCodeFinalData['designation']) > 50){
+            $fontsize   =   '16';
+        }
         ?>
         <div class="badgeContent" style="width:<?php echo $nameBadgeConfData->designation_name->width; ?>px; height: <?php echo $nameBadgeConfData->designation_name->height; ?>px; left: <?php echo $nameBadgeConfData->designation_name->left; ?>px; top: <?php echo $nameBadgeConfData->designation_name->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
             <div id="nameBadgeVisitorCompany">

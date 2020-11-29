@@ -29,6 +29,7 @@
         <link href="{{ URL::asset('public/css/simple-sidebar.css') }}" rel="stylesheet">
     </head>
     <body>
+        <div id="namebadgeDirectPrintSection"></div>
         <div id="app">		
             <div class="d-flex" id="wrapper">
 
@@ -199,6 +200,41 @@
                 swal.close();
                 setTimeout(w.window.close, 0);
             }, 2000);
+        }
+        
+        function print_namebadge_by_serial_number(){
+            var serialNumber    =   $('#registration_id').val();
+            $.ajax({
+                url         : '{{route("print_namebadge_by_serial_number")}}',
+                type        : 'POST',
+                dataType    : 'json',
+                data        : 'serial_number=' + serialNumber,
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success     : function (response) {
+                    if(response.status == 'success'){
+                        update_printing_history(response.attendee_id);
+                        $('#namebadgeDirectPrintSection').html(response.data);
+                        setTimeout(function () {
+                            w = window.open(window.location.href, "_blank");
+                            w.document.open();
+                            w.document.write($('#namebadgeDirectPrintSection').html());
+                            w.document.close();
+                            w.window.print();
+                            swal.close();
+                            setTimeout(w.window.close, 0);
+                            $('#namebadgeDirectPrintSection').hide();
+                            $("#registration_id").val('');
+                            $("#registration_id").focus();
+                        }, 2000);
+                    }else{
+                        $('#namebadgeDirectPrintSection').html('');
+                        swal("Failed", 'No Data', "error");
+                    }
+                },
+                async: false // <- this turns it into synchronous
+            });
         }
         
         </script>

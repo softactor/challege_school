@@ -154,11 +154,11 @@ table.list-table-custom-style{
     background-color: white;
 }
 table.list-table-custom-style tr th{
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
     background-color: lightgrey;
 }
 table.list-table-custom-style tr td{
-    font-size: 14px;
+    font-size: 12px;
     padding-top:.5%;
 }
