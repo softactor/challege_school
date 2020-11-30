@@ -192,9 +192,14 @@
         
         function namebadge_printing_execution(attendee_id){
             setTimeout(function () {
-                var divName     =   'print_preview_'+attendee_id;
-                printDiv(divName);
-            }, 1000);
+                w = window.open(window.location.href, "_blank");
+                w.document.open();
+                w.document.write($('#print_preview_'+attendee_id).html());
+                w.document.close();
+                w.window.print();
+                swal.close();
+                setTimeout(w.window.close, 0);
+            }, 2000);
         }
         
         function print_namebadge_by_serial_number(){
@@ -211,9 +216,15 @@
                     if(response.status == 'success'){
                         update_printing_history(response.attendee_id);
                         $('#namebadgeDirectPrintSection').html(response.data);
+                        return;
                         setTimeout(function () {
-                            var divName     =   'namebadgeDirectPrintSection';
-                            printDiv(divName);
+                            w = window.open(window.location.href, "_blank");
+                            w.document.open();
+                            w.document.write($('#namebadgeDirectPrintSection').html());
+                            w.document.close();
+                            w.window.print();
+                            swal.close();
+                            setTimeout(w.window.close, 0);
                             $('#namebadgeDirectPrintSection').hide();
                             $("#registration_id").val('');
                             $("#registration_id").focus();
@@ -239,6 +250,39 @@
 
                 document.body.innerHTML = originalContents;
                 swal.close();
+       }
+       
+       function delete_all_attendee(){
+           swal(
+                {
+                    title: "Are you sure?",
+                    text: "You want to delete?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                },
+            function(isConfirm){
+                if (isConfirm){
+                    $.ajax({
+                        url         : '{{route("delete_all_attendee")}}',
+                        type        : 'GET',
+                        dataType    : 'json',
+                        success     : function (response) {
+                            if (response.status == 'success'){
+                                swal("Deleted", response.message, "success");
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 3000);
+                            } else{
+                                swal("Failed", response.message, "error");
+                            }
+                        },
+                        async: false // <- this turns it into synchronous
+                    });
+                }
+            });
        }
         </script>
         @yield('page-script')

@@ -59,6 +59,7 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::get('/attendee/delete/{attendee_id}', 'AttendeeController@destroy')->name('deleteAttendee');
 	Route::get('/attendee/sample-csv', 'AttendeeController@sampleCSV')->name('sampleCSV');
 	Route::get('/attendee/add', 'AttendeeController@add_attendee')->name('addAttendee');
+	Route::get('delete_all_attendee', 'AttendeeController@delete_all_attendee')->name('delete_all_attendee');
 
 	// Templates Route
 	Route::get('/templates', 'TemplateController@index')->name('templateList');

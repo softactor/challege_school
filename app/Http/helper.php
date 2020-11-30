@@ -95,7 +95,32 @@ if(!function_exists('getCustomFieldIdBySlug'))
 		}
 	}
 }
-
+function get_seat_item_color_name_by_name($name) {
+    $data = DB::table('event_seat_arrangements')
+                    ->where('name', $name)
+                    ->first();
+    if(isset($data) && !empty($data)){
+        if(isset($data->bg_color) && !empty($data->bg_color)){
+            return $data->bg_color;
+        }else{
+            return '';
+        }
+    }
+    return '';
+}
+function get_table_data_by_clause($data) {
+    $result = DB::table($data['table'])
+            ->where($data['where']);
+    if (isset($data['order_by'])) {
+        $result->orderBy($data['order_by_column'], $data['order_by']);
+    }
+    $result_data = $result->get();
+    if (isset($result_data) && !empty($result_data)) {
+        return $result_data;
+    } else {
+        return false;
+    }
+}
 function image_file_store($file_data) {
     $image_file_name    = $file_data['image_file_name'];
     $fileName           = $file_data['fileName'];

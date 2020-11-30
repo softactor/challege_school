@@ -90,6 +90,11 @@ class AttendeeController extends Controller {
         $insert->office_number      = $request->office_number;
         $insert->postal_code        = $request->postal_code;
         
+        $insert->zone               = $request->zone;
+        $insert->table_name         = $request->table_name;
+        $insert->seat               = $request->seat;
+        $insert->zone_bg_color      = (isset($request->zone) && !empty($request->zone) ? get_seat_item_color_name_by_name($request->zone) : '');
+        
         $insert->created_by = Auth::User()->id;
         $insert->edited_by = Auth::User()->id;
         $insert->save();
@@ -467,6 +472,12 @@ class AttendeeController extends Controller {
         $update->mobile             = $request->mobile;
         $update->office_number      = $request->office_number;
         $update->postal_code        = $request->postal_code;
+        
+        $update->zone               = $request->zone;
+        $update->table_name         = $request->table_name;
+        $update->seat               = $request->seat;
+        $update->zone_bg_color      = (isset($request->zone) && !empty($request->zone) ? get_seat_item_color_name_by_name($request->zone) : '');
+        
         $update->edited_by = Auth::User()->id;
         
         $vcardName          =   'attendee_vcard_'.$request->event_id.'_'.$update->id.'.png';        
@@ -521,6 +532,37 @@ class AttendeeController extends Controller {
         if ($attendee->delete()) {
             return redirect()->route('attendeeList')->with('success', 'Attendee deleted successfully.');
         }
+    }
+    
+    
+    public function delete_all_attendee(Request $request){
+        $deleteContainer    =   0;        
+        $deleteVcard        =   0;        
+        $attendees          = DB::table('attendees')->select('id', 'vcard_path')->get();        
+        if(!$attendees->isEmpty()){
+            foreach ($attendees as $update) {
+                if(isset($update->vcard_path) && !empty($update->vcard_path)){
+                    $vcardFullPath  =   public_path('vcards/'.$update->vcard_path);
+                    
+                    if (file_exists($vcardFullPath)){
+                        if(unlink($vcardFullPath)){
+                            $deleteVcard++;                            
+                        }
+                    }
+                    $attendee = Attendee::find($update->id);
+                    if ($attendee->delete()) {
+                        $deleteContainer++;
+                    }
+                }
+            }
+        }
+        
+        $feedback       =   [
+            'status'    =>   'success',
+            'message'   =>   $deleteContainer.' Data have been successfully deleted',
+        ];
+        
+        echo json_encode($feedback);
     }
 
 }

@@ -142,6 +142,65 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Zone</label>
+                            <select class="form-control" name="zone">
+                                <option value=''>Select Zone</option>
+                                <?php                                
+                                $param      =   [];
+                                $param['table']      =   'event_seat_arrangements';
+                                $param['where']      =   [
+                                    'type'           => 1
+                                ];
+                                $zones      =   get_table_data_by_clause($param);
+                                foreach ($zones as $row) {
+                                    ?>
+                                    <option value="<?php echo $row->name ?>"><?php echo $row->name ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Table</label>
+                            <select class="form-control" name="table_name">
+                                <option value=''>Select Table</option>
+                                <?php
+                                $param      =   [];
+                                $param['table']      =   'event_seat_arrangements';
+                                $param['where']      =   [
+                                    'type'           => 2
+                                ];
+                                $tables      =   get_table_data_by_clause($param);
+                                foreach ($tables as $row) {
+                                    ?>
+                                    <option value="<?php echo $row->name ?>"><?php echo $row->name ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Seat</label>
+                            <select class="form-control" name="seat">
+                                <option value=''>Select Seat</option>
+                                <?php
+                                $param      =   [];
+                                $param['table']      =   'event_seat_arrangements';
+                                $param['where']      =   [
+                                    'type'           => 3
+                                ];
+                                $seats      =   get_table_data_by_clause($param);
+                                foreach ($seats as $row) {
+                                    ?>
+                                    <option value="<?php echo $row->name ?>"><?php echo $row->name ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <input type="hidden" name="serial_number" value="<?php echo $serial_number ?>">
                     <input type="submit" class="btn btn-success" value="Submit">
