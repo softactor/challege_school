@@ -40,18 +40,24 @@ $type_id            = $qrCodeFinalData['type_id'];
     <!--Salutation Area-->
     <?php if (isset($nameBadgeConfData->name) && !empty($nameBadgeConfData->name)) { ?>
         <?php
+        
+        $nameContainer = [];
+        (isset($qrCodeFinalData['salutation']) && !empty($qrCodeFinalData['salutation']) ? array_push($nameContainer, $qrCodeFinalData['salutation']) : "");
+        (isset($qrCodeFinalData['first_name']) && !empty($qrCodeFinalData['first_name']) ? array_push($nameContainer, $qrCodeFinalData['first_name']) : "");
+        (isset($qrCodeFinalData['last_name']) && !empty($qrCodeFinalData['last_name']) ? array_push($nameContainer, $qrCodeFinalData['last_name']) : "");
+        $fullName   =    implode(" ", $nameContainer);
+        
         $textAlign = (isset($nameBadgeConfData->name->textAlign) && !empty($nameBadgeConfData->name->textAlign) ? $nameBadgeConfData->name->textAlign : "left");
         $fontsize = (isset($nameBadgeConfData->name->fontSize) && !empty($nameBadgeConfData->name->fontSize) ? $nameBadgeConfData->name->fontSize : 14);
         $fontweight = (isset($nameBadgeConfData->name->fontWeight) && !empty($nameBadgeConfData->name->fontWeight) ? $nameBadgeConfData->name->fontWeight : 'normal');
+        if(strlen($fullName) > 30){
+            $fontsize   =   '16';
+        }
         ?>
         <div class="badgeContent" style="width:<?php echo $nameBadgeConfData->name->width; ?>px; height: <?php echo $nameBadgeConfData->name->height; ?>px; left: <?php echo $nameBadgeConfData->name->left; ?>px; top: <?php echo $nameBadgeConfData->name->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
             <div id="nameBadgeVisitorName">
                 <?php
-                $nameContainer = [];
-                (isset($qrCodeFinalData['salutation']) && !empty($qrCodeFinalData['salutation']) ? array_push($nameContainer, $qrCodeFinalData['salutation']) : "");
-                (isset($qrCodeFinalData['first_name']) && !empty($qrCodeFinalData['first_name']) ? array_push($nameContainer, $qrCodeFinalData['first_name']) : "");
-                (isset($qrCodeFinalData['last_name']) && !empty($qrCodeFinalData['last_name']) ? array_push($nameContainer, $qrCodeFinalData['last_name']) : "");
-                echo implode(" ", $nameContainer);
+                    echo $fullName;
                 ?>
             </div>
         </div>
@@ -120,6 +126,9 @@ $type_id            = $qrCodeFinalData['type_id'];
         $textAlign = (isset($nameBadgeConfData->company_name->textAlign) && !empty($nameBadgeConfData->company_name->textAlign) ? $nameBadgeConfData->company_name->textAlign : "left");
         $fontsize = (isset($nameBadgeConfData->company_name->fontSize) && !empty($nameBadgeConfData->company_name->fontSize) ? $nameBadgeConfData->company_name->fontSize : 14);
         $fontweight = (isset($nameBadgeConfData->company_name->fontWeight) && !empty($nameBadgeConfData->company_name->fontWeight) ? $nameBadgeConfData->company_name->fontWeight : 'normal');
+        if(strlen($qrCodeFinalData['company_name']) > 30){
+            $fontsize   =   '16';
+        }
         ?>
         <div class="badgeContent" style="width:<?php echo $nameBadgeConfData->company_name->width; ?>px; height: <?php echo $nameBadgeConfData->company_name->height; ?>px; left: <?php echo $nameBadgeConfData->company_name->left; ?>px; top: <?php echo $nameBadgeConfData->company_name->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
             <div id="nameBadgeVisitorCompany">
@@ -135,7 +144,7 @@ $type_id            = $qrCodeFinalData['type_id'];
         $textAlign = (isset($nameBadgeConfData->designation_name->textAlign) && !empty($nameBadgeConfData->designation_name->textAlign) ? $nameBadgeConfData->designation_name->textAlign : "left");
         $fontsize = (isset($nameBadgeConfData->designation_name->fontSize) && !empty($nameBadgeConfData->designation_name->fontSize) ? $nameBadgeConfData->designation_name->fontSize : 14);
         $fontweight = (isset($nameBadgeConfData->designation_name->fontWeight) && !empty($nameBadgeConfData->designation_name->fontWeight) ? $nameBadgeConfData->designation_name->fontWeight : 'normal');
-        if(strlen($qrCodeFinalData['designation']) > 50){
+        if(strlen($qrCodeFinalData['designation']) > 30){
             $fontsize   =   '16';
         }
         ?>
