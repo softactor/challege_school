@@ -15,7 +15,7 @@
                          <!--onchange="print_namebadge_by_serial_number();"-->
                           <!--onclick="print_namebadge_by_serial_number()"-->
                         <input type="text" class="form-control" style="width: 87%;margin-right: 1%;margin-left: 1%;" id="registration_id" name="registration_id" tabindex="1" autofocus="autofocus" onblur="print_namebadge_by_serial_number();" onchange="print_namebadge_by_serial_number();">
-                        
+                        <button type="button" class="btn btn-primary" onclick="print_namebadge_by_serial_number();">Get</button>
                 </div>
                 <div style="margin: 40px 0;"></div>
             </div>

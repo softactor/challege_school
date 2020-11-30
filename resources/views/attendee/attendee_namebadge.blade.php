@@ -50,7 +50,7 @@ $type_id            = $qrCodeFinalData['type_id'];
         $textAlign = (isset($nameBadgeConfData->name->textAlign) && !empty($nameBadgeConfData->name->textAlign) ? $nameBadgeConfData->name->textAlign : "left");
         $fontsize = (isset($nameBadgeConfData->name->fontSize) && !empty($nameBadgeConfData->name->fontSize) ? $nameBadgeConfData->name->fontSize : 14);
         $fontweight = (isset($nameBadgeConfData->name->fontWeight) && !empty($nameBadgeConfData->name->fontWeight) ? $nameBadgeConfData->name->fontWeight : 'normal');
-        if(strlen($fullName) > 30){
+        if(strlen($fullName) > 23){
             $fontsize   =   '16';
         }
         ?>
