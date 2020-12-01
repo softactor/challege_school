@@ -46,7 +46,7 @@ class AttendeeController extends Controller {
         if ($attendee == null) {
             $serial_number = 1;
         } else {
-            $serial_number = $attendee->serial_number + 1;
+            $serial_number = $attendee->id + 1;
         }
         return view('attendee.add_attendee_form', compact('events','usertypes','salutations','countries','serial_number'));
     }

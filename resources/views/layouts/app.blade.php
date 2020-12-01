@@ -216,7 +216,6 @@
                     if(response.status == 'success'){
                         update_printing_history(response.attendee_id);
                         $('#namebadgeDirectPrintSection').html(response.data);
-                        return;
                         setTimeout(function () {
                             w = window.open(window.location.href, "_blank");
                             w.document.open();
