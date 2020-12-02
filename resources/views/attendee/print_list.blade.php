@@ -16,9 +16,11 @@
                             <td style="width:7%; text-align: right;">SCAN ID:</td>
                             <td style="width:90%; text-align: left;">
                                 <input type="text" class="form-control" style="width: 90%;margin-right: 1%;margin-left: 1%;" id="registration_id" name="registration_id" tabindex="1" autofocus="autofocus" onchange="print_namebadge_by_serial_number();" onblur="print_namebadge_by_serial_number();">
+                                <!--<button type="button" class="btn btn-success" onclick="print_namebadge_by_serial_number()">Get</button>-->
                             </td>
                         </tr>
                     </table>
+                     <!--onchange="print_namebadge_by_serial_number();" onblur="print_namebadge_by_serial_number();"-->
                         <!--onblur="print_namebadge_by_serial_number();"--> 
                          <!--onchange="print_namebadge_by_serial_number();"-->
                           <!--onclick="print_namebadge_by_serial_number()"-->

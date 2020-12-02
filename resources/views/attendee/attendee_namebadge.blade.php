@@ -23,7 +23,12 @@ $type_id            = $qrCodeFinalData['type_id'];
     }
     div.badgeContent{
         position: absolute;
-    }          
+    }   
+    @media print {
+        #ename_badge_print_area_container_<?php echo $user_id; ?>{
+            display: block !important;
+        }
+    }
 </style>
 <div id="ename_badge_print_area_container_<?php echo $user_id; ?>"> 
     <!--Header Area-->

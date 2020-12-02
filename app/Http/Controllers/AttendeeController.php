@@ -73,7 +73,7 @@ class AttendeeController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(attendeeStore $request) {
         $insert = new attendee();
         $insert->serial_number      = $request->serial_number;
         $insert->event_id           = $request->event_id;

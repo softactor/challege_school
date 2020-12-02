@@ -191,15 +191,28 @@
         }
         
         function namebadge_printing_execution(attendee_id){
+            var divName = 'print_preview_'+attendee_id;
+            namebadge_printing(divName);
+        }
+        var mywindow;
+        function namebadge_printing(divName, hideDirSec=false){
             setTimeout(function () {
-                w = window.open(window.location.href, "_blank");
-                w.document.open();
-                w.document.write($('#print_preview_'+attendee_id).html());
-                w.document.close();
-                w.window.print();
+                mywindow = window.open(window.location.href, "_blank");
+                mywindow.document.open();
+                mywindow.document.write($('#'+divName).html());
+                mywindow.document.close();
+                mywindow.window.print();
                 swal.close();
-                setTimeout(w.window.close, 0);
-            }, 2000);
+                closeWin();
+                if(hideDirSec){
+                    $('#namebadgeDirectPrintSection').hide();
+                    $("#registration_id").val('');
+                    $("#registration_id").focus();
+                }
+            }, 3000);
+        }
+        function closeWin() {
+            mywindow.close();
         }
         
         function print_namebadge_by_serial_number(){
@@ -216,18 +229,8 @@
                     if(response.status == 'success'){
                         update_printing_history(response.attendee_id);
                         $('#namebadgeDirectPrintSection').html(response.data);
-                        setTimeout(function () {
-                            w = window.open(window.location.href, "_blank");
-                            w.document.open();
-                            w.document.write($('#namebadgeDirectPrintSection').html());
-                            w.document.close();
-                            w.window.print();
-                            swal.close();
-                            setTimeout(w.window.close, 0);
-                            $('#namebadgeDirectPrintSection').hide();
-                            $("#registration_id").val('');
-                            $("#registration_id").focus();
-                        }, 2000);
+                        var divName =   'namebadgeDirectPrintSection';
+                        namebadge_printing(divName, hideDirSec=true);                        
                     }else{
                         $('#namebadgeDirectPrintSection').html('');
                         swal("Failed", 'No Data', "error");
@@ -236,21 +239,6 @@
                 async: false // <- this turns it into synchronous
             });
         }
-        function back_print_listpage() {
-            window.history.back();
-        }
-        function printDiv(divName) {
-                var printContents = document.getElementById(divName).innerHTML;
-                var originalContents = document.body.innerHTML;
-
-                document.body.innerHTML = printContents;
-
-                window.print();
-
-                document.body.innerHTML = originalContents;
-                swal.close();
-       }
-       
        function delete_all_attendee(){
            swal(
                 {
