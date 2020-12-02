@@ -37,12 +37,29 @@
                 <div class="bg-light border-right" id="sidebar-wrapper">
                     <div class="sidebar-heading">Badge Design </div>
                     <div class="list-group list-group-flush">
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
                         <a href="{{ route('eventList') }}" class="list-group-item list-group-item-action bg-light">Events</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
                         <a href="{{ route('userTypes') }}" class="list-group-item list-group-item-action bg-light">User Types</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
                         <a href="{{ route('custom_fields_view') }}" class="list-group-item list-group-item-action bg-light">Custom Fields</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
                         <a href="{{ route('attendeeList') }}" class="list-group-item list-group-item-action bg-light">Attendees</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
                         <a href="{{ route('templateList') }}" class="list-group-item list-group-item-action bg-light">Templates</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
                         <a href="{{ route('print_attendee') }}" class="list-group-item list-group-item-action bg-light">Print Station</a>
+                        <?php } ?>
                     </div>
                 </div>
                 <!-- /#sidebar-wrapper -->
@@ -67,7 +84,7 @@
                                 </li>-->
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Admin
+                                        <?php echo Auth::user()->name ?>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                         <!--<a class="dropdown-item" href="{{ route('logout') }}">Logout</a>-->
