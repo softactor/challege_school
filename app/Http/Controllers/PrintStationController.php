@@ -108,6 +108,7 @@ class PrintStationController extends Controller
             'attendee_email'    =>  $attendeeData->email,
             'type_id'           =>  $attendeeData->type_id,
             'created_at'        =>  $printingDate,
+            'created_by'        =>  Auth::user()->id,
         ];        
         DB::table('print_history')->insert($insertData);     
         
