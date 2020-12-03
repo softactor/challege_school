@@ -76,7 +76,7 @@
                                         <?php
                                             $lastPrintedDate    =   get_namebadge_last_printed_time();
                                             $lastPrintedTime    =   calculate_time_span($lastPrintedDate->created_at);
-                                            echo $lastPrintedTime;
+                                            echo $lastPrintedTime.' at '.$lastPrintedDate->created_at;
                                         ?>
                                     </td>
                                 </tr>
