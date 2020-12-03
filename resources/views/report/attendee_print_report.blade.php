@@ -67,8 +67,8 @@
                                 <?php } ?>
                                 <tr>
                                     <td colspan="2" style="text-align: right">Total</td>
-                                    <td><?php echo $totalUserType; ?></td>
-                                    <td><?php echo $totalUserTypePrinted; ?></td>
+                                    <td style="text-align: right"><?php echo $totalUserType; ?></td>
+                                    <td style="text-align: right"><?php echo $totalUserTypePrinted; ?></td>
                                 </tr>
                             </tbody>
                         </table>
