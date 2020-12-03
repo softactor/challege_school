@@ -70,6 +70,16 @@
                                     <td style="text-align: right"><?php echo $totalUserType; ?></td>
                                     <td style="text-align: right"><?php echo $totalUserTypePrinted; ?></td>
                                 </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: right">Last Printed</td>
+                                    <td colspan="2" style="text-align: right">
+                                        <?php
+                                            $lastPrintedDate    =   get_namebadge_last_printed_time();
+                                            $lastPrintedTime    =   calculate_time_span($lastPrintedDate->created_at);
+                                            echo $lastPrintedTime;
+                                        ?>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

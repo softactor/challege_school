@@ -203,6 +203,7 @@
                 </div>
                 <div class="form-group">
                     <input type="hidden" name="serial_number" value="<?php echo $serial_number ?>">
+                    <input type="hidden" name="add_type" value="2">
                     <input type="submit" class="btn btn-success" value="Submit">
                 </div>
             </div>

@@ -94,6 +94,7 @@ class AttendeeController extends Controller {
         $insert->table_name         = $request->table_name;
         $insert->seat               = $request->seat;
         $insert->zone_bg_color      = (isset($request->zone) && !empty($request->zone) ? get_seat_item_color_name_by_name($request->zone) : '');
+        $insert->add_type      = (isset($request->add_type) && !empty($request->add_type) ? $request->add_type: 1);
         
         $insert->created_by = Auth::User()->id;
         $insert->edited_by = Auth::User()->id;
