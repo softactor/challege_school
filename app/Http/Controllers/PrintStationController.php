@@ -129,4 +129,8 @@ class PrintStationController extends Controller
         ];
         echo json_encode($feedback);
     }
+    
+    public function print_report(){
+        return view('report.attendee_print_report');
+    }
 }

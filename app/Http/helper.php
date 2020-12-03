@@ -271,5 +271,24 @@ function create_attendee_qr_vcard($profile=''){
     
     QR_Code::png($vcardData, $vcardPath);
 }
+function get_table_data_by_table($table, $order_by = null, $colums=null) {
+    $result = DB::table($table);
+    if (isset($colums) && !empty($colums)) {
+        $result->select($colums);
+    }
+    if (isset($order_by['order_by'])) {
+        $result->orderBy($order_by['order_by_column'], $order_by['order_by']);
+    }
+    return $result->get();
+}
+
+function getTableTotalRows($data) {
+    $field = $data['field'];
+    $total_row = DB::table($data['table'])
+            ->select(DB::raw("count($field) as total"))
+            ->where($data['where'])
+            ->first();
+    return $total_row;
+}
 
 ?>

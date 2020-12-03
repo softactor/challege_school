@@ -60,6 +60,11 @@
                         <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
                         <a href="{{ route('print_attendee') }}" class="list-group-item list-group-item-action bg-light">Print Station</a>
                         <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
+                        <a href="{{ route('print_report') }}" class="list-group-item list-group-item-action bg-light">Print Report</a>
+                        <?php } ?>
+                        
                     </div>
                 </div>
                 <!-- /#sidebar-wrapper -->
