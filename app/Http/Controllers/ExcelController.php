@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Template;
 use App\Usertype;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Session;
 
 class ExcelController extends Controller{
     
@@ -31,6 +32,18 @@ class ExcelController extends Controller{
             Excel::create('template_config_export', function($excel) use ($configdata){
                 $excel->sheet('template_config_export', function($sheet) use ($configdata){
                     $sheet->loadView('export.template_config_export')->with('configdata',$configdata);
+                    $sheet->setOrientation('landscape');
+                });
+            })->export('csv');
+        }
+    }
+    
+    public function export_namebadge_print_details(){
+        $reportDatas        = Session::get('reportDatas');
+        if (isset($reportDatas) && !empty($reportDatas)) {
+            Excel::create('attendee_print_details_export', function($excel) use ($reportDatas){
+                $excel->sheet('attendee_print_details_export', function($sheet) use ($reportDatas){
+                    $sheet->loadView('export.attendee_print_details_export')->with('reportDatas',$reportDatas);
                     $sheet->setOrientation('landscape');
                 });
             })->export('csv');

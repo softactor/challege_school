@@ -10,6 +10,7 @@ use App\Usertype;
 use App\Attendee;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Session;
 class PrintStationController extends Controller
 {
     //
@@ -131,6 +132,11 @@ class PrintStationController extends Controller
     }
     
     public function print_report(){
-        return view('report.attendee_print_report');
+        $table                          =   'attendees';
+        $order_by['order_by_column']    =   'first_name';
+        $order_by['order_by']           =   'ASC';
+        $nameBadgedetals                = get_table_data_by_table($table, $order_by);
+        Session::put('reportDatas', $nameBadgedetals);
+        return view('report.attendee_print_report', compact('nameBadgedetals'));
     }
 }

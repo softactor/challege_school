@@ -85,17 +85,76 @@
                     </div>
                 </div>
             </div>            
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="text-align: center;">
+                        Namebadge Print Details Report
+                        <a title="Export Template Configuration" href="<?php echo route('export_namebadge_print_details') ?>" class="btn btn-sm btn-success">
+                            <i class="fas fa-file-export"></i> Export
+                        </a>
+                    </h2>
+                    
+                    <div class="table-responsive">
+                        <table id="NamebadgePrintDetailsReport" class="table table-bordered list-table-custom-style table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Salutation</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Type</th>
+                                    <th>Country</th>
+                                    <th>Company</th>
+                                    <th>Designation</th>
+                                    <th>Mobile</th>
+                                    <th>Office Number</th>
+                                    <th>Postal Code</th>
+                                    <th>Zone</th>
+                                    <th>Table</th>
+                                    <th>Print Status</th>
+                                    <th>Print Date</th>
+                                    <th>Add Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sl             =   1;
+                                foreach($nameBadgedetals as $row){
+                                ?>
+                                <tr style="background-color: <?php echo (($row->add_type == 1 ) ? '' : 'yellow') ?>">
+                                    <td><?php echo $sl++.'.'; ?></td>
+                                    <td><?php echo $row->salutation ?></td>
+                                    <td><?php echo $row->first_name ?></td>
+                                    <td><?php echo $row->last_name ?></td>
+                                    <td><?php echo $row->email ?></td>
+                                    <td><?php echo getTypeName($row->type_id) ?></td>
+                                    <td><?php echo $row->country ?></td>
+                                    <td><?php echo $row->company ?></td>
+                                    <td><?php echo $row->designation ?></td>
+                                    <td><?php echo $row->mobile ?></td>
+                                    <td><?php echo $row->office_number ?></td>
+                                    <td><?php echo $row->postal_code ?></td>
+                                    <td><?php echo $row->zone ?></td>
+                                    <td><?php echo $row->table_name ?></td>
+                                    <td><?php echo (($row->print_status) ? 'Printed': '') ?></td>
+                                    <td><?php echo $row->print_date ?></td>
+                                    <td><?php echo (($row->add_type == 1 ) ? 'CSV' : 'Manual') ?></td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 @endsection
-
 @section('page-script')
 <script>
     $(document).ready(function () {
-        $('#eventTable').DataTable();
+        $('#NamebadgePrintDetailsReport').DataTable();
     });
 </script>
 @endsection
-
