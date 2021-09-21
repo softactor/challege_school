@@ -15,5 +15,6 @@ yarn-error.log
 .composer.lock
 /backup
 /uploads
+/public/vcards
 /public/header_image
 /nbproject/private/
