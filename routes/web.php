@@ -50,7 +50,7 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 
 	// Attendee Route
 	Route::get('/attendees-list', 'AttendeeController@index')->name('attendeeList');
-	Route::get('/add-attendee/{eventId}', 'AttendeeController@create')->name('addAttendee');
+//	Route::get('/add-attendee/{eventId}', 'AttendeeController@create')->name('addAttendee');
 	Route::post('/save-attendee', 'AttendeeController@store')->name('saveAttendee');
 	Route::get('/attendee/import-csv', 'AttendeeController@importCSV')->name('importCSV');
 	Route::post('/attendee/upload-csv', 'AttendeeController@upload_attendee_csv')->name('uploadCSV');
@@ -58,6 +58,8 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::post('/attendee/update/{attendee_id}', 'AttendeeController@update')->name('updateAttendee');
 	Route::get('/attendee/delete/{attendee_id}', 'AttendeeController@destroy')->name('deleteAttendee');
 	Route::get('/attendee/sample-csv', 'AttendeeController@sampleCSV')->name('sampleCSV');
+	Route::get('/attendee/add', 'AttendeeController@add_attendee')->name('addAttendee');
+	Route::get('delete_all_attendee', 'AttendeeController@delete_all_attendee')->name('delete_all_attendee');
 
 	// Templates Route
 	Route::get('/templates', 'TemplateController@index')->name('templateList');
@@ -83,4 +85,11 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
 	Route::get('/custom_field/sequence1', 'CustomController@sequence1');//->name('manage_sequence'); delete after change sequenece code
 	Route::post('/getCustomSequence', 'CustomController@sortsequence');
         Route::get('export_template_config/{id}', 'ExcelController@export_template_configuration');
+        
+        // Printing Station Controller:
+        Route::get('print_attendee', 'PrintStationController@print_attendee')->name('print_attendee');
+        Route::post('print_namebadge_by_serial_number', 'PrintStationController@print_namebadge_by_serial_number')->name('print_namebadge_by_serial_number');
+        Route::get('update_attendee_printing_history', 'PrintStationController@update_attendee_printing_history')->name('update_attendee_printing_history');
+        Route::get('print_report', 'PrintStationController@print_report')->name('print_report');
+        Route::get('export_namebadge_print_details', 'ExcelController@export_namebadge_print_details')->name('export_namebadge_print_details');
 });

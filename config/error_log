@@ -1,0 +1,24 @@
+[04-Sep-2021 00:18:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/registro/public_html/namebadge/config/mail.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/registro/public_html/namebadge/config/mail.php on line 19
+[04-Sep-2021 00:18:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/registro/public_html/namebadge/config/services.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/registro/public_html/namebadge/config/services.php on line 18
+[04-Sep-2021 14:07:00 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/registro/public_html/namebadge/config/services.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/registro/public_html/namebadge/config/services.php on line 18
+[04-Sep-2021 14:08:00 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/registro/public_html/namebadge/config/mail.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/registro/public_html/namebadge/config/mail.php on line 19
+[04-Sep-2021 14:17:45 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/registro/public_html/namebadge/config/filesystems.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/registro/public_html/namebadge/config/filesystems.php on line 16
+[04-Sep-2021 14:19:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/registro/public_html/namebadge/config/app.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/registro/public_html/namebadge/config/app.php on line 16

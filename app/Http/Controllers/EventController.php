@@ -20,8 +20,13 @@ class EventController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $events = Event::all();
-        return view("event.index", compact(['events']));
+        
+        if(Auth::user()->role_id  ==  1){        
+            $events = Event::all();
+            return view("event.index", compact(['events']));
+        }else{
+           return redirect()->route('print_attendee'); 
+        }
     }
 
     /**

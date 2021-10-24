@@ -7,7 +7,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Registro Namebadge') }}</title>
         <link rel="shortcut icon" type="image/png" href="<?php echo asset('public/image/registro_Logo-PNG.png') ?>"/>
 
         <!-- Scripts -->
@@ -29,6 +29,7 @@
         <link href="{{ URL::asset('public/css/simple-sidebar.css') }}" rel="stylesheet">
     </head>
     <body>
+        <div id="namebadgeDirectPrintSection"></div>
         <div id="app">		
             <div class="d-flex" id="wrapper">
 
@@ -36,11 +37,34 @@
                 <div class="bg-light border-right" id="sidebar-wrapper">
                     <div class="sidebar-heading">Badge Design </div>
                     <div class="list-group list-group-flush">
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
                         <a href="{{ route('eventList') }}" class="list-group-item list-group-item-action bg-light">Events</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
                         <a href="{{ route('userTypes') }}" class="list-group-item list-group-item-action bg-light">User Types</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
                         <a href="{{ route('custom_fields_view') }}" class="list-group-item list-group-item-action bg-light">Custom Fields</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
                         <a href="{{ route('attendeeList') }}" class="list-group-item list-group-item-action bg-light">Attendees</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
                         <a href="{{ route('templateList') }}" class="list-group-item list-group-item-action bg-light">Templates</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
+                        <a href="{{ route('print_attendee') }}" class="list-group-item list-group-item-action bg-light">Print Station</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
+                        <a href="{{ route('print_report') }}" class="list-group-item list-group-item-action bg-light">Print Report</a>
+                        <?php } ?>
+                        
                     </div>
                 </div>
                 <!-- /#sidebar-wrapper -->
@@ -65,7 +89,7 @@
                                 </li>-->
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Admin
+                                        <?php echo Auth::user()->name ?>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                         <!--<a class="dropdown-item" href="{{ route('logout') }}">Logout</a>-->
@@ -146,6 +170,129 @@
                 }
             });
         }
+        
+        function confirm_namebadge_print(attendee_id){
+            swal(
+                {
+                    title: "Are you sure?",
+                    text: "You want to Print?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-green",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                },
+            function(isConfirm){
+                if (isConfirm){
+                    var printHistoryRes     =   update_printing_history(attendee_id);
+                    namebadge_printing_execution(attendee_id);
+                }
+            });
+        }
+        
+        function update_printing_history(attendee_id){
+            var responseFeedback    =   false;
+            $.ajax({
+                url         : '{{route("update_attendee_printing_history")}}',
+                type        : 'Get',
+                dataType    : 'json',
+                data        : 'attendee_id=' + attendee_id,
+                success     : function (response) {
+                    if (response.status == 'success'){
+                        responseFeedback    =   true;
+                        $('#printing_status_'+attendee_id).html(response.printingStatus);
+                        $('#printing_not_'+attendee_id).html(response.nop);
+                        $('#printing_date_'+attendee_id).html(response.printingDate);
+                    } else{
+                        responseFeedback    =   false;
+                    }
+                },
+                async: false // <- this turns it into synchronous
+            });
+            return responseFeedback
+        }
+        
+        function namebadge_printing_execution(attendee_id){
+            var divName = 'print_preview_'+attendee_id;
+            namebadge_printing(divName);
+        }
+        var mywindow;
+        function namebadge_printing(divName, hideDirSec=false){
+            setTimeout(function () {
+                mywindow = window.open(window.location.href, "_blank");
+                mywindow.document.open();
+                mywindow.document.write($('#'+divName).html());
+                mywindow.document.close();
+                mywindow.window.print();
+                swal.close();
+                closeWin();
+                if(hideDirSec){
+                    $('#namebadgeDirectPrintSection').hide();
+                    $("#registration_id").val('');
+                    $("#registration_id").focus();
+                }
+            }, 3000);
+        }
+        function closeWin() {
+            mywindow.close();
+        }
+        
+        function print_namebadge_by_serial_number(){
+            var serialNumber    =   $('#registration_id').val();
+            $.ajax({
+                url         : '{{route("print_namebadge_by_serial_number")}}',
+                type        : 'POST',
+                dataType    : 'json',
+                data        : 'serial_number=' + serialNumber,
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success     : function (response) {
+                    if(response.status == 'success'){
+                        update_printing_history(response.attendee_id);
+                        $('#namebadgeDirectPrintSection').html(response.data);
+                        var divName =   'namebadgeDirectPrintSection';
+                        namebadge_printing(divName, hideDirSec=true);                        
+                    }else{
+                        $('#namebadgeDirectPrintSection').html('');
+                        swal("Failed", 'No Data', "error");
+                    }
+                },
+                async: false // <- this turns it into synchronous
+            });
+        }
+       function delete_all_attendee(){
+           swal(
+                {
+                    title: "Are you sure?",
+                    text: "You want to delete?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                },
+            function(isConfirm){
+                if (isConfirm){
+                    $.ajax({
+                        url         : '{{route("delete_all_attendee")}}',
+                        type        : 'GET',
+                        dataType    : 'json',
+                        success     : function (response) {
+                            if (response.status == 'success'){
+                                swal("Deleted", response.message, "success");
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 3000);
+                            } else{
+                                swal("Failed", response.message, "error");
+                            }
+                        },
+                        async: false // <- this turns it into synchronous
+                    });
+                }
+            });
+       }
         </script>
         @yield('page-script')
     </body>
