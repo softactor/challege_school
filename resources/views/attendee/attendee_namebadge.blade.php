@@ -8,6 +8,9 @@ $nameBadgeConfData  = $viewParam->nameBadgeConfData;
 $type_id            = $qrCodeFinalData['type_id'];
 ?>
 <style>
+    @page {
+        margin: 0;
+    }
     canvas {
         margin: 0 !important;
         padding: 0 !important;
@@ -19,12 +22,15 @@ $type_id            = $qrCodeFinalData['type_id'];
         left: 0;
         overflow: hidden;
         /*background-color: red !important;*/
-        border: 1px solid red;
+        /*border: 1px solid red;*/
     }
     div.badgeContent{
         position: absolute;
     }   
     @media print {
+        @page {
+            margin: 0 !important;
+        }
         #ename_badge_print_area_container_<?php echo $user_id; ?>{
             display: block !important;
         }

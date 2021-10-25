@@ -167,14 +167,14 @@ class AttendeeController extends Controller {
                                 $insert->type_id        = $attendeeTypeId;
                                 $insert->country        = $importData[7];
                                 $insert->company        = $importData[8];
-                                $insert->designation    = $importData[9];
-                                $insert->mobile         = $importData[10];
-                                $insert->office_number  = $importData[11];
-                                $insert->postal_code    = $importData[12];
-                                $insert->zone           = $importData[13];
-                                $insert->table_name     = $importData[14];
-                                $insert->seat           = $importData[15];
-                                $insert->zone_bg_color  = $importData[16];
+                                $insert->designation    = (isset($importData[9]) && !empty($importData[9]) ? $importData[9] : '');
+                                $insert->mobile         = (isset($importData[10]) && !empty($importData[10]) ? $importData[10] : '');
+                                $insert->office_number  = (isset($importData[11]) && !empty($importData[11]) ? $importData[11] : '');
+                                $insert->postal_code    = (isset($importData[12]) && !empty($importData[12]) ? $importData[12] : '');
+                                $insert->zone           = (isset($importData[13]) && !empty($importData[13]) ? $importData[13] : '');
+                                $insert->table_name     = (isset($importData[14]) && !empty($importData[14]) ? $importData[14] : '');
+                                $insert->seat           = (isset($importData[15]) && !empty($importData[15]) ? $importData[15] : '');
+                                $insert->zone_bg_color  = (isset($importData[16]) && !empty($importData[16]) ? $importData[16] : '');
                                 $insert->created_by     = Auth::User()->id;
                                 $insert->edited_by      = Auth::User()->id;
                                 $insert->save();
@@ -187,8 +187,8 @@ class AttendeeController extends Controller {
                                     'salutation'        =>  $importData[2],
                                     'fullName'          =>  $importData[3]. ' ' .$importData[4],
                                     'organizationName'  =>  $importData[8],
-                                    'mobile'            =>  $importData[10],
-                                    'office_number'     =>  $importData[11],
+                                    'mobile'            =>  (isset($importData[10]) && !empty($importData[10]) ? $importData[10] : ''),
+                                    'office_number'     =>  (isset($importData[11]) && !empty($importData[11]) ? $importData[11] : ''),
                                     'email'             =>  $importData[5],
                                     'pathName'          =>  $vcardPath
                                 ];
