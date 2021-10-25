@@ -15,15 +15,6 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-4">
-                    <?php
-                        $totalUserType          =   0;
-                        $totalUserTypePrinted   =   0;
-                        $sl             =   1;
-                        $table          =   'usertypes';
-                        $order_by['order_by_column']    =   'type_name';
-                        $order_by['order_by']           =   'ASC';
-                        $detals     = get_table_data_by_table($table, $order_by);    
-                    ?>
                     <div class="table-responsive">
                         <table class="table table-bordered list-table-custom-style table-striped">
                             <thead>
@@ -35,7 +26,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php                                
+                                <?php
+                                $totalUserType          =   0;
+                                $totalUserTypePrinted   =   0;
+                                $sl             =   1;
+                                $table          =   'usertypes';
+                                $order_by['order_by_column']    =   'type_name';
+                                $order_by['order_by']           =   'ASC';
+                                $detals     = get_table_data_by_table($table, $order_by);
                                 foreach($detals as $row){
                                 ?>
                                 <tr>
@@ -81,7 +79,6 @@
                                                 $lastPrintedTime    =   calculate_time_span($lastPrintedDate->created_at);
                                                 echo $lastPrintedTime.' at '.$lastPrintedDate->created_at;
                                             }
-                                            
                                         ?>
                                     </td>
                                 </tr>
@@ -154,7 +151,6 @@
                             </tbody>
                         </table>
                     </div>
-
                     <?php
                         }else{
                     ?>
@@ -162,9 +158,6 @@
                         <strong>No data found</strong>
                     </div>
                     <?php } ?>
-
-
-
                 </div>
             </div>
         </div>
