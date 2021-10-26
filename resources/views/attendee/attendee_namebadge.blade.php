@@ -1,5 +1,5 @@
 <?php
-$dashboardUrl = "http://dashboard.registro.asia/";
+$dashboardUrl = "https://dashboard.registella.asia/";
 $user_id            = $viewParam->user_id;
 $event_id           = $viewParam->event_id;
 $qrCodeFinalData    = $viewParam->qrCodeFinalData;
