@@ -6,6 +6,7 @@ $qrCodeFinalData    = $viewParam->qrCodeFinalData;
 $templatesDatas     = $viewParam->templatesDatas;
 $nameBadgeConfData  = $viewParam->nameBadgeConfData;
 $type_id            = $qrCodeFinalData['type_id'];
+$dashboardQrImage   =   1;
 ?>
 <style>
     @page {
