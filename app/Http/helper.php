@@ -198,6 +198,45 @@ function getTypeTextColor($id){
     return DB::table('usertypes')->where('id', '=', $id)->first()->text_clor;
 }
 
+/**************APP SETTINGS************************/
+
+function event_enable_vcard($event_id){
+    return DB::table('app_settings')
+            ->select('enable_vcard')
+            ->where('event_id', '=', $event_id)
+            ->first()->enable_vcard;
+}
+
+function event_enable_qrcode($event_id){
+    return DB::table('app_settings')
+            ->select('enable_qrcode')
+            ->where('event_id', '=', $event_id)
+            ->first()->enable_qrcode;
+}
+function event_enable_barcode($event_id){
+    return DB::table('app_settings')
+            ->select('enable_barcode')
+            ->where('event_id', '=', $event_id)
+            ->first()->enable_barcode;
+}
+function event_enable_sync_dashboard($event_id){
+    return DB::table('app_settings')
+            ->select('enable_sync_dashboard')
+            ->where('event_id', '=', $event_id)
+            ->first()->enable_sync_dashboard;
+}
+
+
+function get_sync_dashboard_api(){
+    return DB::table('app_settings')
+            ->select('sync_dashboard_api')
+            ->first()->sync_dashboard_api;
+}
+
+
+
+/**************APP SETTINGS************************/
+
 function human_format_date($timestamp) {
     return date("jS M, Y h:i:a", strtotime($timestamp)); //September 30th, 2013
 }

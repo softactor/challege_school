@@ -1,5 +1,5 @@
 <?php
-$dashboardUrl = "https://dashboard.registella.asia/";
+$dashboardUrl = "http://dashboard.registella.asia/";
 $user_id            = $viewParam->user_id;
 $event_id           = $viewParam->event_id;
 $qrCodeFinalData    = $viewParam->qrCodeFinalData;
@@ -196,11 +196,11 @@ $dashboardQrImage   =   1;
                 $qrcodePath = $dashboardUrl . 'pdf/' . $event_id . "/" . $event_id . $user_id . ".png";
                 $path = $qrcodePath;
                 $type = pathinfo($qrcodePath, PATHINFO_EXTENSION);
-                $imageqrdata = file_get_contents($qrcodePath);
-                $imageqrdatabase64 = 'data:image/' . $type . ';base64,' . base64_encode($imageqrdata);
+                //$imageqrdata = file_get_contents($qrcodePath);
+                //$imageqrdatabase64 = 'data:image/' . $type . ';base64,' . base64_encode($imageqrdata);
             
             ?>
-            <img id="reg_qrcode_image" src="<?php echo $imageqrdatabase64; ?>" width="<?php echo $nameBadgeConfData->qrcode->width; ?>" height="<?php echo $nameBadgeConfData->qrcode->height; ?>"/>
+            <img id="reg_qrcode_image" src="<?php echo $path; ?>" width="<?php echo $nameBadgeConfData->qrcode->width; ?>" height="<?php echo $nameBadgeConfData->qrcode->height; ?>"/>
             <?php            
                 }else{
                 if(isset($qrCodeFinalData['vcard_path']) && !empty($qrCodeFinalData['vcard_path'])){

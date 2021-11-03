@@ -98,8 +98,17 @@ class AttendeeController extends Controller {
         
         $insert->created_by = Auth::User()->id;
         $insert->edited_by = Auth::User()->id;
-        $insert->save();
+        //$insert->save();
         
+        if(event_enable_sync_dashboard($request->event_id)){
+            $sync_response  =   $this->sync_dashboard_attendee($request);
+            print '<pre>';
+            print_r($sync_response);
+            print '</pre>';
+            exit;
+            
+        }
+      exit;  
         $vcardName          =   'attendee_vcard_'.$request->event_id.'_'.$insert->id.'.png';        
         $vcardParam         =   (object)[
             'lastName'          =>  $request->last_name,
@@ -118,6 +127,45 @@ class AttendeeController extends Controller {
         $update->vcard_path = $vcardName;
         $update->save();
         return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
+    }
+    
+    // this method will send data to registro dashboard for generate qrcode and other information
+    function sync_dashboard_attendee($request){       
+        
+        $api    = get_sync_dashboard_api();
+        
+        if(isset($api) && !empty($api)){
+
+            $url = $api;
+
+            $event_business_owners  =   [
+                'event_id'              => $request->event_id,
+                'registration_type'     => 'Namebadge',// here need text like visitor, Exibitor etc
+                'company_name'          => $request->company,
+                'postal_code'           => $request->postal_code,
+                'office_number'         => $request->office_number,            
+                'salutation'            => $request->salutation, 
+                'first_name'            => $request->first_name, 
+                'last_name'             => $request->last_name,
+                'designation'           => $request->designation,
+                'mobile'                => $request->mobile,
+                'country_id'            => 18, 
+                'email'                 => $request->email,
+                'namebadge_user_label'  => getTypeName($request->type_id),// here need text like visitor, Exibitor etc
+                'created_at'            => date('Y-m-d H:i:s'),            
+            ];
+            
+            
+                $client = new \GuzzleHttp\Client();
+                $response = $client->post($url, ['form_params' => $event_business_owners]);
+//                $response = $response->getBody()->getContents();
+                print '<pre>';
+                print_r($response);
+                print '</pre>';
+                exit;
+                
+        }
+        
     }
 
     /**
