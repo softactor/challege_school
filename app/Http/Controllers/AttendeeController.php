@@ -154,7 +154,7 @@ class AttendeeController extends Controller {
                 'last_name'             => $request->last_name,
                 'designation'           => $request->designation,
                 'mobile'                => $request->mobile,
-                'country_id'            => get_country_id_by_name($request->first_name), 
+                'country_id'            => get_country_id_by_name($request->country), 
                 'email'                 => $request->email,
                 'namebadge_user_label'  => getTypeName($request->type_id),// here need text like visitor, Exibitor etc
                 'created_at'            => date('Y-m-d H:i:s'),            
