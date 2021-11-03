@@ -31,7 +31,7 @@
                 </thead>
                 <tbody>
                     @php $i = 1 @endphp
-                    $dashboardUrl       = get_registro_dashboard_url();
+                    <?php $dashboardUrl       = get_registro_dashboard_url(); ?>
                     @foreach($attendees as $attendee)
                     <tr>
                         <td>{{$i}}</td>
@@ -43,7 +43,7 @@
                         <td>{{$attendee->company}}</td>
                         <td>
                             <?php
-                                $qrcodePath = $dashboardUrl . 'pdf/' . $attendee->event_id . "/" . $attendee->attendee_live_qr_code;
+                                $path = $dashboardUrl . 'pdf/' . $attendee->event_id . "/" . $attendee->attendee_live_qr_code;
                             
                             ?>
                             <img id="reg_qrcode_image" src="<?php echo $path; ?>" >
