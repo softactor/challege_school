@@ -108,6 +108,19 @@ function get_seat_item_color_name_by_name($name) {
     }
     return '';
 }
+function get_country_id_by_name($country_name) {
+    $data = DB::table('countries')
+                    ->where('country_name', $country_name)
+                    ->first();
+    if(isset($data) && !empty($data)){
+        if(isset($data->id) && !empty($data->id)){
+            return $data->id;
+        }else{
+            return '';
+        }
+    }
+    return '';
+}
 function get_table_data_by_clause($data) {
     $result = DB::table($data['table'])
             ->where($data['where']);

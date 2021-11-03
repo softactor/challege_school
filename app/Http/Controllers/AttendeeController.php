@@ -98,34 +98,39 @@ class AttendeeController extends Controller {
         
         $insert->created_by = Auth::User()->id;
         $insert->edited_by = Auth::User()->id;
-        //$insert->save();
+        $insert->save();
         
         if(event_enable_sync_dashboard($request->event_id)){
             $sync_response  =   $this->sync_dashboard_attendee($request);
-            print '<pre>';
-            print_r($sync_response);
-            print '</pre>';
-            exit;
+            if($sync_response->status == 'success'){
+                
+                $update_attendee                        = Attendee::find($insert->id);
+                $update_attendee->serial_number         = $sync_response->serial_digit;
+                $update_attendee->attendee_live_qr_code = $sync_response->qrcode_path;
+                $update_attendee->save();
+            }
             
-        }
-      exit;  
-        $vcardName          =   'attendee_vcard_'.$request->event_id.'_'.$insert->id.'.png';        
-        $vcardParam         =   (object)[
-            'lastName'          =>  $request->last_name,
-            'fastName'          =>  $request->first_name,
-            'salutation'        =>  $request->salutation,
-            'fullName'          =>  $request->first_name. ' ' .$request->last_name,
-            'organizationName'  =>  $request->company,
-            'mobile'            =>  $request->mobile,
-            'office_number'     =>  $request->office_number,
-            'email'             =>  $request->email,
-            'pathName'          =>  public_path('vcards/'.$vcardName)
-        ];
+        } 
         
-        create_attendee_qr_vcard($vcardParam);
-        $update = Attendee::find($insert->id);
-        $update->vcard_path = $vcardName;
-        $update->save();
+        if(event_enable_vcard($request->event_id)){
+            $vcardName          =   'attendee_vcard_'.$request->event_id.'_'.$insert->id.'.png';        
+            $vcardParam         =   (object)[
+                'lastName'          =>  $request->last_name,
+                'fastName'          =>  $request->first_name,
+                'salutation'        =>  $request->salutation,
+                'fullName'          =>  $request->first_name. ' ' .$request->last_name,
+                'organizationName'  =>  $request->company,
+                'mobile'            =>  $request->mobile,
+                'office_number'     =>  $request->office_number,
+                'email'             =>  $request->email,
+                'pathName'          =>  public_path('vcards/'.$vcardName)
+            ];
+
+            create_attendee_qr_vcard($vcardParam);
+            $update = Attendee::find($insert->id);
+            $update->vcard_path = $vcardName;
+            $update->save();
+        }
         return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
     }
     
@@ -149,7 +154,7 @@ class AttendeeController extends Controller {
                 'last_name'             => $request->last_name,
                 'designation'           => $request->designation,
                 'mobile'                => $request->mobile,
-                'country_id'            => 18, 
+                'country_id'            => get_country_id_by_name($request->first_name), 
                 'email'                 => $request->email,
                 'namebadge_user_label'  => getTypeName($request->type_id),// here need text like visitor, Exibitor etc
                 'created_at'            => date('Y-m-d H:i:s'),            
@@ -158,12 +163,9 @@ class AttendeeController extends Controller {
             
                 $client = new \GuzzleHttp\Client();
                 $response = $client->post($url, ['form_params' => $event_business_owners]);
-//                $response = $response->getBody()->getContents();
-                print '<pre>';
-                print_r($response);
-                print '</pre>';
-                exit;
-                
+                $response = $response->getBody()->getContents();
+                $sync_response  = json_decode($response);
+                return  $sync_response;
         }
         
     }
