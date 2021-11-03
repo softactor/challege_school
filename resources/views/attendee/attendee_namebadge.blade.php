@@ -1,5 +1,5 @@
 <?php
-$dashboardUrl = "http://dashboard.registella.asia/";
+$dashboardUrl       = get_registro_dashboard_url();
 $user_id            = $viewParam->user_id;
 $event_id           = $viewParam->event_id;
 $qrCodeFinalData    = $viewParam->qrCodeFinalData;
@@ -193,7 +193,7 @@ $dashboardQrImage   =   1;
         <div class="badgeContent" style="transform: scale(<?php echo $scaleX; ?>, <?php echo $scaleY; ?>);width:<?php echo $nameBadgeConfData->qrcode->width; ?>px; height: <?php echo $nameBadgeConfData->qrcode->height; ?>px; left: <?php echo $nameBadgeConfData->qrcode->left; ?>px; top: <?php echo $nameBadgeConfData->qrcode->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
             <?php
             if(isset($dashboardQrImage) && $dashboardQrImage==1){
-                $qrcodePath = $dashboardUrl . 'pdf/' . $event_id . "/" . $event_id . $user_id . ".png";
+                $qrcodePath = $dashboardUrl . 'pdf/' . $event_id . "/" . $qrCodeFinalData['attendee_live_qr_code'];
                 $path = $qrcodePath;
                 $type = pathinfo($qrcodePath, PATHINFO_EXTENSION);
                 //$imageqrdata = file_get_contents($qrcodePath);

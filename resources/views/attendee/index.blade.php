@@ -25,12 +25,13 @@
                         <th>Type</th>
                         <th>Country</th>
                         <th>Company</th>
-                        <th>Vcard</th>
+                        <th>Qrcode</th>
                         <th>Action</th>
                     </tr>					
                 </thead>
                 <tbody>
                     @php $i = 1 @endphp
+                    $dashboardUrl       = get_registro_dashboard_url();
                     @foreach($attendees as $attendee)
                     <tr>
                         <td>{{$i}}</td>
@@ -42,15 +43,10 @@
                         <td>{{$attendee->company}}</td>
                         <td>
                             <?php
-                                if(isset($attendee->vcard_path) && !empty($attendee->vcard_path)){
-                                    $vcardFullPath  =   public_path('vcards/'.$attendee->vcard_path);
-                                    $vcardPath      =   asset('public/vcards/'.$attendee->vcard_path);                                    
-                                    if (file_exists($vcardFullPath)) {
-                                        echo '<img src="'.$vcardPath.'">';
-                                    }
-                                }
+                                $qrcodePath = $dashboardUrl . 'pdf/' . $attendee->event_id . "/" . $attendee->attendee_live_qr_code;
                             
                             ?>
+                            <img id="reg_qrcode_image" src="<?php echo $path; ?>" >
                         </td>
                         <td>
                             <a href="{{route('editAttendee',[$attendee['id']])}}"  class="btn btn-sm btn-success">

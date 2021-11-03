@@ -50,6 +50,7 @@ class PrintStationController extends Controller
                 'company_name'          =>  $attendee->company,
                 'type_id'               =>  $attendee->type_id,
                 'vcard_path'            =>  $attendee->vcard_path,
+                'attendee_live_qr_code'            =>  $attendee->attendee_live_qr_code,
                 'zone'                  =>  $attendee->zone,
                 'table_name'            =>  $attendee->table_name,
                 'seat'                  =>  $attendee->seat,
