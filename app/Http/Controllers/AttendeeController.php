@@ -229,25 +229,40 @@ class AttendeeController extends Controller {
                                 $insert->edited_by      = Auth::User()->id;
                                 $insert->save();
                                 
-                                $vcardName          =   'attendee_vcard_'.$importData[1].'_'.$insert->id.'.png';
-                                $vcardPath          =   public_path('vcards/'.$vcardName);
-                                $vcardParam         =   (object)[
-                                    'lastName'          =>  $importData[4],
-                                    'fastName'          =>  $importData[3],
-                                    'salutation'        =>  $importData[2],
-                                    'fullName'          =>  $importData[3]. ' ' .$importData[4],
-                                    'organizationName'  =>  $importData[8],
-                                    'mobile'            =>  (isset($importData[10]) && !empty($importData[10]) ? $importData[10] : ''),
-                                    'office_number'     =>  (isset($importData[11]) && !empty($importData[11]) ? $importData[11] : ''),
-                                    'email'             =>  $importData[5],
-                                    'pathName'          =>  $vcardPath
-                                ];
-                                // create attendee vcard qrcode:
-                                create_attendee_qr_vcard($vcardParam);
-                                // update attendee with vcard path:
-                                $update = Attendee::find($insert->id);
-                                $update->vcard_path = $vcardName;
-                                $update->save();
+                                
+                                if(event_enable_sync_dashboard($insert->event_id)){
+                                    $sync_response  =   $this->sync_dashboard_attendee($insert);
+                                    if($sync_response->status == 'success'){
+                                        $update_attendee                        = Attendee::find($insert->id);
+                                        $update_attendee->serial_number         = $sync_response->serial_digit;
+                                        $update_attendee->attendee_live_qr_code = $sync_response->qrcode_path;
+                                        $update_attendee->save();
+                                    }
+
+                                } 
+
+                                if(event_enable_vcard($insert->event_id)){
+                                
+                                    $vcardName          =   'attendee_vcard_'.$importData[1].'_'.$insert->id.'.png';
+                                    $vcardPath          =   public_path('vcards/'.$vcardName);
+                                    $vcardParam         =   (object)[
+                                        'lastName'          =>  $importData[4],
+                                        'fastName'          =>  $importData[3],
+                                        'salutation'        =>  $importData[2],
+                                        'fullName'          =>  $importData[3]. ' ' .$importData[4],
+                                        'organizationName'  =>  $importData[8],
+                                        'mobile'            =>  (isset($importData[10]) && !empty($importData[10]) ? $importData[10] : ''),
+                                        'office_number'     =>  (isset($importData[11]) && !empty($importData[11]) ? $importData[11] : ''),
+                                        'email'             =>  $importData[5],
+                                        'pathName'          =>  $vcardPath
+                                    ];
+                                    // create attendee vcard qrcode:
+                                    create_attendee_qr_vcard($vcardParam);
+                                    // update attendee with vcard path:
+                                    $update = Attendee::find($insert->id);
+                                    $update->vcard_path = $vcardName;
+                                    $update->save();
+                                }
                                 
                             } else {
                                 $duplicate[] = $importData[5];
