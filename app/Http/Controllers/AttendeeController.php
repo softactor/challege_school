@@ -615,10 +615,11 @@ class AttendeeController extends Controller {
                             $deleteVcard++;                            
                         }
                     }
-                    $attendee = Attendee::find($update->id);
-                    if ($attendee->delete()) {
-                        $deleteContainer++;
-                    }
+                }
+                
+                $attendee = Attendee::find($update->id);
+                if ($attendee->delete()) {
+                    $deleteContainer++;
                 }
             }
         }
