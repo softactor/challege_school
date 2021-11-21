@@ -18,3 +18,4 @@ yarn-error.log
 /public/vcards
 /public/header_image
 /nbproject/private/
+/public/qrcodes/

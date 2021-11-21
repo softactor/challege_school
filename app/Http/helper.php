@@ -267,9 +267,14 @@ function get_sync_dashboard_api(){
             ->first()->sync_dashboard_api;
 }
 function get_registro_dashboard_url(){
-    return DB::table('app_settings')
+    $app_data   =    DB::table('app_settings')
             ->select('registro_dashboard_url')
-            ->first()->registro_dashboard_url;
+            ->first();
+    
+    if(isset($app_data) && !empty($app_data)){
+        return $app_data->registro_dashboard_url;
+    }
+    return '';
 }
 
 
