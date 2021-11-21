@@ -43,10 +43,9 @@
                         <td>{{$attendee->company}}</td>
                         <td>
                             <?php
-                                $path = $dashboardUrl . 'pdf/' . $attendee->event_id . "/" . $attendee->attendee_live_qr_code;
-                            
+                            $dashboardQrImage   = is_qrcode_enable($attendee->event_id);
+                            echo show_attendee_qrcode($dashboardUrl, $dashboardQrImage, $attendee);
                             ?>
-                            <img id="reg_qrcode_image" src="<?php echo $path; ?>" >
                         </td>
                         <td>
                             <a href="{{route('editAttendee',[$attendee['id']])}}"  class="btn btn-sm btn-success">

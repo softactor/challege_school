@@ -131,7 +131,7 @@
                                 @if ($events->count())
                                 @foreach($countries as $country)
                                 <option value="{{ $country->country_name }}" <?php
-                                if (isset($row->country) && $row->country == $country->country_name) {
+                                if (isset($row->country) && strtolower($row->country) == strtolower($country->country_name)) {
                                     echo 'selected';
                                 }
                                 ?>>{{ $country->country_name }}</option>
@@ -150,7 +150,7 @@
                     <div class='col-md-4'>
                         <div class="form-group">
                             <label>Company</label>
-                            <input type="text" name="company" value={{ $row->company }} class="form-control">
+                            <input type="text" name="company" value="{{ $row->company }}" class="form-control">
                             @if ($errors->has('company')) 
                             <span class="help-block">
                                 <span>{{ $errors->first('company') }}</span>

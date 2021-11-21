@@ -214,29 +214,50 @@ function getTypeTextColor($id){
 /**************APP SETTINGS************************/
 
 function event_enable_vcard($event_id){
-    return DB::table('app_settings')
+    $vcard_data =  DB::table('app_settings')
             ->select('enable_vcard')
             ->where('event_id', '=', $event_id)
-            ->first()->enable_vcard;
+            ->first();
+    if(isset($vcard_data) && !empty($vcard_data)){
+        return $vcard_data->enable_vcard;
+    }
+
+    return 0;
 }
 
 function event_enable_qrcode($event_id){
-    return DB::table('app_settings')
+    $qrcode_data =  DB::table('app_settings')
             ->select('enable_qrcode')
             ->where('event_id', '=', $event_id)
-            ->first()->enable_qrcode;
+            ->first();
+
+    if(isset($qrcode_data) && !empty($qrcode_data)){
+        $qrcode_data->enable_qrcode;
+    }
+
+    return 0;
 }
 function event_enable_barcode($event_id){
-    return DB::table('app_settings')
+    $barcode_data =  DB::table('app_settings')
             ->select('enable_barcode')
             ->where('event_id', '=', $event_id)
-            ->first()->enable_barcode;
+            ->first();
+    if(isset($barcode_data) && !empty($barcode_data)){
+        $barcode_data->enable_barcode;
+    }
+
+    return 0;
 }
 function event_enable_sync_dashboard($event_id){
-    return DB::table('app_settings')
+    $sync_data  =    DB::table('app_settings')
             ->select('enable_sync_dashboard')
             ->where('event_id', '=', $event_id)
-            ->first()->enable_sync_dashboard;
+            ->first();
+    if(isset($sync_data) && !empty($sync_data)){
+        $sync_data->enable_sync_dashboard;
+    }
+
+    return 0;
 }
 
 
@@ -249,6 +270,30 @@ function get_registro_dashboard_url(){
     return DB::table('app_settings')
             ->select('registro_dashboard_url')
             ->first()->registro_dashboard_url;
+}
+
+
+function is_qrcode_enable($event_id){
+    $app_data   =  DB::table('app_settings')
+    ->select('enable_qrcode', 'qrcode_type')
+    ->where('event_id', $event_id)
+    ->first();
+
+    if(isset($app_data) && !empty($app_data)){
+        if($app_data->enable_qrcode == 1){
+            return $app_data->qrcode_type;
+        } 
+    }
+
+    return 0;
+
+}
+
+
+function get_qrcode_address_type($event_id){
+    return DB::table('app_settings')
+    ->select('registro_dashboard_url')
+    ->first()->registro_dashboard_url;
 }
 
 
@@ -282,6 +327,18 @@ function getAttendeePrintedDate($id){
 function getAttendeenop($id){
     $attendeeNopHisResp        =   DB::table('print_history')->where('attendee_id', '=', $id)->get();
     return count($attendeeNopHisResp);
+}
+
+function create_attendee_qrcode($data){
+    $qrcodeData = [
+        'pathname'      => $data->path,
+        'qrcode_data'   => $data->qrcode_data
+    ];
+    getQRCode($qrcodeData);
+}
+
+function getQRCode($data) {
+    QR_Code::png($data['qrcode_data'], $data['pathname']);
 }
 
 function create_attendee_vcard($data=''){
@@ -372,5 +429,18 @@ function calculate_time_span($date){
 
 function get_namebadge_last_printed_time(){
     return DB::table('print_history')->latest('created_at')->first();
+}
+
+
+function show_attendee_qrcode($dashboardUrl, $dashboardQrImage, $attendee){
+    if(isset($dashboardQrImage) && $dashboardQrImage==2){
+        $path = $dashboardUrl . 'pdf/' . $attendee->event_id . "/" . $attendee->attendee_live_qr_code;            
+    }elseif(($dashboardQrImage) && $dashboardQrImage==3){
+        $path =  $attendee->client_qrcode_address;                    
+    }elseif(($dashboardQrImage) && $dashboardQrImage==1){
+        $path =  asset('public/qrcodes/'.$attendee->client_qrcode_address);                    
+    }    
+    $qrcode     =    '<img id="reg_qrcode_image" src="'.$path.'" >';
+    return $qrcode;
 }
 ?>

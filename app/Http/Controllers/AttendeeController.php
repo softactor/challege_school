@@ -197,8 +197,8 @@ class AttendeeController extends Controller {
             array_push($fileErrorMessage, 'Please import only CSV file');
         }
         if (!$fileHaveError) {
-            $file = $_FILES['attendee_csv']['tmp_name'];
-            $csvdata = $this->csvToArray($file);
+            $file    = $_FILES['attendee_csv']['tmp_name'];
+            $csvdata = $this->csvToArray($file);            
             if (isset($csvdata) && !empty($csvdata)) {
                 $offlineData = [];
                 foreach ($csvdata as $importData) {
@@ -225,6 +225,7 @@ class AttendeeController extends Controller {
                                 $insert->table_name     = (isset($importData[14]) && !empty($importData[14]) ? $importData[14] : '');
                                 $insert->seat           = (isset($importData[15]) && !empty($importData[15]) ? $importData[15] : '');
                                 $insert->zone_bg_color  = (isset($importData[16]) && !empty($importData[16]) ? $importData[16] : '');
+                                $insert->client_qrcode_text  = (isset($importData[17]) && !empty($importData[17]) ? $importData[17] : '');
                                 $insert->created_by     = Auth::User()->id;
                                 $insert->edited_by      = Auth::User()->id;
                                 $insert->save();
@@ -261,6 +262,24 @@ class AttendeeController extends Controller {
                                     // update attendee with vcard path:
                                     $update = Attendee::find($insert->id);
                                     $update->vcard_path = $vcardName;
+                                    $update->save();
+                                }
+
+                                $qrcode_gen_status  =   is_qrcode_enable($insert->event_id);
+                                if($qrcode_gen_status && $qrcode_gen_status == 1){
+                                    $qrdestPath = public_path('qrcodes/');
+                                    
+                                    $qrfilename         = 'attendee_qrcode_' . $insert->id .  '.png';
+                                    $qr_path_with_file  = $qrdestPath . $qrfilename;
+
+                                    $qrparam    =   (object)[
+                                        'path'          =>  $qr_path_with_file,
+                                        'qrcode_data'   =>  $insert->client_qrcode_text
+                                    ];
+
+                                    create_attendee_qrcode($qrparam);
+                                    $update = Attendee::find($insert->id);
+                                    $update->client_qrcode_address = $qrfilename;
                                     $update->save();
                                 }
                                 

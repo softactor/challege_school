@@ -13,20 +13,25 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Event</label>
+                            <label>Event <span class="field_required"></span></label>
                             <select class="form-control" name="event_id">
                                 <option value=''>-- Select Event --</option>
                                 <?php
                                 foreach ($events as $event) {
                                     ?>
-                                    <option value="<?php echo $event->id ?>"><?php echo $event->name ?></option>
+                                    <option value="<?php echo $event->id ?>" @if (old('event_id') == $event->id) {{ 'selected' }} @endif><?php echo $event->name ?></option>
                                 <?php } ?>
                             </select>
+                            @if ($errors->has('event_id')) 
+                            <span class="help-block error">
+                                <span>{{ $errors->first('event_id') }}</span>
+                            </span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>User Type</label>
+                            <label>User Type <span class="field_required"></span></label>
                             <select class="form-control" name="type_id">
                                 <option value=''>-- Select Type --</option>
                                 <?php
@@ -35,11 +40,16 @@
                                     <option value="<?php echo $usertype->id ?>"><?php echo $usertype->type_name ?></option>
                                 <?php } ?>
                             </select>
+                            @if ($errors->has('type_id')) 
+                            <span class="help-block error">
+                                <span>{{ $errors->first('type_id') }}</span>
+                            </span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Country</label>
+                            <label>Country <span class="field_required"></span></label>
                             <select class="form-control" name="country">
                                 <option value=''>-- Select Country --</option>
                                 <?php
@@ -48,6 +58,11 @@
                                     <option value="<?php echo $country->country_name ?>"><?php echo $country->country_name ?></option>
                                 <?php } ?>
                             </select>
+                            @if ($errors->has('country')) 
+                            <span class="help-block error">
+                                <span>{{ $errors->first('country') }}</span>
+                            </span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -68,14 +83,24 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" name="first_name" class="form-control">
+                            <label>First Name <span class="field_required"></span></label>
+                            <input type="text" name="first_name" class="form-control" value="{{ old('first_name') }}">
+                            @if ($errors->has('first_name')) 
+                            <span class="help-block error">
+                                <span>{{ $errors->first('first_name') }}</span>
+                            </span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" name="last_name" class="form-control">
+                            <label>Last Name <span class="field_required"></span></label>
+                            <input type="text" name="last_name" class="form-control" value="{{ old('last_name') }}">
+                            @if ($errors->has('last_name')) 
+                            <span class="help-block error">
+                                <span>{{ $errors->first('last_name') }}</span>
+                            </span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -83,14 +108,24 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="text" name="email" class="form-control">
+                            <label>Email <span class="field_required"></span></label>
+                            <input type="text" name="email" class="form-control" value="{{ old('email') }}">
+                            @if ($errors->has('email')) 
+                            <span class="help-block error">
+                                <span>{{ $errors->first('email') }}</span>
+                            </span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Company</label>
-                            <input type="text" name="company" class="form-control">
+                            <label>Company <span class="field_required"></span></label>
+                            <input type="text" name="company" class="form-control" value="{{ old('company') }}">
+                            @if ($errors->has('company')) 
+                            <span class="help-block error">
+                                <span>{{ $errors->first('company') }}</span>
+                            </span>
+                            @endif
                         </div>
                     </div>
                 </div>
