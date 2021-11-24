@@ -189,6 +189,19 @@
                   </div>
                 </div>
               </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><b>Photo Section</b></li>
+              </ul>
+
+              <div class=" field-list">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="card-icon box" onclick="user_photo()">
+                       <span>Photo</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><b>Image Section</b></li>
@@ -1059,6 +1072,22 @@ function AddLayout_100()
                     id: 'qrcode'
     });
     var qrcodeObjectUpdate  = add_common_object_name(qrcodeObject, 'qrcode')  
+    canvas.add(qrcodeObjectUpdate);  
+  }
+  
+  function user_photo(){
+    var qrcodeObject = new fabric.Rect({                    
+                    width: 163,
+                    height: 200,
+                    opacity: 1,
+                    fill: '#fff',
+                    stroke: '#000',
+                    strokeWidth: 2,
+                    left: 0,
+                    top: 0,
+                    id: 'attendee_photo'
+    });
+    var qrcodeObjectUpdate  = add_common_object_name(qrcodeObject, 'attendee_photo')  
     canvas.add(qrcodeObjectUpdate);  
   }
   

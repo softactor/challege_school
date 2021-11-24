@@ -92,4 +92,13 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
         Route::get('update_attendee_printing_history', 'PrintStationController@update_attendee_printing_history')->name('update_attendee_printing_history');
         Route::get('print_report', 'PrintStationController@print_report')->name('print_report');
         Route::get('export_namebadge_print_details', 'ExcelController@export_namebadge_print_details')->name('export_namebadge_print_details');
+        
+        
+        Route::get('namebadge_event_settings_view', 'NamebadgeSettingsController@namebadge_event_settings_view')->name('namebadge_event_settings_view');
+        
+        Route::get('get_event_settings_data', 'NamebadgeSettingsController@get_event_settings_data')->name('get_event_settings_data');
+        
+        Route::post('saveEventSettings', 'NamebadgeSettingsController@saveEventSettings')->name('saveEventSettings');
+        
+        
 });

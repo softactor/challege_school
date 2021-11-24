@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<form method="post" action="{{ route('updateAttendee', [$row->id]) }}">
+<form method="post" action="{{ route('updateAttendee', [$row->id]) }}" enctype="multipart/form-data">
     {{  @csrf_field() }}
     @method('POST')
     <div class="col-lg-12">
@@ -264,6 +264,24 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Upload Photo</label>
+                            <input type="file" name="attendee_photo">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <?php
+                        
+                            if(isset($row->attendee_photo) && !empty($row->attendee_photo)){
+                                echo '<img src="'.asset('public/uploads/'.$row->attendee_photo).'" style="width:100px;">';
+                            }
+                        
+                        ?>
+                        <input type="hidden" name="attendee_photo" value="<?php echo $row->attendee_photo; ?>">
+                    </div>
+                </div>
                 @if(count(json_decode($customFields,true)) > 0)
                 <div class="panel panel-default custom_field_data">
                     <div class="panel-heading">
@@ -420,7 +438,7 @@
             @endif
 
             <div class="form-group">
-                <input type="submit" class="btn btn-success" value="Submit">
+                <input type="submit" class="btn btn-success" value="Update">
             </div>
         </div>
     </div>

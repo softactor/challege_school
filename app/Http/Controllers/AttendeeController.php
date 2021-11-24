@@ -61,9 +61,9 @@ class AttendeeController extends Controller {
         } else {
             $serial_number = $attendee->serial_number + 1;
         }
-        $events = Event::get()->pluck('name', 'id');
-        $userTypes = Usertype::get()->pluck('type_name', 'id');
-        $CustomFields = getCustomFieldByModule('attendee');
+        $events         = Event::get()->pluck('name', 'id');
+        $userTypes      = Usertype::get()->pluck('type_name', 'id');
+        $CustomFields   = getCustomFieldByModule('attendee');
         return view('attendee.create', compact(['event_id', 'events', 'serial_number', 'userTypes', 'CustomFields', 'countries', 'salutations']));
     }
 
@@ -74,9 +74,29 @@ class AttendeeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(attendeeStore $request) {
+        
+        $attendee_photo_path    =   '';
+        if(isset($_FILES['attendee_photo']['name']) && !empty($_FILES['attendee_photo']['name'])){
+            $file_name      =   'attendee_photo';
+            $store_path     =   public_path('/uploads/');
+            $photo_response =   upload_attendee_photo($file_name,$store_path);
+            if($photo_response->status == 'error'){
+                return redirect()->route('attendeeList')->with('error', $photo_response->message);
+            }else{
+                $attendee_photo_path    =   $photo_response->name;
+            }
+        }
+        
         $insert = new attendee();
-        $insert->serial_number      = $request->serial_number;
-        $insert->event_id           = $request->event_id;
+        
+        $event_id               =   $request->event_id;
+        $gen_serial_number      =   [
+            'event_id'          =>  $event_id,
+            'serial_prefix'     =>  'C02'
+        ];
+
+        $insert->serial_number      = get_business_owners_details_serial_number($gen_serial_number);
+        $insert->event_id           = $event_id;
         $insert->salutation         = $request->salutation;
         $insert->first_name         = $request->first_name;
         $insert->last_name          = $request->last_name;
@@ -94,10 +114,11 @@ class AttendeeController extends Controller {
         $insert->table_name         = $request->table_name;
         $insert->seat               = $request->seat;
         $insert->zone_bg_color      = (isset($request->zone) && !empty($request->zone) ? get_seat_item_color_name_by_name($request->zone) : '');
-        $insert->add_type      = (isset($request->add_type) && !empty($request->add_type) ? $request->add_type: 1);
+        $insert->add_type           = (isset($request->add_type) && !empty($request->add_type) ? $request->add_type: 1);
         
-        $insert->created_by = Auth::User()->id;
-        $insert->edited_by = Auth::User()->id;
+        $insert->created_by         = Auth::User()->id;
+        $insert->edited_by          = Auth::User()->id;
+        $insert->attendee_photo     = $attendee_photo_path;
         $insert->save();
         
         if(event_enable_sync_dashboard($request->event_id)){
@@ -208,8 +229,14 @@ class AttendeeController extends Controller {
                         if(isset($attendeeTypeId) && !empty($attendeeTypeId)){
                             if ($attendee_exist == 0) {
                                 $insert = new Attendee();
-                                $insert->serial_number  = $importData[0];
-                                $insert->event_id       = $importData[1];
+                                $event_id               =   $importData[1];
+                                $gen_serial_number      =   [
+                                    'event_id'          =>  $event_id,
+                                    'serial_prefix'     =>  'C02'
+                                ];
+                                
+                                $insert->serial_number  = get_business_owners_details_serial_number($gen_serial_number);
+                                $insert->event_id       = $event_id;
                                 $insert->salutation     = $importData[2];
                                 $insert->first_name     = $importData[3];
                                 $insert->last_name      = $importData[4];
@@ -543,6 +570,20 @@ class AttendeeController extends Controller {
             }
         }
         
+        $attendee_photo_path    =   (isset($request->attendee_photo) && !empty($request->attendee_photo) ? $request->attendee_photo : '');
+        if(isset($_FILES['attendee_photo']['name']) && !empty($_FILES['attendee_photo']['name'])){
+            $file_name      =   'attendee_photo';
+            $store_path     =   public_path('/uploads/');
+            $photo_response =   upload_attendee_photo($file_name,$store_path);
+            if($photo_response->status == 'error'){
+                return redirect()->route('attendeeList')->with('error', $photo_response->message);
+            }else{
+                $attendee_photo_path    =   $photo_response->name;
+            }
+        }
+        
+        
+        
         $update->serial_number      = $request->serial_number;
         $update->event_id           = $request->event_id;
         $update->salutation         = $request->salutation;
@@ -561,6 +602,7 @@ class AttendeeController extends Controller {
         $update->zone               = $request->zone;
         $update->table_name         = $request->table_name;
         $update->seat               = $request->seat;
+        $update->attendee_photo     = $attendee_photo_path;
         $update->zone_bg_color      = (isset($request->zone) && !empty($request->zone) ? get_seat_item_color_name_by_name($request->zone) : '');
         
         $update->edited_by = Auth::User()->id;

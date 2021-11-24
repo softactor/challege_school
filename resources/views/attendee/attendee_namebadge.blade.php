@@ -5,6 +5,7 @@ $event_id           = $viewParam->event_id;
 $qrCodeFinalData    = $viewParam->qrCodeFinalData;
 $templatesDatas     = $viewParam->templatesDatas;
 $nameBadgeConfData  = $viewParam->nameBadgeConfData;
+
 $type_id            = $qrCodeFinalData['type_id'];
 $dashboardQrImage   = is_qrcode_enable($event_id);
 ?>
@@ -198,6 +199,26 @@ $dashboardQrImage   = is_qrcode_enable($event_id);
             ?>
         </div>
     <?php } ?>
+    
+    
+    <!--user Photo Area-->
+    <?php if (isset($nameBadgeConfData->attendee_photo) && !empty($nameBadgeConfData->attendee_photo)) { ?>
+        <?php
+        $scaleX = $nameBadgeConfData->attendee_photo->scaleX;
+        $scaleY = $nameBadgeConfData->attendee_photo->scaleY;
+        $textAlign = (isset($nameBadgeConfData->attendee_photo->textAlign) && !empty($nameBadgeConfData->attendee_photo->textAlign) ? $nameBadgeConfData->attendee_photo->textAlign : "left");
+        $fontsize = (isset($nameBadgeConfData->attendee_photo->fontSize) && !empty($nameBadgeConfData->attendee_photo->fontSize) ? $nameBadgeConfData->attendee_photo->fontSize : 14);
+        $fontweight = (isset($nameBadgeConfData->attendee_photo->fontWeight) && !empty($nameBadgeConfData->attendee_photo->fontWeight) ? $nameBadgeConfData->qrcode->fontWeight : 'normal');
+        ?>
+        <div class="badgeContent" style="transform: scale(<?php echo $scaleX; ?>, <?php echo $scaleY; ?>);width:<?php echo $nameBadgeConfData->attendee_photo->width; ?>px; height: <?php echo $nameBadgeConfData->attendee_photo->height; ?>px; left: <?php echo $nameBadgeConfData->attendee_photo->left; ?>px; top: <?php echo $nameBadgeConfData->attendee_photo->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
+            <?php
+                $attendee_photo_path    =   $qrCodeFinalData['attendee_photo'];
+                echo show_attendee_phoho($attendee_photo_path, $nameBadgeConfData->attendee_photo);
+            ?>
+        </div>
+    <?php } ?>
+    
+    
 </div>
 <div style="clear: both"></div>
 

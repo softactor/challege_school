@@ -134,7 +134,7 @@ function get_table_data_by_clause($data) {
         return false;
     }
 }
-function image_file_store($file_data) {
+function image_file_store($file_data, $store_path) {
     $image_file_name    = $file_data['image_file_name'];
     $fileName           = $file_data['fileName'];
     $newDirtory         = $file_data['newDirtory'];
@@ -448,4 +448,115 @@ function show_attendee_qrcode($dashboardUrl, $dashboardQrImage, $attendee){
     $qrcode     =    '<img id="reg_qrcode_image" src="'.$path.'" >';
     return $qrcode;
 }
+
+function show_attendee_phoho($attendee_photo_path, $conf){
+    if(!empty($attendee_photo_path)){
+        $path = asset('public/uploads/'.$attendee_photo_path);            
+    }  
+    $qrcode     =    '<img id="reg_qrcode_image" src="'.$path.'" width="'.$conf->width.'" height="'.$conf->height.'" >';
+    return $qrcode;
+}
+
+function upload_attendee_photo($file_name, $target_dir) {
+    $tmp = explode('.', $_FILES[$file_name]["name"]);
+    $file_extension = end($tmp);
+    $file_base_name      =   'attendee_photo_'.time().'.'.$file_extension;
+    
+    
+    $target_file    = $target_dir . $file_base_name;
+    $uploadOk       = 1;
+    $imageFileType  = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    $message  =   '';
+    $status         =   'error';
+
+// Check if image file is a actual image or fake image
+    $check = getimagesize($_FILES[$file_name]["tmp_name"]);
+    if ($check == false) {
+        $message.= "File is not an image.<br>";
+        $uploadOk = 0;
+    }
+
+// Check if file already exists
+//    if (file_exists($target_file)) {
+//        $error_message.=  "Sorry, file already exists.";
+//        $uploadOk = 0;
+//    }
+
+// Check file size
+    if ($_FILES[$file_name]["size"] > 700000) {
+        $message.= "Sorry, your file is too large.";
+        $uploadOk = 0;
+    }
+
+// Allow certain file formats
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+        $message.= "Sorry, only JPG, JPEG & PNG files are allowed.";
+        $uploadOk = 0;
+    }
+
+// Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+        $message.=   "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+    } else {
+        if (move_uploaded_file($_FILES[$file_name]["tmp_name"], $target_file)) {
+            $message.=  "The file " . htmlspecialchars(basename($_FILES[$file_name]["name"])) . " has been uploaded.";
+            $status     =  'success';
+        } else {
+            $uploadOk = 0;
+            $error_message.=  "Sorry, there was an error uploading your file.";
+        }
+    }
+    
+    $response   =   (object)[
+        'status'            =>  $status,
+        'message'           =>  $message,
+        'name'              =>  $file_base_name,
+    ];
+    
+    return $response;
+}
+
+
+function get_business_owners_details_serial_number($profile_data){
+    $ebodParam['table'] = 'attendees';
+    $ebodParam['field'] = 'id';
+    $ebodParam['where'] = [
+        'event_id'      => $profile_data['event_id']
+    ];
+    $serialParam = [
+        'event_id'      => $profile_data['event_id'],
+        'alphanum'      => strtoupper(substr(str_shuffle(str_repeat('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789', 10)), 0, 6)),
+        'next_id'       => getTableTotalRows($ebodParam)->total + 1,
+        'serial_prefix' => (isset($profile_data['serial_prefix']) && !empty($profile_data['serial_prefix']) ? $profile_data['serial_prefix'] : ''),
+    ];
+    return generate_serial_number($serialParam);
+}
+
+
+function generate_serial_number($data) {
+    $formater_length = 6;
+    $alphanum = $data['alphanum'];
+    if (isset($data['serial_prefix']) && !empty($data['serial_prefix'])) {
+        $length_of_serial_prefix = strlen($data['serial_prefix']);
+        if ($length_of_serial_prefix <= 4) {
+            $formater_length = (6 - $length_of_serial_prefix);
+            $final_formater_length = $formater_length . 'd';
+            $next_id = sprintf('%0' . $final_formater_length, $data['next_id']);
+            $comingDigit = $data['serial_prefix'] .$alphanum. $next_id;
+            return $comingDigit;
+        } else {
+            $next_id = sprintf('%0' . $formater_length . 'd', $data['next_id']);
+        }
+    } else {
+        $next_id = sprintf('%0' . $formater_length . 'd', $data['next_id']);
+    }
+
+    
+    $event = sprintf('%04d', $data['event_id']);
+    $comingDigit = $event . $alphanum . $next_id;
+    return $comingDigit;
+}
+
+
 ?>

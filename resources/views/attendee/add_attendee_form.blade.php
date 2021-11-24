@@ -3,7 +3,7 @@
 @endsection
 
 @section('content')
-<form method="post" action="{{ route('saveAttendee') }}">
+<form method="post" action="{{ route('saveAttendee') }}" enctype="multipart/form-data">
     {{  @csrf_field() }}
     @method('POST')
     <div class="col-lg-12">
@@ -233,6 +233,14 @@
                                     <option value="<?php echo $row->name ?>"><?php echo $row->name ?></option>
                                 <?php } ?>
                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Upload Photo</label>
+                            <input type="file" name="attendee_photo">
                         </div>
                     </div>
                 </div>

@@ -293,6 +293,72 @@
                 }
             });
        }
+       
+       function get_event_settings_data(event_id){
+           if(event_id){
+               $.ajax({
+                    url         : '{{route("get_event_settings_data")}}',
+                    type        : 'GET',
+                    dataType    : 'json',
+                    data        : 'event_id='+event_id,
+                    success     : function (response) {
+                        if (response.status == 'success'){                            
+                            
+                            if(response.data.enable_vcard){
+                                $('#enable_vcard').prop('checked', true);
+                            }else{
+                                $('#enable_vcard').prop('checked', false);
+                            }
+                            
+                            if(response.data.enable_qrcode){
+                                $('#enable_qrcode').prop('checked', true);
+                            }else{
+                                $('#enable_qrcode').prop('checked', false);
+                            }
+                            
+                            if(response.data.enable_barcode){
+                                $('#enable_barcode').prop('checked', true);
+                            }else{
+                                $('#enable_barcode').prop('checked', false);
+                            }
+                            
+                            
+                            if(response.data.enable_sync_dashboard){
+                                $('#enable_sync_dashboard').prop('checked', true);
+                            }else{
+                                $('#enable_sync_dashboard').prop('checked', false);
+                            }
+                            
+                            
+                            if(response.data.qrcode_type){
+                                $('#qrcode_type').val(response.data.qrcode_type);
+                            }else{
+                                $('#qrcode_type').val('');
+                            }
+                            
+                            
+                            swal("Data Found", response.message, "success");
+                            setTimeout(function(){
+                                swal.close();
+                            }, 2000);
+                        } else{
+                            swal("Data Not Found", response.message, "error");
+                            $('#enable_vcard').prop('checked', false);
+                            $('#enable_qrcode').prop('checked', false);
+                            $('#enable_barcode').prop('checked', false);
+                            $('#enable_sync_dashboard').prop('checked', false);
+                        }
+                    },
+                    async: false // <- this turns it into synchronous
+                });
+           }else{
+               $('#enable_vcard').prop('checked', false);
+               $('#enable_qrcode').prop('checked', false);
+               $('#enable_barcode').prop('checked', false);
+               $('#enable_sync_dashboard').prop('checked', false);
+           }
+       }
+       
         </script>
         @yield('page-script')
     </body>
