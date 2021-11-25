@@ -6,6 +6,7 @@ $qrCodeFinalData    = $viewParam->qrCodeFinalData;
 $templatesDatas     = $viewParam->templatesDatas;
 $nameBadgeConfData  = $viewParam->nameBadgeConfData;
 
+
 $type_id            = $qrCodeFinalData['type_id'];
 $dashboardQrImage   = is_qrcode_enable($event_id);
 ?>
@@ -196,6 +197,26 @@ $dashboardQrImage   = is_qrcode_enable($event_id);
                 $dashboardQrImage   =   is_qrcode_enable($event_id);
                 $attendee           =   (object)$qrCodeFinalData;
                 echo show_attendee_qrcode($dashboardUrl, $dashboardQrImage, $attendee);
+            ?>
+        </div>
+    <?php } ?>
+
+
+    <!--Barcode Area-->
+    <?php if (isset($nameBadgeConfData->barcode) && !empty($nameBadgeConfData->barcode)) { ?>
+        <?php
+        $scaleX = $nameBadgeConfData->barcode->scaleX;
+        $scaleY = $nameBadgeConfData->barcode->scaleY;
+        $textAlign = (isset($nameBadgeConfData->barcode->textAlign) && !empty($nameBadgeConfData->barcode->textAlign) ? $nameBadgeConfData->barcode->textAlign : "left");
+        $fontsize = (isset($nameBadgeConfData->barcode->fontSize) && !empty($nameBadgeConfData->barcode->fontSize) ? $nameBadgeConfData->barcode->fontSize : 14);
+        $fontweight = (isset($nameBadgeConfData->barcode->fontWeight) && !empty($nameBadgeConfData->barcode->fontWeight) ? $nameBadgeConfData->barcode->fontWeight : 'normal');
+        ?>
+        <div class="badgeContent" style="transform: scale(<?php echo $scaleX; ?>, <?php echo $scaleY; ?>);width:<?php echo $nameBadgeConfData->barcode->width; ?>px; height: <?php echo $nameBadgeConfData->barcode->height; ?>px; left: <?php echo $nameBadgeConfData->barcode->left; ?>px; top: <?php echo $nameBadgeConfData->barcode->top; ?>px; font-size:<?php echo $fontsize ?>px; font-weight: <?php echo $fontweight; ?>; text-align: <?php echo $textAlign; ?>">
+            <?php
+                $attendee           =   (object)$qrCodeFinalData;
+                $barcode_path       =   asset('public/barcodes/'.$attendee->bar_code_path);
+
+                echo '<img src="'.$barcode_path.'">';
             ?>
         </div>
     <?php } ?>

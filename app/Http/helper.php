@@ -232,7 +232,7 @@ function event_enable_qrcode($event_id){
             ->first();
 
     if(isset($qrcode_data) && !empty($qrcode_data)){
-        $qrcode_data->enable_qrcode;
+        return $qrcode_data->enable_qrcode;
     }
 
     return 0;
@@ -243,7 +243,7 @@ function event_enable_barcode($event_id){
             ->where('event_id', '=', $event_id)
             ->first();
     if(isset($barcode_data) && !empty($barcode_data)){
-        $barcode_data->enable_barcode;
+        return $barcode_data->enable_barcode;
     }
 
     return 0;
@@ -254,7 +254,7 @@ function event_enable_sync_dashboard($event_id){
             ->where('event_id', '=', $event_id)
             ->first();
     if(isset($sync_data) && !empty($sync_data)){
-        $sync_data->enable_sync_dashboard;
+        return $sync_data->enable_sync_dashboard;
     }
 
     return 0;
@@ -438,22 +438,26 @@ function get_namebadge_last_printed_time(){
 
 
 function show_attendee_qrcode($dashboardUrl, $dashboardQrImage, $attendee){
+    $qrcode     =   '';
     if(isset($dashboardQrImage) && $dashboardQrImage==2){
         $path = $dashboardUrl . 'pdf/' . $attendee->event_id . "/" . $attendee->attendee_live_qr_code;            
     }elseif(($dashboardQrImage) && $dashboardQrImage==3){
         $path =  $attendee->client_qrcode_address;                    
     }elseif(($dashboardQrImage) && $dashboardQrImage==1){
         $path =  asset('public/qrcodes/'.$attendee->client_qrcode_address);                    
-    }    
-    $qrcode     =    '<img id="reg_qrcode_image" src="'.$path.'" >';
+    }   
+    if(isset($path) && !empty($path)){ 
+        $qrcode     =    '<img id="reg_qrcode_image" src="'.$path.'" >';
+    }
     return $qrcode;
 }
 
 function show_attendee_phoho($attendee_photo_path, $conf){
+    $qrcode     =   '';
     if(!empty($attendee_photo_path)){
         $path = asset('public/uploads/'.$attendee_photo_path);            
+        $qrcode     =    '<img id="reg_qrcode_image" src="'.$path.'" width="'.$conf->width.'" height="'.$conf->height.'" >';
     }  
-    $qrcode     =    '<img id="reg_qrcode_image" src="'.$path.'" width="'.$conf->width.'" height="'.$conf->height.'" >';
     return $qrcode;
 }
 
@@ -557,6 +561,31 @@ function generate_serial_number($data) {
     $comingDigit = $event . $alphanum . $next_id;
     return $comingDigit;
 }
+
+
+    function generate_barcode($barcode_param){
+        $bar = App::make('BarCode');
+        $barcode = [
+            'size'              => 30,
+            'orientation'       => 'horizontal',
+            'code_type'         => 'code128',
+            'print'             => true,
+            'sizefactor'        => 1,
+            'text'              => $barcode_param->text,
+            'filename'          => $barcode_param->filename,
+            'filepath'          => $barcode_param->filepath
+        ];
+        $barcontent = $bar->barcodeFactory()->renderBarcode(
+            $text=$barcode["text"], 
+            $size=$barcode['size'], 
+            $orientation=$barcode['orientation'], 
+            $code_type=$barcode['code_type'], // code_type : code128,code39,code128b,code128a,code25,codabar 
+            $print=$barcode['print'], 
+            $sizefactor=$barcode['sizefactor'],
+            $filename = $barcode['filename'],
+            $filepath = $barcode['filepath']
+    )->filename($barcode['filename']);
+    }
 
 
 ?>

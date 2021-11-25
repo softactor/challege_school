@@ -152,6 +152,43 @@ class AttendeeController extends Controller {
             $update->vcard_path = $vcardName;
             $update->save();
         }
+
+        $qrcode_gen_status  =   is_qrcode_enable($insert->event_id);
+        if($qrcode_gen_status && $qrcode_gen_status == 1){
+            $qrdestPath = public_path('qrcodes/');
+            
+            $qrfilename         = 'attendee_qrcode_' . $insert->id .  '.png';
+            $qr_path_with_file  = $qrdestPath . $qrfilename;
+
+            $qrparam    =   (object)[
+                'path'          =>  $qr_path_with_file,
+                'qrcode_data'   =>  $insert->client_qrcode_text
+            ];
+
+            create_attendee_qrcode($qrparam);
+            $update = Attendee::find($insert->id);
+            $update->client_qrcode_address = $qrfilename;
+            $update->save();
+        }
+        
+        
+        $barcode_gen_status  =   event_enable_barcode($insert->event_id);
+        if($barcode_gen_status && $barcode_gen_status == 1){
+            $barcode_file_path  =   public_path('barcodes/');
+            
+            $qrfilename         = 'attendee_barcode_' . $insert->id .  '.png';
+
+            $qrparam    =   (object)[
+                'text'          => $insert->serial_number,
+                'filename'      => $qrfilename,
+                'filepath'      => $barcode_file_path
+            ];
+            generate_barcode($qrparam);
+            $update = Attendee::find($insert->id);
+            $update->bar_code_path = $qrfilename;
+            $update->save();
+        }
+
         return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
     }
     
@@ -309,6 +346,25 @@ class AttendeeController extends Controller {
                                     $update->client_qrcode_address = $qrfilename;
                                     $update->save();
                                 }
+                                
+                                
+                                $barcode_gen_status  =   event_enable_barcode($insert->event_id);
+                                if($barcode_gen_status && $barcode_gen_status == 1){
+                                    $barcode_file_path  =   public_path('barcodes/');
+                                    
+                                    $qrfilename         = 'attendee_barcode_' . $insert->id .  '.png';
+
+                                    $qrparam    =   (object)[
+                                        'text'          => $insert->serial_number,
+                                        'filename'      => $qrfilename,
+                                        'filepath'      => $barcode_file_path
+                                    ];
+                                    generate_barcode($qrparam);
+                                    $update = Attendee::find($insert->id);
+                                    $update->bar_code_path = $qrfilename;
+                                    $update->save();
+                                }
+                                
                                 
                             } else {
                                 $duplicate[] = $importData[5];

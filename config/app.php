@@ -161,6 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        peal\barcodegenerator\BarcodeServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -228,7 +229,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Curl'          => Ixudra\Curl\Facades\Curl::class,
+        'Curl'  => Ixudra\Curl\Facades\Curl::class,
+        'BarCode' => peal\barcodegenerator\Facades\BarCode::class,
 
     ],
 

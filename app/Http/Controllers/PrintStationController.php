@@ -58,6 +58,7 @@ class PrintStationController extends Controller
                 'zone_bg_color'         =>  $attendee->zone_bg_color,
                 'designation'           =>  $attendee->designation,
                 'attendee_photo'        =>  $attendee->attendee_photo,
+                'bar_code_path'         =>  $attendee->bar_code_path,
             ];  
             $viewParamData['user_id']             = $attendee->id;
             $viewParamData['event_id']            = $attendee->event_id;
