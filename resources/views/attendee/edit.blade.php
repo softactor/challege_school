@@ -84,7 +84,7 @@
                     <div class='col-md-4'>
                         <div class="form-group">
                             <label>Last Name</label>
-                            <input type="text" name="last_name" value={{ $row->last_name }} class="form-control">
+                            <input type="text" name="last_name" value="{{ $row->last_name }}" class="form-control">
                             @if ($errors->has('last_name')) 
                             <span class="help-block">
                                 <span>{{ $errors->first('last_name') }}</span>
