@@ -154,24 +154,35 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Office Number</label>
                             <input type="text" name="office_number" value="{{ old('office_number') }}" class="form-control">
                             @if ($errors->has('office_number')) 
-                            <span class="help-block">
+                            <span class="help-block error">
                                 <span>{{ $errors->first('office_number') }}</span>
                             </span>
                             @endif
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Postal Code</label>
                             <input type="text" name="postal_code" value="{{ old('postal_code') }}" class="form-control">
                             @if ($errors->has('postal_code')) 
                             <span class="help-block">
                                 <span>{{ $errors->first('postal_code') }}</span>
+                            </span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>National ID / Passport Number<span class="field_required"></span></label>
+                            <input type="text" name="fax" value="{{ old('fax') }}" class="form-control">
+                            @if ($errors->has('fax')) 
+                            <span class="help-block error">
+                                <span>{{ $errors->first('fax') }}</span>
                             </span>
                             @endif
                         </div>

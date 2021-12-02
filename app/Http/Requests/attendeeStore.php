@@ -25,13 +25,14 @@ class attendeeStore extends FormRequest
     public function rules()
     {
         $rules = [
-            'event_id' => 'required',
+            'event_id'  => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|email|unique:attendees,email,'.(isset($this->attendee_id->id)?$this->attendee_id->id:''),
-            'type_id' => 'required',
-            'country' => 'required',
-            'company' => 'required'
+            'email'     => 'required|email|unique:attendees,email,'.(isset($this->attendee_id->id)?$this->attendee_id->id:''),
+            'type_id'   => 'required',
+            'country'   => 'required',
+            'company'   => 'required',
+            'fax'       => 'required'
         ];
 		
 		return $rules;
@@ -50,6 +51,7 @@ class attendeeStore extends FormRequest
 			'type_id.required' => 'User Type is required',
 			'country.required' => 'Country is required',
 			'company.required' => 'Company is required',
+			'fax.required' => 'National ID / Passport Number is required',
 		];
 		
 		$customMessage = array();

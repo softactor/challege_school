@@ -109,6 +109,7 @@ class AttendeeController extends Controller {
         $insert->mobile             = $request->mobile;
         $insert->office_number      = $request->office_number;
         $insert->postal_code        = $request->postal_code;
+        $insert->fax        = $request->fax;
         
         $insert->zone               = $request->zone;
         $insert->table_name         = $request->table_name;
@@ -654,6 +655,7 @@ class AttendeeController extends Controller {
         $update->mobile             = $request->mobile;
         $update->office_number      = $request->office_number;
         $update->postal_code        = $request->postal_code;
+        $update->fax        = $request->fax;
         
         $update->zone               = $request->zone;
         $update->table_name         = $request->table_name;
