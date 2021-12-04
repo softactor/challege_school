@@ -88,6 +88,7 @@ Route::group(['middleware' => 'RevalidateBackHistory'],function(){
         
         // Printing Station Controller:
         Route::get('print_attendee', 'PrintStationController@print_attendee')->name('print_attendee');
+        Route::get('get_attendee_print_table_data', 'PrintStationController@get_attendee_print_table_data')->name('get_attendee_print_table_data');
         Route::post('print_namebadge_by_serial_number', 'PrintStationController@print_namebadge_by_serial_number')->name('print_namebadge_by_serial_number');
         Route::get('update_attendee_printing_history', 'PrintStationController@update_attendee_printing_history')->name('update_attendee_printing_history');
         Route::get('print_report', 'PrintStationController@print_report')->name('print_report');
