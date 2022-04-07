@@ -170,6 +170,7 @@
                 }
             });
         }
+        var mywindow;
         
         function confirm_namebadge_print(attendee_id){
             swal(
@@ -212,11 +213,59 @@
             return responseFeedback
         }
         
+        $("#save_n_print").click(function(){
+           var form = $("#attendee_add_form");
+
+           var formData = new FormData(form[0]);
+//           let photoFiles = $("#attendee_photo")[0].files[0];
+//           fd.append('file', photoFiles);
+           
+           $.ajax({
+                url         : '{{route("attendee_data_save_n_print")}}',
+                type        : 'POST',
+                dataType    : 'json',
+                data        : formData,
+                contentType : false,
+                processData : false,
+                async: false, // <- this turns it into synchronous
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success     : function (response) {
+                    
+                    if(response.status == 'success'){
+                    
+                        $('#attendee_badge_show').html(response.namebadge);
+
+                        namebadge_printing_execution(response.attendee_id);
+                        setTimeout(function () {
+                            $('.print-error-msg').hide();
+                            $('#print_preview_'+response.attendee_id).remove();
+                            $('#attendee_add_form')[0].reset();
+                        }, 4000);
+                    
+                    }else{
+                        
+                        printErrorMsg(response.data);
+                    } 
+                }
+            });    
+        });
+        
+        
+        function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                    $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+    }
+        
         function namebadge_printing_execution(attendee_id){
             var divName = 'print_preview_'+attendee_id;
             namebadge_printing(divName);
         }
-        var mywindow;
+        
         function namebadge_printing(divName, hideDirSec=false){
             setTimeout(function () {
                 mywindow = window.open(window.location.href, "_blank");
@@ -224,7 +273,7 @@
                 mywindow.document.write($('#'+divName).html());
                 mywindow.document.close();
                 mywindow.window.print();
-                swal.close();
+//                swal.close();
                 closeWin();
                 if(hideDirSec){
                     $('#namebadgeDirectPrintSection').hide();
@@ -358,6 +407,9 @@
                $('#enable_sync_dashboard').prop('checked', false);
            }
        }
+       
+       
+       
        
         </script>
         @yield('page-script')

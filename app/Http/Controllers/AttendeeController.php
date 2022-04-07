@@ -14,8 +14,18 @@ use App\Http\Requests\attendeeStore;
 use App\Http\Requests\uploadCSV;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AttendeeController extends Controller {
+    
+    
+    private $attendee_insert_id;
+    private $attendee_photo_path;
+    private $attendee_photo_upload_error;
+    private $event_id;
+    private $attendee_data_request;
+    private $client_qrcode_text;
+    private $serial_number;
 
     public function __construct() {
         $this->middleware('auth');
@@ -66,6 +76,72 @@ class AttendeeController extends Controller {
         $CustomFields   = getCustomFieldByModule('attendee');
         return view('attendee.create', compact(['event_id', 'events', 'serial_number', 'userTypes', 'CustomFields', 'countries', 'salutations']));
     }
+    
+    
+    
+    public function attendee_data_save_n_print(Request $request){
+        
+        $validationRules = [
+            'event_id'  => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email'     => 'required',
+            'type_id'   => 'required',
+            'country'   => 'required',
+            'company'   => 'required',
+            'fax'       => 'required'
+        ];
+        
+        $messages =  [
+                'event_id.required' => 'Event is required',
+                'salutation.required' => 'Salutation is required',
+                'first_name.required' => 'First Name is required',
+                'last_name.required' => 'Last Name is required',
+                'email.required' => 'Email is required',
+                'email.email' => 'Invalid Email format',
+                'email.unique' => 'Email already exist',
+                'type_id.required' => 'User Type is required',
+                'country.required' => 'Country is required',
+                'company.required' => 'Company is required',
+                'fax.required' => 'National ID / Passport Number is required',
+        ];
+        
+        
+        $validator = Validator::make($request->all(), $validationRules, $messages);
+        
+        if ($validator->fails()) {
+            $response   =   (object)[
+                'status'        => 'error',
+                'data'          => $validator->errors()->all(),
+                'message'       => 'Form data have error'
+            ];
+
+            echo json_encode($response);
+            
+        }else{
+        
+            $this->attendee_data_request   =   $request;
+
+            $this->attendee_store_process();
+
+
+            $attendee = Attendee::find($this->attendee_insert_id);
+
+            $preview_id     =   "print_preview_".$this->attendee_insert_id;
+            $namebadge  =   "<div id='$preview_id'>";
+            $namebadge  .=   make_attendee_namebadge($attendee);
+            $namebadge  .=   "</div>";
+
+            $response   =   (object)[
+                'attendee_id'   => $this->attendee_insert_id,
+                'namebadge'     => $namebadge,
+                'status'        => 'success',
+                'message'       => 'Attendee has been already added'
+            ];
+
+            echo json_encode($response);  
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -75,67 +151,92 @@ class AttendeeController extends Controller {
      */
     public function store(attendeeStore $request) {
         
-        $attendee_photo_path    =   '';
-        if(isset($_FILES['attendee_photo']['name']) && !empty($_FILES['attendee_photo']['name'])){
-            $file_name      =   'attendee_photo';
-            $store_path     =   public_path('/uploads/');
-            $photo_response =   upload_attendee_photo($file_name,$store_path);
-            if($photo_response->status == 'error'){
-                return redirect()->route('attendeeList')->with('error', $photo_response->message);
-            }else{
-                $attendee_photo_path    =   $photo_response->name;
-            }
+        $this->attendee_data_request   =   $request;
+        
+        
+        
+        
+        $this->attendee_store_process();
+        
+        
+        
+
+        return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
+    }
+    
+    
+    public function attendee_store_process(){
+        
+        // Process1
+        $this->attendee_image_upload_process();
+        
+        // Process2
+        $this->attendee_data_store_process();
+        
+        // Process3        
+        $this->attendee_sync_dashboard();
+        
+        
+        // Process4       
+        $this->attendee_vcard();
+        
+        // Process5       
+        $this->attendee_vcard();
+        
+        
+        // Process6      
+        $this->attendee_barcode();
+        
+    }
+    
+    
+    public function attendee_barcode(){
+        $request    =   $this->attendee_data_request;
+        $barcode_gen_status  =   event_enable_barcode($request->event_id);
+        if($barcode_gen_status && $barcode_gen_status == 1){
+            $barcode_file_path  =   public_path('barcodes/');
+            
+            $qrfilename         = 'attendee_barcode_' . $this->attendee_insert_id .  '.png';
+
+            $qrparam    =   (object)[
+                'text'          => $this->serial_number,
+                'filename'      => $qrfilename,
+                'filepath'      => $barcode_file_path
+            ];
+            generate_barcode($qrparam);
+            $update = Attendee::find($this->attendee_insert_id);
+            $update->bar_code_path = $qrfilename;
+            $update->save();
         }
         
-        $insert = new attendee();
-        
-        $event_id               =   $request->event_id;
-        $gen_serial_number      =   [
-            'event_id'          =>  $event_id,
-            'serial_prefix'     =>  'C02'
-        ];
-
-        $insert->serial_number      = get_business_owners_details_serial_number($gen_serial_number);
-        $insert->event_id           = $event_id;
-        $insert->salutation         = $request->salutation;
-        $insert->first_name         = $request->first_name;
-        $insert->last_name          = $request->last_name;
-        $insert->email              = $request->email;
-        $insert->type_id            = $request->type_id;
-        $insert->country            = $request->country;
-        $insert->company            = $request->company;
-        
-        $insert->designation        = $request->designation;
-        $insert->mobile             = $request->mobile;
-        $insert->office_number      = $request->office_number;
-        $insert->postal_code        = $request->postal_code;
-        $insert->fax        = $request->fax;
-        
-        $insert->zone               = $request->zone;
-        $insert->table_name         = $request->table_name;
-        $insert->seat               = $request->seat;
-        $insert->zone_bg_color      = (isset($request->zone) && !empty($request->zone) ? get_seat_item_color_name_by_name($request->zone) : '');
-        $insert->add_type           = (isset($request->add_type) && !empty($request->add_type) ? $request->add_type: 1);
-        
-        $insert->created_by         = Auth::User()->id;
-        $insert->edited_by          = Auth::User()->id;
-        $insert->attendee_photo     = $attendee_photo_path;
-        $insert->save();
-        
-        if(event_enable_sync_dashboard($request->event_id)){
-            $sync_response  =   $this->sync_dashboard_attendee($request);
-            if($sync_response->status == 'success'){
-                
-                $update_attendee                        = Attendee::find($insert->id);
-                $update_attendee->serial_number         = $sync_response->serial_digit;
-                $update_attendee->attendee_live_qr_code = $sync_response->qrcode_path;
-                $update_attendee->save();
-            }
+    }
+    
+    public function attendee_qrcode(){
+        $request    =   $this->attendee_data_request;
+        $qrcode_gen_status  =   is_qrcode_enable($request->event_id);
+        if($qrcode_gen_status && $qrcode_gen_status == 1){
+            $qrdestPath = public_path('qrcodes/');
             
-        } 
+            $qrfilename         = 'attendee_qrcode_' . $this->attendee_insert_id .  '.png';
+            $qr_path_with_file  = $qrdestPath . $qrfilename;
+
+            $qrparam    =   (object)[
+                'path'          =>  $qr_path_with_file,
+                'qrcode_data'   =>  $this->client_qrcode_text
+            ];
+
+            create_attendee_qrcode($qrparam);
+            $update = Attendee::find($this->attendee_insert_id);
+            $update->client_qrcode_address = $qrfilename;
+            $update->save();
+        }
         
+    }
+    
+    public function attendee_vcard(){
+        $request    =   $this->attendee_data_request;
         if(event_enable_vcard($request->event_id)){
-            $vcardName          =   'attendee_vcard_'.$request->event_id.'_'.$insert->id.'.png';        
+            $vcardName          =   'attendee_vcard_'.$request->event_id.'_'.$this->attendee_insert_id.'.png';        
             $vcardParam         =   (object)[
                 'lastName'          =>  $request->last_name,
                 'fastName'          =>  $request->first_name,
@@ -149,49 +250,100 @@ class AttendeeController extends Controller {
             ];
 
             create_attendee_qr_vcard($vcardParam);
-            $update = Attendee::find($insert->id);
+            $update = Attendee::find($this->attendee_insert_id);
             $update->vcard_path = $vcardName;
             $update->save();
         }
-
-        $qrcode_gen_status  =   is_qrcode_enable($insert->event_id);
-        if($qrcode_gen_status && $qrcode_gen_status == 1){
-            $qrdestPath = public_path('qrcodes/');
-            
-            $qrfilename         = 'attendee_qrcode_' . $insert->id .  '.png';
-            $qr_path_with_file  = $qrdestPath . $qrfilename;
-
-            $qrparam    =   (object)[
-                'path'          =>  $qr_path_with_file,
-                'qrcode_data'   =>  $insert->client_qrcode_text
-            ];
-
-            create_attendee_qrcode($qrparam);
-            $update = Attendee::find($insert->id);
-            $update->client_qrcode_address = $qrfilename;
-            $update->save();
-        }
         
-        
-        $barcode_gen_status  =   event_enable_barcode($insert->event_id);
-        if($barcode_gen_status && $barcode_gen_status == 1){
-            $barcode_file_path  =   public_path('barcodes/');
-            
-            $qrfilename         = 'attendee_barcode_' . $insert->id .  '.png';
-
-            $qrparam    =   (object)[
-                'text'          => $insert->serial_number,
-                'filename'      => $qrfilename,
-                'filepath'      => $barcode_file_path
-            ];
-            generate_barcode($qrparam);
-            $update = Attendee::find($insert->id);
-            $update->bar_code_path = $qrfilename;
-            $update->save();
-        }
-
-        return redirect()->route('attendeeList')->with('success', 'Attendee Added successfully.');
     }
+    
+    public function attendee_sync_dashboard(){
+        $request    =   $this->attendee_data_request;
+        if(event_enable_sync_dashboard($request->event_id)){
+            $sync_response  =   $this->sync_dashboard_attendee($request);
+            if($sync_response->status == 'success'){
+                
+                $update_attendee                        = Attendee::find($this->attendee_insert_id);
+                $update_attendee->serial_number         = $sync_response->serial_digit;
+                $update_attendee->attendee_live_qr_code = $sync_response->qrcode_path;
+                $update_attendee->save();
+            }
+            
+        }
+        
+    }
+    
+    
+    
+    public function attendee_data_store_process(){
+        $request                =   $this->attendee_data_request;
+        $attendee_photo_path    =   ((!$this->attendee_photo_upload_error) ?  $this->attendee_photo_path : "");
+        
+        $insert = new attendee();
+        
+        $event_id               =   $request->event_id;
+        $gen_serial_number      =   [
+            'event_id'          =>  $event_id,
+            'serial_prefix'     =>  'C02'
+        ];
+
+        $insert->serial_number      = get_business_owners_details_serial_number($gen_serial_number);
+        $this->serial_number        = $insert->serial_number;
+        $insert->event_id           = $event_id;
+        $insert->salutation         = $request->salutation;
+        $insert->first_name         = $request->first_name;
+        $insert->last_name          = $request->last_name;
+        $insert->email              = $request->email;
+        $insert->type_id            = $request->type_id;
+        $insert->country            = $request->country;
+        $insert->company            = $request->company;
+        
+        $insert->designation        = $request->designation;
+        $insert->mobile             = $request->mobile;
+        $insert->office_number      = $request->office_number;
+        $insert->postal_code        = $request->postal_code;
+        $insert->fax                = $request->fax;
+        
+        $insert->zone               = $request->zone;
+        $insert->table_name         = $request->table_name;
+        $insert->seat               = $request->seat;
+        $insert->zone_bg_color      = (isset($request->zone) && !empty($request->zone) ? get_seat_item_color_name_by_name($request->zone) : '');
+        $insert->add_type           = (isset($request->add_type) && !empty($request->add_type) ? $request->add_type: 1);
+        
+        $insert->created_by         = Auth::User()->id;
+        $insert->edited_by          = Auth::User()->id;
+        $insert->attendee_photo     = $attendee_photo_path;
+        $insert->save();
+        
+        $this->attendee_insert_id  =   $insert->id;
+        
+    }
+    
+    
+    
+    public function attendee_image_upload_process(){
+        
+        $attendee_photo_path    =   '';
+        $is_error               =   false;
+        $message                =   '';
+        if(isset($_FILES['attendee_photo']['name']) && !empty($_FILES['attendee_photo']['name'])){
+            $file_name      =   'attendee_photo';
+            $store_path     =   public_path('/uploads/');
+            $photo_response =   upload_attendee_photo($file_name,$store_path);
+            if($photo_response->status == 'error'){
+                $is_error               =   true;
+                $message                =   $photo_response->message;
+            }else{
+                $message                =   'Photo upload was successfull';
+                $attendee_photo_path    =   $photo_response->name;
+            }
+        }
+        
+        $this->attendee_photo_path          =   $attendee_photo_path;
+        $this->attendee_photo_upload_error  =   $is_error;
+        
+    }
+    
     
     // this method will send data to registro dashboard for generate qrcode and other information
     function sync_dashboard_attendee($request){       

@@ -136,48 +136,7 @@ class PrintStationController extends Controller
 
     
     public function get_user_namebadge($attendee) {
-        $namebadge                  =   '<span class="badge badge-warning">No template Found</span>';
-        $nameBadgeTemplateParam     =   [
-            'event_id'  => $attendee->event_id,
-            'type_id'   => $attendee->type_id
-        ];
-        $templateInfo       =   getNameBadgeTemplatedata($nameBadgeTemplateParam);
-        if(isset($templateInfo) && !empty($templateInfo)){
-            $nameBadgeConfData  =   json_decode($templateInfo->namebadge_print_data);
-            
-            
-            
-            $attendeeData       =   [
-                'serial_number'         =>  $attendee->serial_number,
-                'event_id'              =>  $attendee->event_id,
-                'salutation'            =>  $attendee->salutation,
-                'first_name'            =>  $attendee->first_name,
-                'last_name'             =>  $attendee->last_name,
-                'email'                 =>  $attendee->email,
-                'namebadge_user_label'  =>  getTypeName($attendee->type_id),
-                'country_id'            =>  $attendee->country,
-                'company_name'          =>  $attendee->company,
-                'type_id'               =>  $attendee->type_id,
-                'vcard_path'            =>  $attendee->vcard_path,
-                'attendee_live_qr_code' =>  $attendee->attendee_live_qr_code,
-                'client_qrcode_address' =>  $attendee->client_qrcode_address,
-                'zone'                  =>  $attendee->zone,
-                'table_name'            =>  $attendee->table_name,
-                'seat'                  =>  $attendee->seat,
-                'zone_bg_color'         =>  $attendee->zone_bg_color,
-                'designation'           =>  $attendee->designation,
-                'attendee_photo'        =>  $attendee->attendee_photo,
-                'bar_code_path'         =>  $attendee->bar_code_path,
-            ];  
-            $viewParamData['user_id']             = $attendee->id;
-            $viewParamData['event_id']            = $attendee->event_id;
-            $viewParamData['qrCodeFinalData']     = $attendeeData;
-            $viewParamData['templatesDatas']      = $templateInfo;
-            $viewParamData['nameBadgeConfData']   = $nameBadgeConfData;
-            $viewParam                            = (object)$viewParamData;
-            $namebadgeViewData                    =   View::make('attendee.attendee_namebadge', compact('viewParam'));
-            $namebadge                            =   $namebadgeViewData->render();
-        }
+        $namebadge  =   make_attendee_namebadge($attendee);
         return $namebadge;
     }
     

@@ -48,6 +48,9 @@
                 type:'GET',
                 dataType:'json'
             },
+            'fnCreatedRow': function (nRow, aData, iDataIndex) {
+                $(nRow).attr('id', 'my' + aData.serial_number); // or whatever you choose to set as the id
+            },
             "columns":[
                 {"data":"serial_number"},
                 {"data":"name"},

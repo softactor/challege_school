@@ -3,13 +3,17 @@
 @endsection
 
 @section('content')
-<form method="post" action="{{ route('saveAttendee') }}" enctype="multipart/form-data">
+<form method="post" action="{{ route('saveAttendee') }}" enctype="multipart/form-data" id="attendee_add_form">
     {{  @csrf_field() }}
     @method('POST')
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">Add Attendee</div>
             <div class="panel-body">
+                
+                <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
@@ -248,17 +252,23 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Upload Photo</label>
-                            <input type="file" name="attendee_photo">
+                            <input type="file" name="attendee_photo" id="attendee_photo">
                         </div>
                     </div>
+                    
+                    <div class="col-md-6" id="attendee_badge_show">
+                        
+                    </div>
+                    
                 </div>
                 <div class="form-group">
                     <input type="hidden" name="serial_number" value="<?php echo $serial_number ?>">
                     <input type="hidden" name="add_type" value="2">
-                    <input type="submit" class="btn btn-success" value="Submit">
+                    <input type="submit" class="btn btn-success" value="Save">
+                    <input type="button" id="save_n_print" class="btn btn-warning" value="Save & Print">
                 </div>
             </div>
         </div>
