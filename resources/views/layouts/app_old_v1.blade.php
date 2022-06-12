@@ -1,140 +1,135 @@
-<!doctype html>
-<html class="no-js" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Registro Namebadge') }}</title>
-    <link rel="shortcut icon" type="image/png" href="<?php echo asset('public/image/registro_Logo-PNG.png') ?>"/>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ config('app.name', 'Registro Namebadge') }}</title>
+        <link rel="shortcut icon" type="image/png" href="<?php echo asset('public/image/registro_Logo-PNG.png') ?>"/>
 
-    <!-- Meta -->
-    <meta name="description" content="@yield('meta_description', 'Default Description')">
-    <meta name="author" content="@yield('meta_author', 'Registro')">
-    <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+        <!-- Scripts -->
+        <script src="{{URL::asset('public/js/jquery-3.3.1.min.js')}}" type="text/javascript"></script>
+        <link rel="dns-prefetch" href="//fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <script>
-        window.Laravel = '<?php echo json_encode(['csrfToken' => csrf_token()]) ?>';
-    </script>
-    <?php
-    if (!empty($google_analytics)) {
-        echo $google_analytics;
-    }
-    ?>
-    <link href="{{ URL::asset('public/css/jquery.datetimepicker.min.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('public/css/sweetalert.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('public/css/style.css') }}" rel="stylesheet">
+        <!-- fontawesome icon-->
+        <link href="{{ URL::asset('public/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('public/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css') }}" rel="stylesheet">
+        <!-- Styles -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        <link href="{{ URL::asset('public/js/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('public/css/jquery.datetimepicker.min.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('public/css/bootstrap-panel.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('public/css/sweetalert.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('public/css/style.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('public/css/datatable/jquery.dataTables.min.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('public/css/simple-sidebar.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="namebadgeDirectPrintSection"></div>
+        <div id="app">		
+            <div class="d-flex" id="wrapper">
 
-    <link rel="stylesheet" href="{{ asset('public/theme/vendor/datatables/css/jquery.dataTables.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/theme/vendor/chartist/css/chartist.min.css') }}">
-    <link href="{{ asset('public/theme/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/theme/vendor/owl-carousel/owl.carousel.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/theme/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/theme/css/style_theme_custome.css') }}" rel="stylesheet">
-
-    <style type="text/css">
-        .phpdebugbar {
-            display: none !important;
-        }
-
-        .messages-menu,
-        .notifications-menu,
-        .tasks-menu {
-            display: none !important;
-        }
-    </style>
-</head>
-
-<body>
-    <div id="namebadgeDirectPrintSection"></div>
-    <div class="loading" style="display:none"></div>
-
-    <!-- Preloader start -->
-    <div id="preloader">
-        <div class="sk-three-bounce">
-            <div class="sk-child sk-bounce1"></div>
-            <div class="sk-child sk-bounce2"></div>
-            <div class="sk-child sk-bounce3"></div>
-        </div>
-    </div>
-
-    <!-- Main wrapper start  -->
-    <div id="app">
-        <div id="main-wrapper">
-
-            <!-- Header Top menu start -->
-
-
-            @include('includes.top_navbar')
-
-            <!-- start left sidebar -->
-
-            @include('includes.left_sidebar')
-
-            <!-- Content body start -->
-            <div class="content-body">
-
-                <div class="container-fluid">
-                    @yield('content')
+                <!-- Sidebar -->
+                <div class="bg-light border-right" id="sidebar-wrapper">
+                    <div class="sidebar-heading">Badge Design </div>
+                    <div class="list-group list-group-flush">
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
+                        <a href="{{ route('eventList') }}" class="list-group-item list-group-item-action bg-light">Events</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
+                        <a href="{{ route('userTypes') }}" class="list-group-item list-group-item-action bg-light">User Types</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
+                        <a href="{{ route('custom_fields_view') }}" class="list-group-item list-group-item-action bg-light">Custom Fields</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
+                        <a href="{{ route('attendeeList') }}" class="list-group-item list-group-item-action bg-light">Attendees</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1){ ?>
+                        <a href="{{ route('templateList') }}" class="list-group-item list-group-item-action bg-light">Templates</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
+                        <a href="{{ route('print_attendee') }}" class="list-group-item list-group-item-action bg-light">Print Station</a>
+                        <?php } ?>
+                        
+                        <?php if(Auth::user()->role_id  ==  1  || Auth::user()->role_id  ==  2){ ?>
+                        <a href="{{ route('print_report') }}" class="list-group-item list-group-item-action bg-light">Print Report</a>
+                        <?php } ?>
+                        
+                    </div>
                 </div>
+                <!-- /#sidebar-wrapper -->
 
+                <!-- Page Content -->
+                <div id="page-content-wrapper">
+
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                        <button class="" id="menu-toggle"><img src="{{ URL::asset('public/menubar.png')}}" height="30px" width="30px" /></button>
+
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                                <!--<li class="nav-item active">
+                                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link" href="#">Link</a>
+                                </li>-->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <?php echo Auth::user()->name ?>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        <!--<a class="dropdown-item" href="{{ route('logout') }}">Logout</a>-->
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+                                        <!--<a class="dropdown-item" href="#">Another action</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Something else here</a>-->
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+
+                    <div class="container-fluid">
+                        <main class="py-4">
+                            @include('flash-message')
+                            @yield('css')
+                            @yield('content')
+                        </main>                        
+                    </div>
+                </div>
+                <!-- /#page-content-wrapper -->
 
             </div>
-
-            <!-- Content body end -->
-
-            <div class="footer">
-                <div class="copyright">
-                    <p>Copyright © Designed &amp; Developed by <a href="https://registro.asia/" target="_blank">Registro Asia</a> 2018</p>
-                </div>
-            </div>
-            <!-- Footer end -->
-
+            <!-- /#wrapper -->
         </div>
-    </div>
-
-    <!-- JavaScripts -->
-
-    <!-- Menu Toggle Script --> 
-        <script src="<?php echo asset('public/theme/vendor/global/global.min.js') ?>"></script>       
+        <!-- Menu Toggle Script -->        
         <script src="{{URL::asset('public/js/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('public/js/jquery.datetimepicker.full.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('public/js/moment.min.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('public/js/sweetalert.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('public/js/fabric.min.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('public/js/datatable/jquery.dataTables.min.js')}}" type="text/javascript"></script>
-        
-        
-
-
-    <!-- theme js start -->
-
-
-
-    <script src="<?php echo asset('public/theme/vendor/bootstrap-select/dist/js/bootstrap-select.min.js')  ?>"></script>
-
-
-
-    <script src="<?php echo asset('public/theme/js/plugins-init/datatables.init.js')  ?>"></script>
-
-
-    <script src="<?php echo asset('public/theme/vendor/chart.js/Chart.bundle.min.js')  ?>"></script>
-
-    <!-- Chart piety plugin files -->
-    <script src="<?php echo asset('public/theme/vendor/peity/jquery.peity.min.js')  ?>"></script>
-
-    <!-- Apex Chart -->
-    <script src="<?php echo asset('public/theme/vendor/apexchart/apexchart.js')  ?>"></script>
-
-    <script src="<?php echo asset('public/theme/vendor/owl-carousel/owl.carousel.js')  ?>"></script>
-    <script src="<?php echo asset('public/theme/js/custom.min.js')  ?>"></script>
-    <script src="<?php echo asset('public/theme/js/deznav-init.js')  ?>"></script>
-
-
-    <script>
+        <script>
             $(document).ready(function() {
             $("#evet_start_date").datetimepicker();
             });
@@ -417,10 +412,6 @@
        
        
         </script>
-
-
-    <!-- theme js end -->
-    @yield('page-script')
-</body>
-
+        @yield('page-script')
+    </body>
 </html>

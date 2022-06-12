@@ -17,9 +17,11 @@ Route::get('/storage', function(){
 });
 
 Route::group(['middleware' => 'RevalidateBackHistory'],function(){
-	Route::get('/home', 'HomeController@index');
+	Route::get('/home', function () {
+		return view('auth.login');
+	});
 	Route::get('/', function () {
-		return view('welcome');
+		return view('auth.login');
 	});
 
 

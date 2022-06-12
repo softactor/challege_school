@@ -1,17 +1,12 @@
 @extends('layouts.app')
-@section('css')
-<style>
-.card-body{
-	overflow-x:scroll;
-}
-.layout{
-	cursor:pointer;
-}
-</style>
-@endsection
+
 @section('content')
-  <div class="col-md-12">
-	<input type="hidden" id="header_image_url" value="{{ ($row->header_image != '')?asset('public/header_image/'.$row->header_image):''  }}">
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+            <input type="hidden" id="header_image_url" value="{{ ($row->header_image != '')?asset('public/header_image/'.$row->header_image):''  }}">
         <?php $exportUrl    =   url("export_template_config/$row->id"); ?>
         <a title="Export Template Configuration" href="{{url($exportUrl)}}"  class="btn btn-sm btn-success">
             <i class="fas fa-file-export"></i> Export Template Configuration
@@ -20,10 +15,13 @@
     <div id="importTemplate" class="collapse">
       <input type="file" name="import_json" id="import_json">
     </div>
-  </div><br>
+            </div>
+        </div>
+    </div>
+</div>
 
   <div class="row">
-    <div class="col-lg-9 col-md-12 col-12 col-sm-12">
+    <div class="col-lg-8 col-md-8 col-sm-12">
       <div class="card">
         <div class="card-header">
           <h4>{{ getTemplateName($template_id)}}</h4>
@@ -37,15 +35,15 @@
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-12 col-12 col-sm-12">
+    <div class="col-lg-4 col-md-4 col-sm-12">
       <div class="card">
         <div class="card-header">
           <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#home"><i class="fas fa-th-large"></i></a>
+              <a class="nav-link active" data-toggle="tab" href="#home"><i class="fa fa-th-large"></i></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#menu1"><i class="fas fa-paint-brush"></i></a>
+              <a class="nav-link" data-toggle="tab" href="#menu1"><i class="fa fa-paint-brush"></i></a>
             </li>
           </ul>
         </div>

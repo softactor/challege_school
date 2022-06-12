@@ -1,49 +1,77 @@
 @extends('layouts.app')
-@section('css')
-<style>
-.help-block span{
-	color:#FF0000;
-}
-</style>
-@endsection
 
 @section('content')
-	<form method="post" action="{{ route('save_event') }}">
-		{{  @csrf_field() }}
-		<div class="col-lg-12">
-			<div class="panel panel-default">
-				<div class="panel-heading">Add Event</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<label>Name</label>
-                                                <input type="text" name="name" class="form-control" value="{{ old('name') }}">
-						@if ($errors->has('name')) 
-							<span class="help-block">
-								<span>{{ $errors->first('name') }}</span>
-							</span>
-						@endif
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header d-block">
+				<div class="row">
+					<div class="col-md-6">
+						<h4 class="card-title">Event Add</h4>
 					</div>
-					<div class="form-group">
-						<label>Event Date</label>
-						<input type="text" autocomplete="off" id="evet_start_date" name="event_date" class="form-control" value="{{ old('event_date') }}">
-						@if ($errors->has('event_date')) 
-							<span class="help-block">
-								<span>{{ $errors->first('event_date') }}</span>
-							</span>
-						@endif
-					</div>
-					<div class="form-group">
-						<input type="submit" class="btn btn-success" value="Submit">
+					<div class="col-md-6 text-right">
+						<a href="{{route('importEventCSV')}}">
+							<button type="button" class="btn btn-rounded btn-info">
+								<span class="btn-icon-left text-info">
+									<i class="fa fa-list color-info"></i>
+								</span>Import Events
+							</button>
+						</a>
+						<a href="{{route('eventList')}}">
+							<button type="button" class="btn btn-rounded btn-info">
+								<span class="btn-icon-left text-info">
+									<i class="fa fa-list color-info"></i>
+								</span>Event List
+							</button>
+						</a>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>
+	</div>
+</div>
+
+
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="basic-form">
+					<form method="post" action="{{ route('save_event') }}">
+						{{ @csrf_field() }}
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Name</label>
+							<div class="col-sm-9">
+								<input type="text" name="name" class="form-control" value="{{ old('name') }}">
+								@if ($errors->has('name'))
+								<span class="help-block">
+									<span>{{ $errors->first('name') }}</span>
+								</span>
+								@endif
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Event Date</label>
+							<div class="col-sm-9">
+								<input type="text" autocomplete="off" id="evet_start_date" name="event_date" class="form-control" value="{{ old('event_date') }}">
+								@if ($errors->has('event_date'))
+								<span class="help-block">
+									<span>{{ $errors->first('event_date') }}</span>
+								</span>
+								@endif
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-10">
+								<input type="submit" class="btn btn-success" value="Create">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
-
-@section('page-script')
-<script>
-
-</script>
-@endsection
-
